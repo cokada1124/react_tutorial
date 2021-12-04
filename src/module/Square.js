@@ -5,7 +5,7 @@ function Square(props) {
     <button 
       className="square"
       data-key={`square_${props.idx}`}
-      onClick={() => props.onDrop(props.idx)}
+      onClick={() => props.onDrop()}
     >
       { props.children }
     </button>

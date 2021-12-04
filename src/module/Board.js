@@ -3,7 +3,8 @@ import React from 'react';
 import Square from "./Square";
 
 const Board = (props) => {
-  const renderSquare = (sq, i) => {
+  const renderSquare = (sq, row, column) => {
+    const idx = (row * props.square_num) + column
     return (
       /**
        * ropsを改行するならインデントを下げたい（単なる好み）
@@ -16,44 +17,37 @@ const Board = (props) => {
        * ということで、ここでは「手を打つ」という意味でonDropという名称を使いました。
        */
       <Square 
-        idx={i}
-        key={`square_${i}`}
-        onDrop={() => props.onDrop(i)}
+        idx={idx}
+        key={`square_${idx}`}
+        onDrop={() => props.onDrop([row, column])}
       >
         {sq}
       </Square>
     );
   }
-    
-  /**
-   * 配列を１辺の長さで折り返してテーブルを作る。
-   * [
-   *  [x, x, x],
-   *  [x, x, x],
-   *  [x, x, x]
-   * ]
-   * のような。（each_rowのこと）
-   * で、１行ごとに<div className="borad-row"></div>でwrapして返却する。
-   */
-    const renderSquares = () => {
-      const each_row = []
-      const {squares, square_num} = props
-      squares.forEach((sq, i) => {
-        const row = Math.floor(i / square_num)
-        // const column = i % square_num
-        each_row[row] = each_row[row] === undefined ? [sq] : [...each_row[row], sq]
-      })
 
-      return each_row.map((squares, i) => (
-        <div className="board-row" key={`row_${i}`}>
-          {squares.map((sq, j) => renderSquare(sq, (i*square_num) + j))}
-        </div>
-      ))
-    }
+
+  /**
+   * Game.state.historyは
+   *  [{
+   *   squares: [
+   *      [0, 0, 0],
+   *      [0, 0, 0],
+   *      [0, 0, 0]
+   *    ] 
+   *  }]
+   * と最初から二次元配列で宣言するようにしたんですね。
+   * 
+   */
+  const squares = props.squares.map((line, i) => (
+    <div className="board-row" key={`div_${i}`} data-key={`div_${i}`}>
+      {line.map((val, j) => renderSquare(val, i, j))}
+    </div>
+  ))
   
   return (
     <div>
-      {renderSquares()}
+      {squares}
       {/* <div className="board-row">
         {renderSquare(0)}
         {renderSquare(1)}

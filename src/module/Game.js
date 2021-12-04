@@ -7,13 +7,18 @@ import Board from "./Board";
  */
  const SQUARE_NUM = 10
 
-
+/**
+ * 元々は１次元の配列でsquaresを持ってたが、
+ * どうせ表示する時に二次元に展開するので、
+ * 最初から二次元で持つよう変えてみてもいい。
+ * 二次元で持つようにすると、勝敗判定を作る時にちょっと有利になりそう。
+ */
 class Game extends React.Component {
   constructor(props){
     super(props);
     this.state ={
       history: [{
-        squares: Array(SQUARE_NUM**2).fill(null) // SQUARE_NUM ** 2で二乗して動的に配列を初期化
+        squares: Array(SQUARE_NUM).fill(null).map(() => Array(SQUARE_NUM).fill(null)) // SQUARE_NUM ** 2で二乗して動的に配列を初期化
       }],
       stepNumber:0,
       xIsNext: true,
@@ -47,10 +52,15 @@ class Game extends React.Component {
     });
   }
 
+  /**
+   * 
+   * @param {array} idx : [行, 列]を数字で渡す
+   * @returns 
+   */
   dropThePiece(idx){//// チェスで駒を打つことをdropというそうなので、そんなラベリングにしてみました
     //// 適宜console.logで中身を把握しながら進めましょう。
-    console.log("この手が打たれました！", idx)
-    
+    console.log("この手が打たれました！", (idx[0]*SQUARE_NUM)+idx[1])
+    return false
     const history = this.state.history.slice(0,this.state.stepNumber + 1);
     const current = history[history.length -1];
     const squares = current.squares.slice();
