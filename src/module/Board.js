@@ -39,9 +39,9 @@ const Board = (props) => {
    * と最初から二次元配列で宣言するようにしたんですね。
    * 
    */
-  const squares = props.squares.map((line, i) => (
-    <div className="board-row" key={`div_${i}`} data-key={`div_${i}`}>
-      {line.map((val, j) => renderSquare(val, i, j))}
+  const squares = props.squares.map((line, row) => (
+    <div className="board-row" key={`div_${row}`} data-key={`div_${row}`}>
+      {line.map((val, column) => renderSquare(val, row, column))}
     </div>
   ))
   

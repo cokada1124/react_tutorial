@@ -58,16 +58,17 @@ class Game extends React.Component {
    * @returns 
    */
   dropThePiece(idx){//// チェスで駒を打つことをdropというそうなので、そんなラベリングにしてみました
+    const [row, column] = idx
     //// 適宜console.logで中身を把握しながら進めましょう。
-    console.log("この手が打たれました！", (idx[0]*SQUARE_NUM)+idx[1])
-    return false
+    console.log("この手が打たれました！", (row*SQUARE_NUM)+column)
+    // return false
     const history = this.state.history.slice(0,this.state.stepNumber + 1);
-    const current = history[history.length -1];
-    const squares = current.squares.slice();
-    if (this.calculateWinner(squares) || squares[idx]){
-      return;
-    }
-    squares[idx] = this.state.xIsNext ? 'X' : '0';
+    const current = history[history.length - 1];
+    const squares = [...current.squares]
+    // if (this.calculateWinner(squares) || squares[idx]){
+    //   return;
+    // }
+    squares[row][column] = this.state.xIsNext ? 'X' : '0';
     this.setState({
       history: history.concat([{
         squares: squares, 
