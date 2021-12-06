@@ -20,6 +20,7 @@ class Board extends React.Component {
     return (
       <Square 
       value={this.props.squares[i]}
+      
       onClick={() => this.props.onClick(i)}
       />
     );
@@ -151,3 +152,4 @@ function calculateWinner(squares) {
 }
 
 
+//tutorial
