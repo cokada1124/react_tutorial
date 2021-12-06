@@ -2,12 +2,18 @@ import React from 'react';
 
 import Board from "./Board";
 
+/**
+ * １辺のマスの数を定義。
+ */
+ const SQUARE_NUM = 10
+
+
 class Game extends React.Component {
   constructor(props){
     super(props);
     this.state ={
       history: [{
-        squares: Array(9).fill(null),
+        squares: Array(SQUARE_NUM**2).fill(null) // SQUARE_NUM ** 2で二乗して動的に配列を初期化
       }],
       stepNumber:0,
       xIsNext: true,
@@ -40,21 +46,25 @@ class Game extends React.Component {
       xIsNext: (step % 2) ===0,
     });
   }
-  handleClick(i){
+
+  dropThePiece(idx){//// チェスで駒を打つことをdropというそうなので、そんなラベリングにしてみました
+    //// 適宜console.logで中身を把握しながら進めましょう。
+    console.log("この手が打たれました！", idx)
+    
     const history = this.state.history.slice(0,this.state.stepNumber + 1);
     const current = history[history.length -1];
     const squares = current.squares.slice();
-    if (this.calculateWinner(squares) || squares[i]){
+    if (this.calculateWinner(squares) || squares[idx]){
       return;
     }
-    squares[i] = this.state.xIsNext ? 'X' : '0';
+    squares[idx] = this.state.xIsNext ? 'X' : '0';
     this.setState({
       history: history.concat([{
         squares: squares, 
       }]),
-    stepNumber: history.length,
-    xIsNext: !this.state.xIsNext,
-  });
+      stepNumber: history.length,
+      xIsNext: !this.state.xIsNext,
+    })
   }
 
   render() {
@@ -86,7 +96,8 @@ class Game extends React.Component {
         <div className="game-board">
           <Board 
           squares={current.squares}
-          onClick={(i) => this.handleClick(i)} />
+          square_num={SQUARE_NUM}
+          onDrop={(i) => this.dropThePiece(i)} />
         </div>
         <div className="game-info">
           <div>{ status }</div>
