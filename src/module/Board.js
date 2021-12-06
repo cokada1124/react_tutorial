@@ -40,6 +40,7 @@ const Board = (props) => {
       const {squares, square_num} = props
       squares.forEach((sq, i) => {
         const row = Math.floor(i / square_num)
+        console.log(props)
         // const column = i % square_num
         each_row[row] = each_row[row] === undefined ? [sq] : [...each_row[row], sq]
       })
