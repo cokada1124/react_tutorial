@@ -64,6 +64,8 @@ class Game extends React.Component {
       lines_a.push([i, i])
     }
 
+
+
     const lines_b = []
     const len =10;
     for(let i = 0; i < 10; i++){
@@ -82,6 +84,9 @@ class Game extends React.Component {
       for(let j = 0; j < 10; j++){  
         lines_d.push([j, i])
       }
+    }
+    for (let i =0; i <lines_a.lenght; i++){
+    squares[lines_a[i]]
     }
 
     for (let i = 0; i < lines.length; i++) {
