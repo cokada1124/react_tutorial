@@ -24,8 +24,10 @@ class Game extends React.Component {
       xIsNext: true,
     };
   }
+  
 
   calculateWinner(squares) {
+    console.log(SQUARE_NUM)
     const lines = [
       [0, 1, 2],
       [3, 4, 5],
@@ -61,6 +63,7 @@ class Game extends React.Component {
     const [row, column] = idx
     //// 適宜console.logで中身を把握しながら進めましょう。
     console.log("この手が打たれました！", (row*SQUARE_NUM)+column)
+    
     // return false
     const history = this.state.history.slice(0,this.state.stepNumber + 1);
     const current = history[history.length - 1];
@@ -69,6 +72,7 @@ class Game extends React.Component {
     //   return;
     // }
     squares[row][column] = this.state.xIsNext ? 'X' : '0';
+    console.log(squares[row][column]);
     this.setState({
       history: history.concat([{
         squares: squares, 
