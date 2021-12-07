@@ -57,16 +57,55 @@ class Game extends React.Component {
      }
     console.log(lines)
 
+     console.log(squares)
+     
+    const lines_a = []
+    for(let i = 0; i < 10; i++){
+      lines_a.push([i, i])
+    }
+
+    const lines_b = []
+    const len =10;
+    for(let i = 0; i < 10; i++){
+      lines_b.push([i, (len - 1) -i ])
+    }
+
+    const lines_c = []
+    for(let i = 0; i < 10; i++){
+      for(let j = 0; j < 10; j++){  
+        lines_c.push([i, j])
+      }
+    }
+
+    const lines_d = []
+    for(let i = 0; i < 10; i++){
+      for(let j = 0; j < 10; j++){  
+        lines_d.push([j, i])
+      }
+    }
+
+    for (let i = 0; i < lines.length; i++) {
+      const [a, b, c] = lines[i];
+      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+        return squares[a];
+      }
+    }
+    return null;
+
+
     // 判定プロセス --------------------------
-    let result = null
-    lines.some(line => {
-      const game_over = line.every(v => v === line[0])
-      if(game_over) { result = line[0] }
-      return game_over
-    })
+    // let result = null
+    // lines.some(line => {
+    //   const game_over = line.every(v => v === line[0])
+    //   if(game_over) { result = line[0] }
+    //   return game_over
+    // })
 
-    return result
+    // return result
 
+
+    
+    
     // const lines = [
     //   [0, 1, 2],
     //   [3, 4, 5],
