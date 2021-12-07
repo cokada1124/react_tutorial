@@ -69,8 +69,19 @@ for(let i = 0; i < 10; i++){
 const lines_c = []
 const len =10;
 for(let i = 0; i < 10; i++){
-  lines_c.push(, i )
+  for(let j = 0; j < 10; j++){  
+    lines_c.push([i, j])
+  }
 }
+
+const lines_d = []
+const len =10;
+for(let i = 0; i < 10; i++){
+  for(let j = 0; j < 10; j++){  
+    lines_d.push([j, i])
+  }
+}
+
 
 const len = 10
 const arr = Array(10).fill(null).map((a,i) => Array(len).fill(null).map((b, j) => (null)))
