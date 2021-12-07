@@ -46,13 +46,31 @@ const hantei_list= new Array();
 const masu = Array(4).fill(null).map((a,i) => Array(4).fill(null).map((b, j) => ((4*i)+j)))
 
 const liness = (new Array(8)).fill((new Array(10)).fill((new Array(2)).fill(0)));
-for (let i = 0; i < 4; i++) {
- liness[i][i]= i;
- for (let j = 0; j < 2; i++) {
-  console.log(i,j)
+for (let i = 0; i < 8; i++) {
+ for (let j = 0; j < 10; j++) {
+  for (let k = 0; k < 2; k++) {
+    liness[i][j][k]=k;
+    liness[i][j][k,k]=k;
+  }
  }
 }
 
+const lines_a = []
+for(let i = 0; i < 10; i++){
+  lines_a.push([i, i])
+}
+
+const lines_b = []
+const len =10;
+for(let i = 0; i < 10; i++){
+  lines_b.push([i, (len - 1) -i ])
+}
+
+const lines_c = []
+const len =10;
+for(let i = 0; i < 10; i++){
+  lines_c.push(, i )
+}
 
 const len = 10
 const arr = Array(10).fill(null).map((a,i) => Array(len).fill(null).map((b, j) => (null)))

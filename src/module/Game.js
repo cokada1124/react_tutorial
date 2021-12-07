@@ -28,16 +28,48 @@ class Game extends React.Component {
 
   calculateWinner(squares) {
     console.log(SQUARE_NUM)
-    const lines = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ];
+
+    const lines_a = []
+    for(let i = 0; i < 10; i++){
+      lines_a.push([i, i])
+    }
+
+    const lines_b = []
+    const len =10;
+    for(let i = 0; i < 10; i++){
+      lines_b.push([i, (len - 1) -i ])
+    }
+
+    const lines_c = []
+    for(let i = 0; i < 10; i++){
+      for(let j = 0; j < 10; j++){  
+        lines_c.push([i, j])
+      }
+
+    }
+
+    const lines_d = []
+    for(let i = 0; i < 10; i++){
+      for(let j = 0; j < 10; j++){  
+        lines_d.push([j, i])
+      }
+    }
+
+    // const lines = [
+    //   [0, 1, 2],
+    //   [3, 4, 5],
+    //   [6, 7, 8],
+    //   [0, 3, 6],
+    //   [1, 4, 7],
+    //   [2, 5, 8],
+    //   [0, 4, 8],
+    //   [2, 4, 6],
+    // ];
+    const SQUARE_NUM = 10
+    for(let i =0; i<lines_a.length; i++) {
+      const a[lines_a.length] = lines_a[i];
+    }
+
     for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
       if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
