@@ -50,14 +50,17 @@ class Game extends React.Component {
 
     // console.log(lines)
     
-    const lines_cross_1 = [] //// 変数名は意味を表す命名を心がけましょう。命名で10分以上迷ってしまうようなら時間がかかりすぎなので、諦めて適当な命名でもいいです
-    for(let i = 0; i < 10; i++){
-      lines_cross_1.push([i, i])
-    }
+    // const lines_cross_1 = [] //// 変数名は意味を表す命名を心がけましょう。命名で10分以上迷ってしまうようなら時間がかかりすぎなので、諦めて適当な命名でもいいです
+    // for(let i = 0; i < 10; i++){
+    //   lines_cross_1.push([i, i])
+    // }
 
     // console.log(squares[lines_a[1]]);
 
-
+    const lines_cross_1 = []
+    for(let i = 0; i < SQUARE_NUM; i++){
+      lines_cross_1.push(squares[i][i])
+    }
 
     const lines_cross_2 = []
     const len =10;
@@ -81,7 +84,8 @@ class Game extends React.Component {
       }
     }
     console.log(lines_cross_1)
-    console.log(lines_cross_2)
+    // console.log(lines_cross_1.count)
+    // console.log(lines_cross_2)
     // console.log(lines_column)
     // console.log(lines_row)
 
@@ -93,20 +97,36 @@ class Game extends React.Component {
     // console.log(lines_c[1])
     // console.log(lines_d[1])
 
-    const kekka = [];
-    for (let i =0; i <lines_cross_1.length; i++){
+    
+    // for (let i =0; i <lines_cross_1.length; i++){
     // 　let a = squares[lines_cross_1[i]]
     //// やりたいのはこういうことですよね。
     //// lines_cross_1で持ってるのは値じゃなく参照なので、値を取るには行と列を指定する必要があります。
-    let a = squares[lines_cross_1[i][0]][lines_cross_1[i][1]]
-      if (a === "0"){
-        kekka.push(a)
-        if(kekka.length === lines_cross_1.length){
-          return a;
+    // let a = squares[lines_cross_1[i][0]][lines_cross_1[i][1]]
+    let valcount_O  = 0
+    let valcount_X  = 0
+    for(let i = 0; i<lines_cross_1.length; i++){
+        if (lines_cross_1[i] === "O"){
+          valcount_O ++;
+        } else if (lines_cross_1[i] === "X"){
+          valcount_X ++;
         }
-      }
     }
-    console.log(kekka)
+    if (lines_cross_1[0] === "O" && valcount_O === SQUARE_NUM){
+         return lines_cross_1[0];
+    }
+    if (lines_cross_1[0] === "X" && valcount_X === SQUARE_NUM){
+        return lines_cross_1[0];
+    }
+      
+    
+    // console.log(kekka)
+
+    // const lines_cross_1 = []
+    // for(let i = 0; i < 10; i++){
+    //   // lines_cross_1.push([i, i]) // こうじゃなく
+    //   lines_cross_1.push(squares[i][i]) // こうすれば直接値が入りますので
+    // }
 
 
     // 判定プロセス --------------------------
@@ -143,7 +163,7 @@ class Game extends React.Component {
     if (this.calculateWinner(squares) || squares[idx]){
       return;
     }
-    squares[row][column] = this.state.xIsNext ? 'X' : '0';
+    squares[row][column] = this.state.xIsNext ? 'X' : 'O';
     this.setState({
       history: history.concat([{
         squares: squares, 
