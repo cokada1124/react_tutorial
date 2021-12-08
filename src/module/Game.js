@@ -95,12 +95,12 @@ class Game extends React.Component {
     // }
 
     //// 二重ループでpushしたらlengthが２乗になりませんか？
-    const lines_row = []
-    for(let i = 0; i < 10; i++){
-      for(let j = 0; j < 10; j++){  
-        lines_row.push([j, i])
-      }
-    }
+    // const lines_row = []
+    // for(let i = 0; i < 10; i++){
+    //   for(let j = 0; j < 10; j++){  
+    //     lines_row.push([j, i])
+    //   }
+    // }
 
     // console.log(lines_column_temp)
     // console.log(lines_column)
@@ -172,12 +172,12 @@ class Game extends React.Component {
 
     //// IsAllEqual_columnすごいですね！判定用のfuncを作るなんて・・・良いアイデアです。
     //// しかもアローの略記法且つevery使いも小粋ですね！
-    const IsAllEqual_column = array => array.every(value => value === array[0]);
+    const IsAllEqual = array => array.every(value => value === array[0]);
     for(let i = 0; i<10; i++){
       //// ここの部分は
-        if (IsAllEqual_column(squares[i]) && squares[i][0] === "O"){
+        if (IsAllEqual(squares[i]) && squares[i][0] === "O"){
         return "O"
-        }else if(IsAllEqual_column(squares[i]) && squares[i][0] === "X"){
+        }else if(IsAllEqual(squares[i]) && squares[i][0] === "X"){
         return "X"
         }
 
@@ -188,12 +188,16 @@ class Game extends React.Component {
     }
 
     //縦
+    const lines_row = []
     for (let i = 0; i<10; i++){
-      if(squares[0][i] === "O"){
-        
+      lines_row.push(squares[i][0])
+      if (IsAllEqual(lines_row) && !(lines_row[9] == null)){
+        return lines_row[0]
       }
     }
     
+    const picked = squares.map(item => item[0]);
+    console.log(picked)
 
       
 
