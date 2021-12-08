@@ -26,39 +26,89 @@ class Game extends React.Component {
   }
 
   calculateWinner(squares) {
-    const lines_num = (SQUARE_NUM * 2) + 1 // 縦横の行数＋斜め（斜めは１回のループでクロス両方を作るので、+1）
-    const lines = [...squares]
+    // const lines_num = (SQUARE_NUM * 2) + 1 // 縦横の行数＋斜め（斜めは１回のループでクロス両方を作るので、+1）
+    // const lines = [...squares]
     
-    for(let i = 0; i < lines_num; i++) {
-      // 横
-      if(i < SQUARE_NUM) {
-      }
-      // 縦
-      else if(i >= SQUARE_NUM && i < (SQUARE_NUM*2)) {
-        const column_num = (i - SQUARE_NUM)
-        lines.push(squares.map(row => row[column_num]))
-      }
-      // 斜め
-      else {
-        // 斜めの左右
-        Array(2).fill(null).map((a, direction) => {
-          const vector = direction == 0 ? 1 : -1
-          lines.push(squares.map((row, i) => row[(((SQUARE_NUM-1)*direction) + (i*vector))]))
-        })
+    // for(let i = 0; i < lines_num; i++) {
+    //   // 横
+    //   if(i < SQUARE_NUM) {
+    //   }
+    //   // 縦
+    //   else if(i >= SQUARE_NUM && i < (SQUARE_NUM*2)) {
+    //     const column_num = (i - SQUARE_NUM)
+    //     lines.push(squares.map(row => row[column_num]))
+    //   }
+    //   // 斜め
+    //   else {
+    //     // 斜めの左右
+    //     Array(2).fill(null).map((a, direction) => {
+    //       const vector = direction == 0 ? 1 : -1
+    //       lines.push(squares.map((row, i) => row[(((SQUARE_NUM-1)*direction) + (i*vector))]))
+    //     })
+    //   }
+    // }
+
+    // console.log(lines)
+    
+    const lines_a = []
+    for(let i = 0; i < 10; i++){
+      lines_a.push([i, i])
+    }
+
+    // console.log(squares[lines_a[1]]);
+
+
+
+    const lines_b = []
+    const len =10;
+    for(let i = 0; i < 10; i++){
+      lines_b.push([i, (len - 1) -i ])
+    }
+
+    const lines_c = []
+    for(let i = 0; i < 10; i++){
+      for(let j = 0; j < 10; j++){  
+        lines_c.push([i, j])
       }
     }
 
-    console.log(lines)
+    const lines_d = []
+    for(let i = 0; i < 10; i++){
+      for(let j = 0; j < 10; j++){  
+        lines_d.push([j, i])
+      }
+    }
+
+    console.log(squares[lines_a[1]])
+    console.log(lines_a[1])
+    console.log(squares)
+    console.log(squares[1][1])
+    // console.log(lines_b[1])
+    // console.log(lines_c[1])
+    // console.log(lines_d[1])
+
+    const kekka = [];
+    for (let i =0; i <lines_a.lenght; i++){
+    　let a = squares[lines_a[i]]
+      if (a === "O"){
+        kekka.push(a)
+        if(kekka.length === lines_a.length){
+          return a;
+        }
+      }
+    }
+
+
 
     // 判定プロセス --------------------------
-    let result = null
-    lines.some(line => {
-      const game_over = line.every(v => v === line[0])
-      if(game_over) { result = line[0] }
-      return game_over
-    })
+    // let result = null
+    // lines.some(line => {
+    //   const game_over = line.every(v => v === line[0])
+    //   if(game_over) { result = line[0] }
+    //   return game_over
+    // })
 
-    return result
+    // return result
   }
 
   jumpTo(step){
