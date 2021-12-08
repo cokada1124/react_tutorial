@@ -71,13 +71,28 @@ class Game extends React.Component {
     }
 
     //// 二重ループでpushしたらlengthが２乗になりませんか？
-    const lines_column = []
-    for(let i = 0; i < 10; i++){
-      for(let j = 0; j < 10; j++){  
-        lines_column.push(squares[i][j])
-      }
-      // lines_column[] = lines_column
-    }
+    // const lines_column = []
+    // const lines_column_temp = []
+
+    // for(let i = 0; i < 10; i++){
+    //   squares[i]
+    // }  
+
+    // for(let i = 0; i < 10; i++){
+    //   for(let j = 0; j < 10; j++){  
+    //     if (!(squares[i][j] == null)){
+    //     lines_column_temp.push(squares[i][j])
+    //     }
+    //   }
+    //   if (!(lines_column_temp[9] == null)){
+    //     lines_column.push(lines_column_temp);
+    //     lines_column_temp.length =0;
+    //   }
+    //   // if(line_column.lenght===10){
+    //   // lines_column.push(line_column);
+    //   // line_column.length =0;
+    //   // } 
+    // }
 
     //// 二重ループでpushしたらlengthが２乗になりませんか？
     const lines_row = []
@@ -86,7 +101,10 @@ class Game extends React.Component {
         lines_row.push([j, i])
       }
     }
-    console.log(lines_column)
+
+    // console.log(lines_column_temp)
+    // console.log(lines_column)
+    console.log(squares[0])
     // console.log(lines_cross_1.count)
     // console.log(lines_cross_2)
     // console.log(lines_column)
@@ -99,13 +117,13 @@ class Game extends React.Component {
     // console.log(lines_b[1])
     // console.log(lines_c[1])
     // console.log(lines_d[1])
-    const aaa = [...squares]
-    console.log(aaa)
+    // const aaa = [...squares]
+    // console.log(aaa)
     
     // for (let i =0; i <lines_cross_1.length; i++){
     // 　let a = squares[lines_cross_1[i]]
-    //// やりたいのはこういうことですよね。
-    //// lines_cross_1で持ってるのは値じゃなく参照なので、値を取るには行と列を指定する必要があります。
+    // // やりたいのはこういうことですよね。
+    // // lines_cross_1で持ってるのは値じゃなく参照なので、値を取るには行と列を指定する必要があります。
     // let a = squares[lines_cross_1[i][0]][lines_cross_1[i][1]]
     let valcount_O  = 0
     let valcount_X  = 0
@@ -140,7 +158,29 @@ class Game extends React.Component {
         return lines_cross_2[0];
     }
 
+
+    // let valcount  = 0
+    // for(let i = 0; i<lines_cross_1.length; i++){
+    //     if(lines_cross_1[i] === null) { valcount = -1; break }
+    //     const val = lines_cross_1[i] === "O" ? 0 : 1
+    //     valcount += val
+    // }
+    // if (valcount === 0 || valcount === SQUARE_NUM){
+    //      return lines_cross_1[0];
+    // }
     //横
+    const IsAllEqual_column = array => array.every(value => value === array[0]);
+    for(let i = 0; i<10; i++){
+        if (IsAllEqual_column(squares[i]) && squares[i][0] === "O"){
+        return "O"
+        }else if(IsAllEqual_column(squares[i]) && squares[i][0] === "X"){
+        return "X"
+        }
+    }
+
+    //縦
+    
+    
 
       
 
