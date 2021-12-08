@@ -169,13 +169,22 @@ class Game extends React.Component {
     //      return lines_cross_1[0];
     // }
     //横
+
+    //// IsAllEqual_columnすごいですね！判定用のfuncを作るなんて・・・良いアイデアです。
+    //// しかもアローの略記法且つevery使いも小粋ですね！
     const IsAllEqual_column = array => array.every(value => value === array[0]);
     for(let i = 0; i<10; i++){
+      //// ここの部分は
         if (IsAllEqual_column(squares[i]) && squares[i][0] === "O"){
         return "O"
         }else if(IsAllEqual_column(squares[i]) && squares[i][0] === "X"){
         return "X"
         }
+
+      //// これだけでOKですよ！
+      // if (IsAllEqual_column(squares[i])){
+      //   return squares[i][0]
+      // }
     }
 
     //縦
