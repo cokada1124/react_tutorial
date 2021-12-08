@@ -50,54 +50,63 @@ class Game extends React.Component {
 
     // console.log(lines)
     
-    const lines_a = []
+    const lines_cross_1 = [] //// 変数名は意味を表す命名を心がけましょう。命名で10分以上迷ってしまうようなら時間がかかりすぎなので、諦めて適当な命名でもいいです
     for(let i = 0; i < 10; i++){
-      lines_a.push([i, i])
+      lines_cross_1.push([i, i])
     }
 
     // console.log(squares[lines_a[1]]);
 
 
 
-    const lines_b = []
+    const lines_cross_2 = []
     const len =10;
     for(let i = 0; i < 10; i++){
-      lines_b.push([i, (len - 1) -i ])
+      lines_cross_2.push([i, (len - 1) -i ])
     }
 
-    const lines_c = []
+    //// 二重ループでpushしたらlengthが２乗になりませんか？
+    const lines_column = []
     for(let i = 0; i < 10; i++){
       for(let j = 0; j < 10; j++){  
-        lines_c.push([i, j])
+        lines_column.push([i, j])
       }
     }
 
-    const lines_d = []
+    //// 二重ループでpushしたらlengthが２乗になりませんか？
+    const lines_row = []
     for(let i = 0; i < 10; i++){
       for(let j = 0; j < 10; j++){  
-        lines_d.push([j, i])
+        lines_row.push([j, i])
       }
     }
+    console.log(lines_cross_1)
+    console.log(lines_cross_2)
+    // console.log(lines_column)
+    // console.log(lines_row)
 
-    console.log(squares[lines_a[1]])
-    console.log(lines_a[1])
-    console.log(squares)
-    console.log(squares[1][1])
+    // console.log(squares[lines_a[1]])
+    // console.log(lines_a[1])
+    // console.log(squares)
+    // console.log(squares[1][1])
     // console.log(lines_b[1])
     // console.log(lines_c[1])
     // console.log(lines_d[1])
 
     const kekka = [];
-    for (let i =0; i <lines_a.lenght; i++){
-    　let a = squares[lines_a[i]]
-      if (a === "O"){
+    for (let i =0; i <lines_cross_1.length; i++){
+    // 　let a = squares[lines_cross_1[i]]
+    //// やりたいのはこういうことですよね。
+    //// lines_cross_1で持ってるのは値じゃなく参照なので、値を取るには行と列を指定する必要があります。
+    let a = squares[lines_cross_1[i][0]][lines_cross_1[i][1]]
+      if (a === "0"){
         kekka.push(a)
-        if(kekka.length === lines_a.length){
+        if(kekka.length === lines_cross_1.length){
           return a;
         }
       }
     }
-
+    console.log(kekka)
 
 
     // 判定プロセス --------------------------
