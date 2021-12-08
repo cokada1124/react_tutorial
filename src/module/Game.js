@@ -179,7 +179,11 @@ class Game extends React.Component {
     }
 
     //縦
-    
+    for (let i = 0; i<10; i++){
+      if(squares[0][i] === "O"){
+        
+      }
+    }
     
 
       
