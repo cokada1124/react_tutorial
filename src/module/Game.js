@@ -80,9 +80,10 @@ class Game extends React.Component {
     }
 
     console.log(squares[lines_a[1]])
-    console.log(lines_a[1])
+    console.log(lines_a)
+    console.log(lines_a[1][1])
     console.log(squares)
-    console.log(squares[1][1])
+    console.log(squares[lines_a[1][0]][lines_a[1][1]])
     // console.log(lines_b[1])
     // console.log(lines_c[1])
     // console.log(lines_d[1])
