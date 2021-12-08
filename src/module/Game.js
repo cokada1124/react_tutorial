@@ -26,29 +26,29 @@ class Game extends React.Component {
   }
 
   calculateWinner(squares) {
-    // const lines_num = (SQUARE_NUM * 2) + 1 // 縦横の行数＋斜め（斜めは１回のループでクロス両方を作るので、+1）
-    // const lines = [...squares]
+    const lines_num = (SQUARE_NUM * 2) + 1 // 縦横の行数＋斜め（斜めは１回のループでクロス両方を作るので、+1）
+    const lines = [...squares]
     
-    // for(let i = 0; i < lines_num; i++) {
-    //   // 横
-    //   if(i < SQUARE_NUM) {
-    //   }
-    //   // 縦
-    //   else if(i >= SQUARE_NUM && i < (SQUARE_NUM*2)) {
-    //     const column_num = (i - SQUARE_NUM)
-    //     lines.push(squares.map(row => row[column_num]))
-    //   }
-    //   // 斜め
-    //   else {
-    //     // 斜めの左右
-    //     Array(2).fill(null).map((a, direction) => {
-    //       const vector = direction == 0 ? 1 : -1
-    //       lines.push(squares.map((row, i) => row[(((SQUARE_NUM-1)*direction) + (i*vector))]))
-    //     })
-    //   }
-    // }
+    for(let i = 0; i < lines_num; i++) {
+      // 横
+      if(i < SQUARE_NUM) {
+      }
+      // 縦
+      else if(i >= SQUARE_NUM && i < (SQUARE_NUM*2)) {
+        const column_num = (i - SQUARE_NUM)
+        lines.push(squares.map(row => row[column_num]))
+      }
+      // 斜め
+      else {
+        // 斜めの左右
+        Array(2).fill(null).map((a, direction) => {
+          const vector = direction == 0 ? 1 : -1
+          lines.push(squares.map((row, i) => row[(((SQUARE_NUM-1)*direction) + (i*vector))]))
+        })
+      }
+    }
 
-    // console.log(lines)
+    console.log(lines)
     
     // const lines_cross_1 = [] //// 変数名は意味を表す命名を心がけましょう。命名で10分以上迷ってしまうようなら時間がかかりすぎなので、諦めて適当な命名でもいいです
     // for(let i = 0; i < 10; i++){
@@ -62,18 +62,21 @@ class Game extends React.Component {
       lines_cross_1.push(squares[i][i])
     }
 
+
+
     const lines_cross_2 = []
     const len =10;
     for(let i = 0; i < 10; i++){
-      lines_cross_2.push([i, (len - 1) -i ])
+      lines_cross_2.push(squares[i][(len - 1) -i])
     }
 
     //// 二重ループでpushしたらlengthが２乗になりませんか？
     const lines_column = []
     for(let i = 0; i < 10; i++){
       for(let j = 0; j < 10; j++){  
-        lines_column.push([i, j])
+        lines_column.push(squares[i][j])
       }
+      // lines_column[] = lines_column
     }
 
     //// 二重ループでpushしたらlengthが２乗になりませんか？
@@ -83,7 +86,7 @@ class Game extends React.Component {
         lines_row.push([j, i])
       }
     }
-    console.log(lines_cross_1)
+    console.log(lines_column)
     // console.log(lines_cross_1.count)
     // console.log(lines_cross_2)
     // console.log(lines_column)
@@ -96,7 +99,8 @@ class Game extends React.Component {
     // console.log(lines_b[1])
     // console.log(lines_c[1])
     // console.log(lines_d[1])
-
+    const aaa = [...squares]
+    console.log(aaa)
     
     // for (let i =0; i <lines_cross_1.length; i++){
     // 　let a = squares[lines_cross_1[i]]
@@ -105,6 +109,8 @@ class Game extends React.Component {
     // let a = squares[lines_cross_1[i][0]][lines_cross_1[i][1]]
     let valcount_O  = 0
     let valcount_X  = 0
+
+    //斜め1
     for(let i = 0; i<lines_cross_1.length; i++){
         if (lines_cross_1[i] === "O"){
           valcount_O ++;
@@ -118,7 +124,26 @@ class Game extends React.Component {
     if (lines_cross_1[0] === "X" && valcount_X === SQUARE_NUM){
         return lines_cross_1[0];
     }
+
+    //斜め2
+    for(let i = 0; i<lines_cross_2.length; i++){
+      if (lines_cross_2[i] === "O"){
+        valcount_O ++;
+      } else if (lines_cross_2[i] === "X"){
+        valcount_X ++;
+      }
+    }
+    if (lines_cross_2[0] === "O" && valcount_O === SQUARE_NUM){
+        return lines_cross_2[0];
+    }
+    if (lines_cross_2[0] === "X" && valcount_X === SQUARE_NUM){
+        return lines_cross_2[0];
+    }
+
+    //横
+
       
+
     
     // console.log(kekka)
 
