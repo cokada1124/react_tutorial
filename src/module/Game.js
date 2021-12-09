@@ -104,7 +104,7 @@ class Game extends React.Component {
 
     // console.log(lines_column_temp)
     // console.log(lines_column)
-    console.log(squares[0])
+    // console.log(squares[0])
     // console.log(lines_cross_1.count)
     // console.log(lines_cross_2)
     // console.log(lines_column)
@@ -172,13 +172,13 @@ class Game extends React.Component {
 
     //// IsAllEqual_columnすごいですね！判定用のfuncを作るなんて・・・良いアイデアです。
     //// しかもアローの略記法且つevery使いも小粋ですね！
-    const IsAllEqual = array => array.every(value => value === array[0]);
+    const IsAllEqual = lists => lists.every(val => val === lists[0]);
     for(let i = 0; i<10; i++){
       //// ここの部分は
         if (IsAllEqual(squares[i]) && squares[i][0] === "O"){
-        return "O"
+        return squares[i][0]
         }else if(IsAllEqual(squares[i]) && squares[i][0] === "X"){
-        return "X"
+        return squares[i][0]
         }
 
       //// これだけでOKですよ！
@@ -188,16 +188,22 @@ class Game extends React.Component {
     }
 
     //縦
-    const lines_row = []
+    // const lines_row = []
+    // for (let i = 0; i<10; i++){
+    //   lines_row.push(squares[i][0])
+    //   if (IsAllEqual(lines_row) && !(lines_row[9] == null)){
+    //     return lines_row[0]
+    //   }
+    // }
     for (let i = 0; i<10; i++){
-      lines_row.push(squares[i][0])
-      if (IsAllEqual(lines_row) && !(lines_row[9] == null)){
-        return lines_row[0]
-      }
+      let lines_row = squares.map(val => val[i]);
+      console.log(lines_row);
+      if (IsAllEqual(lines_row) && lines_row[0] === "O"){
+        return lines_row[0];
+        }else if(IsAllEqual(lines_row) && lines_row[0] === "X"){
+        return lines_row[0];
+        }      
     }
-    
-    const picked = squares.map(item => item[0]);
-    console.log(picked)
 
       
 
