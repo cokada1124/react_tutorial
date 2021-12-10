@@ -26,6 +26,7 @@ class Game extends React.Component {
   }
 
   calculateWinner(squares) {
+    console.log(" !!!!!!!!!!!!!!!!!!!!!!!!! ")
     const lines_num = (SQUARE_NUM * 2) + 1 // 縦横の行数＋斜め（斜めは１回のループでクロス両方を作るので、+1）
     const lines = [...squares]
     
@@ -65,9 +66,8 @@ class Game extends React.Component {
 
 
     const lines_cross_2 = []
-    const len =10;
     for(let i = 0; i < 10; i++){
-      lines_cross_2.push(squares[i][(len - 1) -i])
+      lines_cross_2.push(squares[i][(SQUARE_NUM - 1) -i])
     }
 
     //// 二重ループでpushしたらlengthが２乗になりませんか？
@@ -195,14 +195,16 @@ class Game extends React.Component {
     //     return lines_row[0]
     //   }
     // }
+
+    let lines_row =[];
     for (let i = 0; i<10; i++){
-      let lines_row = squares.map(val => val[i]);
-      console.log(lines_row);
-      if (IsAllEqual(lines_row) && lines_row[0] === "O"){
+      lines_row = squares.map(row => row[i]);
+      if(lines_row[0] == null) { continue }
+      console.log("縦判定 --------------", lines_row);
+      console.log(i)
+      if (IsAllEqual(lines_row)){
         return lines_row[0];
-        }else if(IsAllEqual(lines_row) && lines_row[0] === "X"){
-        return lines_row[0];
-        }      
+      }
     }
 
       
@@ -241,6 +243,7 @@ class Game extends React.Component {
    * @returns 
    */
   dropThePiece(idx){//// チェスで駒を打つことをdropというそうなので、そんなラベリングにしてみました
+    console.log(idx)
     const [row, column] = idx
     //// 適宜console.logで中身を把握しながら進めましょう。
     console.log("この手が打たれました！", (row*SQUARE_NUM)+column)
