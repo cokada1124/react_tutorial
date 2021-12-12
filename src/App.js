@@ -1,16 +1,14 @@
-import React from "react";
+import React from "react"
 import './App.scss';
-import Menu from "module/Menu";
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
         {/* <img src={logo} className="App-logo" alt="logo" /> */}
-        <p>aaa</p>
-        <Menu />
+        
+        <p>test</p>
       </header>
-      <p>aaa</p>
     </div>
   );
 }
