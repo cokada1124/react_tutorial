@@ -9,9 +9,18 @@ class Menu extends React.Component{
   }
   render(){
     return(
-      this.state
+      this.state.title
     )
   }
 }
 
-export default Menu
+export default Menu;
+
+
+// import React from 'react';
+
+// const Menu = () => {
+//     return <p>This is Person Component.</p>
+// };
+
+// export default Menu;
