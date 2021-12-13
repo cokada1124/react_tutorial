@@ -2,6 +2,7 @@ import React from "react"
 import './App.scss';
 
 import Menu from './module/Menu'
+import {List} from './module/List'
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <header className="App-header">
         {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <Menu />
+        <List title="テスト" />
       </header>
     </div>
   );
