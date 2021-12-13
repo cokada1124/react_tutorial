@@ -9,7 +9,9 @@ class Menu extends React.Component{
   }
   render(){
     return(
-      this.state.title
+      <h2>
+      {this.state.title}
+      </h2>
     )
   }
 }

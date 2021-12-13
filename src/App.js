@@ -3,6 +3,7 @@ import './App.scss';
 
 import Menu from './module/Menu'
 import {List} from './module/List'
+import Form from './module/Form'
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <Menu />
         <List title="テスト" />
+        <Form />
       </header>
     </div>
   );
