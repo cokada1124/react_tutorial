@@ -5,15 +5,22 @@ import Menu from './module/Menu'
 import {List} from './module/List'
 import Form from './module/Form'
 
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
-        <Menu />
+      </header>
+      <Menu />
         <List title="テスト" />
         <Form />
-      </header>
+
+        <BrowserRouter>
+        <Routes>
+        <Route path="/" element={<Form />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
