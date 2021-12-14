@@ -1,16 +1,16 @@
-import React from 'react';
+import React from "react"
 
-export class Index extends React.Component{
-  constructor(props){
-    super(props);
-    this.state ={
+export class Index extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
       a: "test", 
     }
-
   }
-  render(){
-    const {title} = this.props;
-    return(
+
+  render() {
+    const { title } = this.props
+    return (
       <table className="fl-right">
         <tr>
           <td>{title}</td>
@@ -21,11 +21,11 @@ export class Index extends React.Component{
         </tr>
       </table>
       
-      {
-        for (var i = 0, length = localStorage.length; i < length; ++i) {
-          console.log(localStorage.key(i));
-        }
-      }
+      // {
+      //   for (var i = 0, length = localStorage.length; i < length; ++i) {
+      //     console.log(localStorage.key(i));
+      //   }
+      // }
       
     )
   }
