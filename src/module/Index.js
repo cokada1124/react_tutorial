@@ -10,15 +10,21 @@ export class Index extends React.Component {
 
   render() {
     const { title } = this.props
+    const local = (() => {
+      try{
+        return JSON.parse(localStorage["this_test"])
+      }catch(e) {return null }
+    })()
+
     return (
       <table className="fl-right">
-        <tr>
+        <tbody><tr>
           <td>{title}</td>
           <td>{title}</td>
           <td>{title}</td>
           <td>{title}</td>
-          <td>{JSON.parse(localStorage["this_test"])}</td>
-        </tr>
+          <td>{ local }</td>
+        </tr></tbody>
       </table>
       
       // {
