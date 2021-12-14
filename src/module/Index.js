@@ -1,6 +1,6 @@
 import React from 'react';
 
-export class List extends React.Component{
+export class Index extends React.Component{
   // constructor(props){
   //   super(props);
   //   this.state ={
@@ -9,7 +9,7 @@ export class List extends React.Component{
   render(){
     const {title} = this.props;
     return(
-      <table className="f-right">
+      <table className="fl-right">
         <tr>
           <td>{title}</td>
           <td>{title}</td>

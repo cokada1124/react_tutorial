@@ -14,7 +14,9 @@
   },
   "scripts": {
     "build": "webpack --progress",
-    "start": "webpack-dev-server --open",
+    "start": ["webpack-dev-server --open",
+      "webpack-dev-server --history-api-fallback"
+            ],
     "hhh": "webpack-dev-server --help"
   },
   "eslintConfig": {

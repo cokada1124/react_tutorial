@@ -1,8 +1,8 @@
 import React from "react"
 import './App.scss';
 
-import Menu from './module/Menu'
-import {List} from './module/List'
+import Side from './module/Side'
+import {Index} from './module/Index'
 import Form from './module/Form'
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -12,14 +12,15 @@ function App() {
     <div className="App">
       <header className="App-header">
       </header>
-      <Menu />
-        <List title="テスト" />
-        <Form />
+      
 
         <BrowserRouter>
+        <Side />
         <Routes>
-        <Route path="/" element={<Form />} />
+        <Route path="/" element={  <Index title="テスト" /> } />
+        <Route path="/new" element={<Form /> } />
         </Routes>
+
       </BrowserRouter>
     </div>
   );
