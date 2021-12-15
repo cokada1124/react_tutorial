@@ -1,6 +1,5 @@
 import React from "react"
 
-<<<<<<< HEAD
 export class Index extends React.Component{
   constructor(props){
     super(props);
@@ -21,6 +20,11 @@ export class Index extends React.Component{
   render(){
     const {title} = this.props;
     const test = [];
+    const local = (() => {
+      try{
+        return JSON.parse(localStorage["test"])
+      }catch(e) {return null }
+    })()
 
     return(
       <div>
@@ -152,40 +156,6 @@ export class Index extends React.Component{
             } */}
       </div>
       
-=======
-export class Index extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      a: "test", 
-    }
-  }
-
-  render() {
-    const { title } = this.props
-    const local = (() => {
-      try{
-        return JSON.parse(localStorage["this_test"])
-      }catch(e) {return null }
-    })()
-
-    return (
-      <table className="fl-right">
-        <tbody><tr>
-          <td>{title}</td>
-          <td>{title}</td>
-          <td>{title}</td>
-          <td>{title}</td>
-          <td>{ local }</td>
-        </tr></tbody>
-      </table>
-      
-      // {
-      //   for (var i = 0, length = localStorage.length; i < length; ++i) {
-      //     console.log(localStorage.key(i));
-      //   }
-      // }
->>>>>>> 3744ee15452c17aac88d684970b327e82f5a7729
       
     )
   }
