@@ -15,12 +15,12 @@ class Side extends React.Component{
     return(
       <ul className="li-st-none f-24">
         <li>
-      <Link to={`/new`}>{this.state.title_1}</Link>
+      <Link to={`/`}>{this.state.title_1}</Link>
       {/* <a href="/new">{this.state.title_1}</a> */}
       {/* <a href="/" className={this.state.toggle ? "on" : ""} onClisk={() => this.setState(toggle: !)}</a> */}
       </li>
       <li>
-      <a href="/">{this.state.title_2}</a>
+      <a href="/new">{this.state.title_2}</a>
       </li>
       </ul>
     )
