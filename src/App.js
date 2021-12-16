@@ -14,6 +14,7 @@ class App extends React.Component {
     //// 列名とstateのプロパティ名をマッピングしておくと
     //// 一元管理できて良いです。
     this.column_names = {
+      id          : "#",
       task        : "種別",
       key         : "キー",
       title       : "件名",
@@ -32,6 +33,7 @@ class App extends React.Component {
     //// 直接state.titleとかstate.statusでアクセスできた方が便利です。
     this.state = {
       tasks: [{
+        id          : 100,
         task        : "タスク",
         key         : "TASK-1",
         title       : "タイトル１",
@@ -42,6 +44,7 @@ class App extends React.Component {
         start_date  : "2021-12-12",
         end_date    : "2021-12-31"
       },{
+        id          : 200,
         task        : "検証",
         key         : "TASK-2",
         title       : "タイトル２",
@@ -74,7 +77,8 @@ class App extends React.Component {
           <article>
           <Routes>
             <Route path="/" element={  <Index title="テスト" tasks={this.state.tasks} column_names={this.column_names} /> } />
-            <Route path="/new" element={<Form addTask={this.addTask} /> } />
+            <Route path="/new" element={<Form kind={"new"} addTask={this.addTask} /> } />
+            <Route path="/:id" element={<Form kind={"edit"} /> } />
           </Routes>
           </article>
         </BrowserRouter>
