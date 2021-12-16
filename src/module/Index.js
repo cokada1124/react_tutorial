@@ -28,12 +28,15 @@ export class Index extends React.Component{
       }catch(e) {return null }
     })()
 
-
+    const ths = Object.keys(this.props.tasks).map((key, i) => (
+      <th key={`th_${i}`}>{key}</th>
+    ))
 
     return(
       
       <div>
         {console.log(this.props.tasks[0])}
+        {console.log(ths)}
       <table className="fl-right">
         <tbody>
         <tr>
@@ -53,6 +56,7 @@ export class Index extends React.Component{
           
 
         </tr>
+          
           {/* {this.state.a.map((key, i) => {
             return(
               {this:key.map((keys, j) =>
@@ -147,6 +151,41 @@ export class Index extends React.Component{
             //     );
             // })
       }
+{
+// function Index(props) {
+//   const { column_names, tasks } = props
+
+//   const ths = Object.keys(column_names).map((key, i) => (
+//     <th key={`th_${i}`}>{column_names[key]}</th>
+//   ))
+
+//   const trs = tasks.map((task, i) => {
+//     const tds = Object.keys(task).map((td, j) => (
+//       <td key={`td_${j}`}>{task[td]}</td>
+//     ))
+
+//     return (
+//       <tr key={`tr_${i}`}>
+//         {tds}
+//       </tr>
+//     )
+//   })
+
+//   return(
+//     <div>
+//       <table>
+//         <thead>
+//           <tr>
+//             {ths}
+//           </tr>
+//         </thead>
+//         <tbody>
+//           {trs}
+//         </tbody>
+//       </table>
+//     </div>
+//   )
+}
         </tbody>
       </table>
 
