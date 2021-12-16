@@ -3,14 +3,15 @@ import React from "react"
 export class Index extends React.Component{
   constructor(props){
     super(props);
-    // this.state ={
-    //   data: JSON.parse(localStorage["test"]),
-    //   vals: Object.values(JSON.parse(localStorage["test"])),
-    //   vals_: [Object.values(JSON.parse(localStorage["test"])[0])],
-    //   keys: [Object.keys(JSON.parse(localStorage["test"])[0])],
+    this.state ={
+      // data: JSON.parse(localStorage["test"]),
+      // vals: Object.values(JSON.parse(localStorage["test"])),
+      vals_: [Object.values(JSON.parse(localStorage["test"])[0])],
+      // keys: [Object.keys(JSON.parse(localStorage["test"])[0])],
 
-    //   le: JSON.parse(localStorage["test"]).length
-    // }
+      le: JSON.stringify(this.props.tasks).length,
+      data: this.props.tasks.concat()
+    }
 
     // localstorageデータ
     // state=[{kind: 'タスク', key:"HBR-HOGE-1", task_name: "summary", manager:"fujiwara", state:"未対応", primary:"高", registration_date:"2021/9/1", start_date:"2021/9/1", deadline_date:"2021/9/1"}]
@@ -18,10 +19,8 @@ export class Index extends React.Component{
 
   }
   render(){
-    return (
-      <>{this.props.tasks}</>
-    )
-    const {title} = this.props;
+    // return null
+    // const {tasks} = this.props.tasks;
     const test = [];
     const local = (() => {
       try{
@@ -30,7 +29,9 @@ export class Index extends React.Component{
     })()
 
     return(
+      
       <div>
+        {console.log(this.state.data)}
       <table className="fl-right">
         <tbody>
         <tr>
@@ -43,9 +44,11 @@ export class Index extends React.Component{
           <th>登録者</th>
           <th>開始日</th>
           <th>期限日</th>
-          {console.log(this.state.vals[0])}
+          {/* {console.log(this.state.vals[0])}
           {console.log(this.state.vals_)}
-          {console.log(this.state.keys[0])}
+          {console.log(this.state.keys[0])} */}
+          {/* {JSON.stringify(this.state.data)} */}
+          
 
         </tr>
           {/* {this.state.a.map((key, i) => {
@@ -60,8 +63,8 @@ export class Index extends React.Component{
          )} */}
 
          {/* データを一つづつ表示 dateの要素が2つになると動かない状態です */}
-          <tr>
-          {this.state.data.map((key, i) =>
+          {/* <tr>
+          {this.props.tasks.map((key, i) =>
           <td key={i}>{key.kind}</td>
           )}
 
@@ -91,7 +94,7 @@ export class Index extends React.Component{
           {this.state.data.map((key, i) =>
           <td key={i}>{key.deadline_date}</td>
           )}
-        </tr>
+        </tr> */}
         {
           
         }
@@ -120,6 +123,9 @@ export class Index extends React.Component{
       {     // 下記詰まっている内容になります。
             // this.state.valsをthis.state.vals[i]として要素分回したいのですが、エラーとなる。
             // {val}が<td></td>の中に全て入ってしまう。
+            // let tasks = this.props.tasks;
+            
+
             Array(this.state.le).fill("0").map((test,i) => {
                 return (
                       <tr key ={i}>
@@ -157,6 +163,8 @@ export class Index extends React.Component{
                     );
                 })
             } */}
+            {JSON.parse(this.props.tasks)}
+            {/* console.log({this.props.tasks}); */}
       </div>
       
       
