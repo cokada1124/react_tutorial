@@ -28,18 +28,18 @@ export class Index extends React.Component{
       }catch(e) {return null }
     })()
 
-    const ths = Object.keys(this.state.vals_).map((key, i) => (
-      <th key={`th_${i}`}>{this.state.vals_[key]}</th>
+    const ths = Object.keys(this.props.keys).map((key, i) => (
+      <th key={`th_${i}`}>{this.props.keys[key]}</th>
     ))
 
     console.log(ths)
-    console.log(this.state.vals_)
+    // console.log(this.state.vals_)
 
     // const ths = Object.keys(this.state.vals_).map((key, i) => (
     //   <th key={`th_${i}`}>{column_names[key]}</th>
     // ))
   
-    // const trs = tasks.map((task, i) => {
+    // const trs = this.props.tasks.map((task, i) => {
     //   const tds = Object.keys(task).map((td, j) => (
     //     <td key={`td_${j}`}>{task[td]}</td>
     //   ))
@@ -69,10 +69,19 @@ export class Index extends React.Component{
     return(
       
       <div>
-        {console.log(this.props.tasks[0])}
-        {console.log(ths)}
+        {/* {console.log(this.props.tasks[0])}
+        {console.log(ths)} */}
       <table className="fl-right">
-        <tbody>
+      <thead>
+            <tr>
+              {ths}
+            </tr>
+          </thead>
+          <tbody>
+            {/* {trs} */}
+          </tbody>
+          </table>
+        {/* <tbody>
         <tr>
           <th>種別</th>
           <th>キー</th>
@@ -82,14 +91,14 @@ export class Index extends React.Component{
           <th>優先度</th>
           <th>登録者</th>
           <th>開始日</th>
-          <th>期限日</th>
+          <th>期限日</th> */}
           {/* {console.log(this.state.vals[0])}
           {console.log(this.state.vals_)}
           {console.log(this.state.keys[0])} */}
           {/* {JSON.stringify(this.state.data)} */}
           
 
-        </tr>
+        {/* </tr> */}
           
           {/* {this.state.a.map((key, i) => {
             return(
@@ -220,8 +229,8 @@ export class Index extends React.Component{
 //     </div>
 //   )
 }
-        </tbody>
-      </table>
+        {/* </tbody>
+      </table> */}
 
       
 
@@ -238,7 +247,7 @@ export class Index extends React.Component{
                     );
                 })
             } */}
-            {JSON.stringify(this.props.tasks)}
+            {/* {JSON.stringify(this.props.tasks)} */}
             {/* console.log({this.props.tasks}); */}
       </div>
       
