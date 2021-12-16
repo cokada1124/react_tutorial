@@ -16,7 +16,6 @@ class Side extends React.Component {
     return (
       <ul className="li-st-none f-24">
         <li>
-<<<<<<< HEAD
       <Link to={`/`}>{this.state.title_1}</Link>
       {/* <a href="/new">{this.state.title_1}</a> */}
       {/* <a href="/" className={this.state.toggle ? "on" : ""} onClisk={() => this.setState(toggle: !)}</a> */}
@@ -24,15 +23,6 @@ class Side extends React.Component {
       <li>
       <a href="/new">{this.state.title_2}</a>
       </li>
-=======
-          <Link to={`/new`}>{this.state.title_1}</Link>
-          {/* <a href="/new">{this.state.title_1}</a> */}
-          {/* <a href="/" className={this.state.toggle ? "on" : ""} onClisk={() => this.setState(toggle: !)}</a> */}
-        </li>
-        <li>
-         <a href="/">{this.state.title_2}</a>
-        </li>
->>>>>>> 3744ee15452c17aac88d684970b327e82f5a7729
       </ul>
     )
   }

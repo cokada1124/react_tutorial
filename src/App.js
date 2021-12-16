@@ -1,4 +1,6 @@
 import React from "react"
+import {useState} from 'react';
+
 import "./App.scss"
 
 import Side from "./module/Side"
@@ -8,11 +10,16 @@ import Form from "./module/Form"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 function App() {
+  const [tasks,setTasks] = useState(localStorage["test"]);
+  const addTasks = () => {
+    setTasks(tasks.push({kind: 'タスク', key:"HBR-HOGE-1", task_name: "summary", manager:"fujiwara", state:"未対応", primary:"高", registration_date:"2021/9/1", start_date:"2021/9/1", deadline_date:"2021/9/1"}));
+  }
   return (
     <div className="App">
       <header className="App-header">
       </header>
-
+      {tasks}
+      <button onClick={addTasks}>ボタン</button>
       <BrowserRouter>
         <Side />
         <Routes>
