@@ -163,7 +163,7 @@ export class Index extends React.Component{
                     );
                 })
             } */}
-            {JSON.parse(this.props.tasks)}
+            {JSON.stringify(this.props.tasks)}
             {/* console.log({this.props.tasks}); */}
       </div>
       
