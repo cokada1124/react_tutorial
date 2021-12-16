@@ -38,18 +38,28 @@ export class Index extends React.Component{
     // const ths = Object.keys(this.state.vals_).map((key, i) => (
     //   <th key={`th_${i}`}>{column_names[key]}</th>
     // ))
+
+
   
     const trs = this.props.tasks.map((task, i) => {
       const tds = Object.keys(task).map((td, j) => (
         <td key={`td_${j}`}>{task[td]}</td>
       ))
+      const toEdit = (id) => {
+        // location.href = "/" + id
+      }
   
       return (
-        <tr key={`tr_${i}`}>
+        <tr key={`tr_${i}`} onClick ={toEdit(task.id)}>
           {tds}
         </tr>
       )
     })
+
+    // console.log(ths);
+    // ths.forEach(th => {
+    //   console.log(th.props.children)
+    // })
   
     // return(
     //   <div>

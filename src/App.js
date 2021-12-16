@@ -10,7 +10,7 @@ import Form from "./module/Form"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 function App() {
-  const [tasks,setTasks] = useState([])
+  const [tasks,setTasks] = useState([{id: "",kind: "タスク", key:"HBR-HOGE-1", task_name: "summary", manager:"fujiwara", state:"未対応", primary:"高", registration_date:"2021/9/1", start_date:"2021/9/1", deadline_date:"2021/9/1"},{id: "",kind: "タスク", key:"HBR-HOGE-1", task_name: "summary", manager:"fujiwara", state:"未対応", primary:"高", registration_date:"2021/9/1", start_date:"2021/9/1", deadline_date:"2021/9/1"}])
   const [keys,setKeys] = useState(
   {
     id          : "#",
@@ -31,7 +31,7 @@ function App() {
     // ]
     const task2 = tasks.concat()
     // [...tasks]
-    task2.push({id: "*",kind: "タスク", key:"HBR-HOGE-1", task_name: "summary", manager:"fujiwara", state:"未対応", primary:"高", registration_date:"2021/9/1", start_date:"2021/9/1", deadline_date:"2021/9/1"})
+    task2.push({id: "",kind: "タスク", key:"HBR-HOGE-1", task_name: "summary", manager:"fujiwara", state:"未対応", primary:"高", registration_date:"2021/9/1", start_date:"2021/9/1", deadline_date:"2021/9/1"})
     // console.log(task2)
     setTasks(task2)
   }
