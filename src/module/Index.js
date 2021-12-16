@@ -28,9 +28,43 @@ export class Index extends React.Component{
       }catch(e) {return null }
     })()
 
-    const ths = Object.keys(this.props.tasks).map((key, i) => (
-      <th key={`th_${i}`}>{key}</th>
+    const ths = Object.keys(this.state.vals_).map((key, i) => (
+      <th key={`th_${i}`}>{this.state.vals_[key]}</th>
     ))
+
+    console.log(ths)
+    console.log(this.state.vals_)
+
+    // const ths = Object.keys(this.state.vals_).map((key, i) => (
+    //   <th key={`th_${i}`}>{column_names[key]}</th>
+    // ))
+  
+    // const trs = tasks.map((task, i) => {
+    //   const tds = Object.keys(task).map((td, j) => (
+    //     <td key={`td_${j}`}>{task[td]}</td>
+    //   ))
+  
+    //   return (
+    //     <tr key={`tr_${i}`}>
+    //       {tds}
+    //     </tr>
+    //   )
+    // })
+  
+    // return(
+    //   <div>
+    //     <table>
+    //       <thead>
+    //         <tr>
+    //           {ths}
+    //         </tr>
+    //       </thead>
+    //       <tbody>
+    //         {trs}
+    //       </tbody>
+    //     </table>
+    //   </div>
+    // )
 
     return(
       
