@@ -4,12 +4,12 @@ export class Index extends React.Component{
   constructor(props){
     super(props);
     this.state ={
-      // data: JSON.parse(localStorage["test"]),
-      // vals: Object.values(JSON.parse(localStorage["test"])),
+      data_: JSON.parse(localStorage["test"]),
+      vals: Object.values(JSON.parse(localStorage["test"])),
       vals_: [Object.values(JSON.parse(localStorage["test"])[0])],
-      // keys: [Object.keys(JSON.parse(localStorage["test"])[0])],
+      keys: [Object.keys(JSON.parse(localStorage["test"])[0])],
 
-      le: JSON.stringify(this.props.tasks).length,
+      le: this.props.tasks.length,
       data: this.props.tasks.concat()
     }
 
@@ -28,10 +28,12 @@ export class Index extends React.Component{
       }catch(e) {return null }
     })()
 
+
+
     return(
       
       <div>
-        {console.log(this.state.data)}
+        {console.log(this.props.tasks[0])}
       <table className="fl-right">
         <tbody>
         <tr>
@@ -126,24 +128,24 @@ export class Index extends React.Component{
             // let tasks = this.props.tasks;
             
 
-            Array(this.state.le).fill("0").map((test,i) => {
-                return (
-                      <tr key ={i}>
-                      {
+            // Array(this.state.le).fill("0").map((test,i) => {
+            //     return (
+            //           <tr key ={i}>
+            //           {
                         
-                          this.state.vals_.map((val, j)=>{
-                            return(
-                                  <td key={j}>
+            //               this.props.tasks.map((val, j)=>{
+            //                 return(
+            //                       <td key={j}>
                                     
-                                  {val}
+            //                       {val}
                                     
-                                  </td>
-                            );
-                          })
-                      }
-                      </tr>
-                );
-            })
+            //                       </td>
+            //                 );
+            //               })
+            //           }
+            //           </tr>
+            //     );
+            // })
       }
         </tbody>
       </table>
