@@ -39,17 +39,17 @@ export class Index extends React.Component{
     //   <th key={`th_${i}`}>{column_names[key]}</th>
     // ))
   
-    // const trs = this.props.tasks.map((task, i) => {
-    //   const tds = Object.keys(task).map((td, j) => (
-    //     <td key={`td_${j}`}>{task[td]}</td>
-    //   ))
+    const trs = this.props.tasks.map((task, i) => {
+      const tds = Object.keys(task).map((td, j) => (
+        <td key={`td_${j}`}>{task[td]}</td>
+      ))
   
-    //   return (
-    //     <tr key={`tr_${i}`}>
-    //       {tds}
-    //     </tr>
-    //   )
-    // })
+      return (
+        <tr key={`tr_${i}`}>
+          {tds}
+        </tr>
+      )
+    })
   
     // return(
     //   <div>
@@ -78,7 +78,7 @@ export class Index extends React.Component{
             </tr>
           </thead>
           <tbody>
-            {/* {trs} */}
+            {trs}
           </tbody>
           </table>
         {/* <tbody>

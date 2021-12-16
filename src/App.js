@@ -10,30 +10,8 @@ import Form from "./module/Form"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 function App() {
-  const [tasks,setTasks] = useState([{
-    id: "0",
-    kind: "タスク", 
-    key:"HBR-HOGE-1", 
-    task_name: "summary", 
-    manager:"fujiwara", 
-    state:"未対応", 
-    primary:"高", 
-    registration_date:"2021/9/1", 
-    start_date:"2021/9/1", 
-    deadline_date:"2021/9/1"
-  },{
-    id: "1",
-    kind: "タスク2", 
-    key:"HBR-HOGE-2", 
-    task_name: "summary", 
-    manager:"fujiwara", 
-    state:"未対応", 
-    primary:"高", 
-    registration_date:"2021/9/1", 
-    start_date:"2021/9/1", 
-    deadline_date:"2021/9/1"
-  }])
-  const [keys,setKeys] = useState([
+  const [tasks,setTasks] = useState([])
+  const [keys,setKeys] = useState(
   {
     id          : "#",
     task        : "種別",
@@ -45,7 +23,7 @@ function App() {
     registed_at : "登録日",
     start_date  : "開始日",
     end_date    : "期限日"
-  }])
+  })
   const addTasks = () => {
     // const new_tasks = [
     //   ...tasks, 
@@ -53,7 +31,7 @@ function App() {
     // ]
     const task2 = tasks.concat()
     // [...tasks]
-    task2.push({kind: "タスク", key:"HBR-HOGE-1", task_name: "summary", manager:"fujiwara", state:"未対応", primary:"高", registration_date:"2021/9/1", start_date:"2021/9/1", deadline_date:"2021/9/1"})
+    task2.push({id: "*",kind: "タスク", key:"HBR-HOGE-1", task_name: "summary", manager:"fujiwara", state:"未対応", primary:"高", registration_date:"2021/9/1", start_date:"2021/9/1", deadline_date:"2021/9/1"})
     // console.log(task2)
     setTasks(task2)
   }
@@ -69,8 +47,8 @@ function App() {
     <div className="App">
       <header className="App-header">
       </header>
-      {JSON.stringify(tasks)}
-      <button onClick={addTasks}>ボタン</button>
+      {/* {JSON.stringify(tasks)} */}
+      {/* <button onClick={addTasks}>ボタン</button> */}
       <BrowserRouter>
         <Side />
         <Routes>
