@@ -81,3 +81,18 @@ a {
 .m-top-5{
   margin-top:5px;
 }
+
+
+
+.FormList {
+  list-style-type: none;
+  label {
+    display: inline-block;
+    font-weight: bold;
+    width: 7rem;
+    margin-right: 1rem;
+  }
+  li {
+    margin-bottom: 20px;
+  }
+}

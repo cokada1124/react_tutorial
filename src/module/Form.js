@@ -1,239 +1,116 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
+import { useParams } from "react-router-dom"
 
-class Form extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      id          : 0,
-      task        : 0,
-      key         : "",
-      title       : "",
-      author      : "",
-      status      : "",
-      priority    : "",
-      registed_at : "",
-      start_date  : "",
-      end_date    : ""
-    }
-    this.selects = {
-      task: [
-        [0, "タスク"],
-        [1, "検証"],
-        [2, "議事録"]
-      ],
-      author: [
-        [0, "minamoto"],
-        [1, "taira"],
-        [2, "soga"],
-        [3, "fujiwara"]
-      ],
-      status: [
-        [0, "高"],
-        [1, "中"],
-        [2, "低"]
-      ]
-    }
-    this.setSelect = this.setSelect.bind(this)
-    
-    // this.changeTitle = this.changeTitle.bind(this)
+const Form = (props) => {
+  const { id } = useParams()
+  const [ state, setState ] = useState({
+    id          : 0,
+    task        : 0,
+    key         : "",
+    title       : "",
+    author      : "",
+    status      : "",
+    priority    : "",
+    registed_at : "",
+    start_date  : "",
+    end_date    : ""
+  })
+
+  const selects = {
+    task     : ["タスク", "検証", "議事録"],
+    author   : ["minamoto", "taira", "soga", "fujiwara"],
+    status   : ["未対応", "対応済"],
+    priority : ["高", "中", "低"]
   }
 
-  setSelect(key, val) {
-        const new_val = {}
-        new_val[key] = val
-        this.setState({...this.state, ...new_val})
+  const title = id === undefined ? "課題追加" : "課題編集"
+  const submit_label = id === undefined ? "追加" : "更新"
+
+  useEffect(() => {
+    // console.log("useEffect", id)
+    const this_task = id === undefined ? null : props.tasks.find(task => task.id === id)
+    if(this_task !== null) {
+      setState({...this_task})
+    }
+  }, [props.tasks])
+  
+  console.log(state)
+
+  const generateOpt = (key) => {
+    // console.log("gen opt: ", selects[key])
+    return selects[key].map((opt, i) => (
+      <option key={`${key}_${i}`} value={opt}>{opt}</option>
+    ))
   }
 
-  // render() {
-  //       const task_opt = this.selects.task.map((task, i) => {
-  //         return (<option key={`opt_task_${i}`} value={task[0]}>{task[1]}</option>)
-  //       })
-    
-  //       return (
-  //         <div>
-  //           <h2>{this.state.title}</h2>
-  //           <form>
-  //             <label>タイトル</label>
-  //             <select onChange={(e)=>this.setSelect("task", e.target.value)} value={this.state.task}>
-  //               {task_opt}
-  //             </select>
-  //             <br />
-  //             <label>キー</label>
-  //             <input type="text" value={this.state.key} onChange={(e)=>this.setState({key: e.target.value})} />
-    
-  //             {/* <input type="text" id="title" name="title" value={this.state.task} /> */}
-            
-  //             <div>
-  //               <button onClick={()=>this.props.addTask(this.state)}>追加</button>
-  //             </div>
-  //           </form>
-  //         </div>
-  //       )
-  //     }
+  const createOrUpdateTask = props.onClickAddTask || props.onClickUpdateTask
   
-  // const changeTitle = () => {
-  //   this.setState({
-  //     title: '課題編集',
-  //   });
-  
-
-  
-  
-  // changeTitle() {
-  //   this.setState({
-  //     title: "cTitle2",
-  //   });
-  // }
-
-
-  render() {
-    const submitForm = (e) => {
-      e.preventDefault();
-    }
-
-    const changeTitle = this.props.kind==="edit" ? "課題編集" : "課題追加";
-
-    const editTask = this.props.tasks.find(value => value.id === location.pathname.slice(1,2));
-
-    const testtest = this.props.tasks
-
-    console.log(editTask)
-
-    console.log(this.props.path)
-
-    // console.log(location.pathname.slice(1,2))
-
-    // const etask = this.props.tasks.map((test , i) => {
-    //   this.props.keys.map((k,i) => {
-    //   return(<p keys={i}>{test[k]}</p>)
-    //   })
-    // })
-
-    // console.log(this.props.kind)
-
-    // const changeTitle = () => {
-    //   this.setState({
-    //     title: "課題編集"
-    //   });
-    // }
-    const task_opt = this.selects.task.map((task, i) => {
-      return (<option key={`opt_task_${i}`} value={task[0]}>{task[1]}</option>)
-    })
-
-    // console.log(testtest)
-    
-
-    return (
+  return (
+    <div className="main_container fl-right m-top-5">
+      <h2>{title}</h2>
       
-      <div className="main_container fl-right m-top-5">
-        <h2>{changeTitle}</h2>
-         
-        <p>{this.props.kind==="edit" ? Object.values(editTask) : ""}</p>
-        {/* {etask} */}
-        <form onSubmit={submitForm}>
-          <label>タイトル</label>
-          <input type="text" id="title" name="title" />
+      <ul className="FormList">
+        <li><label>id</label>{id}</li>
 
-          <select onChange={(e)=>this.setSelect("task", e.target.value)} value={this.state.task}>
-          {task_opt}
-        </select>
-        <br />
-        <label>キー</label>
-        <input type="text" value={this.state.key} onChange={(e)=>this.setState({key: e.target.value})} />
+        <li>
+          <label>task</label>
+          <select onChange={(e)=>setState({...state, ...{task: e.target.value}})} value={state.task}>
+          {generateOpt("task")}
+          </select>
+        </li>
         
-          <div><button onClick={() => this.props.onClickAddTasks()}>
-            追加_
-          </button>
-          </div>
-          {/* <div>
-          <button onClick={()=>this.props.addTask(this.state)}>追加</button>
-        </div> */}
-        </form>
-        {/* <button onClick={this.changeTitle}>
-          変更
-        </button> */}
-
-        {console.log(this.props.tasks)}
-
+        <li>
+          <label>key</label>
+          <input type="text" value={state.key} onChange={(e) => setState({...state, ...{key: e.target.value}})} />
+        </li>
+        
+        <li>
+          <label>title</label>
+          <input type="text" value={state.title} onChange={(e) => setState({...state, ...{title: e.target.value}})} />
+        </li>
+        
+        <li>
+          <label>author</label>
+          <select onChange={(e)=>setState({...state, ...{author: e.target.value}})} value={state.author}>
+          {generateOpt("author")}
+          </select>
+        </li>
+        
+        <li>
+          <label>status</label>
+          <select onChange={(e)=>setState({...state, ...{status: e.target.value}})} value={state.status}>
+          {generateOpt("status")}
+          </select>
+        </li>
+        
+        <li>
+          <label>priority</label>
+          <select onChange={(e)=>setState({...state, ...{priority: e.target.value}})} value={state.priority}>
+          {generateOpt("priority")}
+          </select>
+        </li>
+        
+        <li>
+          <label>registed_at</label>
+          <input type="date" value={state.registed_at} onChange={(e) => setState({...state, ...{registed_at: e.target.value}})} />
+        </li>
+        
+        <li>
+          <label>start_date</label>
+          <input type="date" value={state.start_date} onChange={(e) => setState({...state, ...{start_date: e.target.value}})} />
+        </li>
+        
+        <li>
+          <label>end_date</label>
+          <input type="date" value={state.end_date} onChange={(e) => setState({...state, ...{end_date: e.target.value}})} />
+        </li>
+      </ul>
+      
+      <div>
+        <button onClick={() => createOrUpdateTask()}>{submit_label}</button>
       </div>
-
-
-    )
-  }
+    </div>
+  )
 }
 
-
 export default Form
-
-// import React from "react"
-
-// class Form extends React.Component {
-//   constructor(props) {
-//     super(props)
-//     this.state = {
-//       task        : 0,
-//       key         : "",
-//       title       : "",
-//       author      : "",
-//       status      : "",
-//       priority    : "",
-//       registed_at : "",
-//       start_date  : "",
-//       end_date    : ""
-//     }
-//     this.selects = {
-//       task: [
-//         [0, "タスク"],
-//         [1, "検証"],
-//         [2, "議事録"]
-//       ],
-//       author: [
-//         [0, "minamoto"],
-//         [1, "taira"],
-//         [2, "soga"],
-//         [3, "fujiwara"]
-//       ],
-//       status: [
-//         [0, "高"],
-//         [1, "中"],
-//         [2, "低"]
-//       ]
-//     }
-//     this.setSelect = this.setSelect.bind(this)
-//   }
-
-//   setSelect(key, val) {
-//     const new_val = {}
-//     new_val[key] = val
-//     this.setState({...this.state, ...new_val})
-//   }
-
-//   render() {
-//     const task_opt = this.selects.task.map((task, i) => {
-//       return (<option key={`opt_task_${i}`} value={task[0]}>{task[1]}</option>)
-//     })
-
-//     return (
-//       <div>
-//         <h2>{this.state.title}</h2>
-//         <form>
-//           <label>タイトル</label>
-//           <select onChange={(e)=>this.setSelect("task", e.target.value)} value={this.state.task}>
-//             {task_opt}
-//           </select>
-//           <br />
-//           <label>キー</label>
-//           <input type="text" value={this.state.key} onChange={(e)=>this.setState({key: e.target.value})} />
-
-//           {/* <input type="text" id="title" name="title" value={this.state.task} /> */}
-        
-//           <div>
-//             <button onClick={()=>this.props.addTask(this.state)}>追加</button>
-//           </div>
-//         </form>
-//       </div>
-//     )
-//   }
-// }
-
-// export default Form
