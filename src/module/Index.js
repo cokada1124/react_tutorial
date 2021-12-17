@@ -46,7 +46,7 @@ export class Index extends React.Component{
         <td key={`td_${j}`}>{task[td]}</td>
       ))
       const toEdit = (id) => {
-        // location.href = "/" + id
+        location.href = "/" + id
       }
   
       return (
