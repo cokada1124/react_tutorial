@@ -8,14 +8,31 @@ class Form extends React.Component {
     }
   }
   
+  changeTitle(text) {
+    this.setState({
+      title: text
+    });
+    return this.state.title;
+  }
+
+  
+  
+  
+
+
   render() {
     const submitForm = (e) => {
       e.preventDefault();
     }
 
+    console.log(this.props.kind)
+
+    
+
     return (
-      <div>
-        <h2>{this.state.title}</h2>
+      
+      <div className="main_container fl-right m-top-5">
+        <h2>{this.props.kind==="edit" ? this.changeTitle("課題編集") :this.state.title}</h2>
         <form onSubmit={submitForm}>
           <label>タイトル</label>
           <input type="text" id="title" name="title" />

@@ -50,7 +50,7 @@ export class Index extends React.Component{
       }
   
       return (
-        <tr key={`tr_${i}`} onClick ={toEdit(task.id)}>
+        <tr key={`tr_${i}`} onClick ={()=>toEdit(task.id)}>
           {tds}
         </tr>
       )
@@ -78,10 +78,10 @@ export class Index extends React.Component{
 
     return(
       
-      <div>
+      <div className="main_container">
         {/* {console.log(this.props.tasks[0])}
         {console.log(ths)} */}
-      <table className="fl-right">
+      <table className="fl-right m-top-15">
       <thead>
             <tr>
               {ths}

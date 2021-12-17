@@ -41,6 +41,10 @@
   float:right;
 }
 
+.fl-left{
+  float:left;
+}
+
 .f-bole{
   font-weight: bold;
 }
@@ -55,6 +59,25 @@ a {
   
 }
 
+.side_bar{
+  width:10%;
+}
+
+.main_container{
+  width:85%;
+}
+
 .li-st-none{
   list-style: none;
+}
+
+.m-top-15{
+  margin-top:15px;
+}
+.m-top-10{
+  margin-top:10px;
+}
+
+.m-top-5{
+  margin-top:5px;
 }
