@@ -10,7 +10,7 @@ import Form from "./module/Form"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 function App() {
-  const [tasks,setTasks] = useState([{id: "1",kind: "タスク", key:"HBR-HOGE-1", task_name: "summary", manager:"fujiwara", state:"未対応", primary:"高", registration_date:"2021/9/1", start_date:"2021/9/1", deadline_date:"2021/9/1"},{id: "2",kind: "タスク", key:"HBR-HOGE-1", task_name: "summary", manager:"fujiwara", state:"未対応", primary:"高", registration_date:"2021/9/1", start_date:"2021/9/1", deadline_date:"2021/9/1"}])
+  const [tasks,setTasks] = useState([{id: "1",kind: "タスクA", key:"HBR-HOGE-1", task_name: "summary", manager:"fujiwara", state:"未対応", primary:"高", registration_date:"2021/9/1", start_date:"2021/9/1", deadline_date:"2021/9/1"},{id: "2",kind: "タスクB", key:"HBR-HOGE-1", task_name: "summary", manager:"fujiwara", state:"未対応", primary:"高", registration_date:"2021/9/1", start_date:"2021/9/1", deadline_date:"2021/9/1"}])
   const [keys,setKeys] = useState(
   {
     id          : "#",
@@ -35,6 +35,14 @@ function App() {
     // console.log(task2)
     setTasks(task2)
   }
+
+    // const addTask(task) => {
+    //       const present_tasks = this.state.tasks
+    //       this.setState({
+    //         tasks: [...present_tasks, task]
+    //       })
+    // }
+
   /**
    * 
   const addTasks = () => {
@@ -53,7 +61,7 @@ function App() {
         <Side />
         <Routes>
           <Route path="/" element={  <Index title="テスト" tasks={tasks} keys={keys} /> } />
-          <Route path="/new" element={<Form onClickAddTasks={addTasks} kind={"new"}/> } />
+          <Route path="/new" element={<Form onClickAddTasks={addTasks} tasks={tasks} kind={"new"}/> } />
           <Route path="/:id" element={<Form tasks={tasks} kind={"edit"} /> } />
         </Routes>
       </BrowserRouter>
