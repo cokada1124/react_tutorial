@@ -32,7 +32,7 @@ class Form extends React.Component {
     return (
       
       <div className="main_container fl-right m-top-5">
-        <h2>{this.props.kind==="edit" ? this.changeTitle("課題編集") :this.state.title}</h2>
+        <h2>{this.props.kind==="edit" ? "課題編集" : "課題追加"}</h2>
         <form onSubmit={submitForm}>
           <label>タイトル</label>
           <input type="text" id="title" name="title" />
