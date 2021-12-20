@@ -32,7 +32,7 @@ function App() {
     // console.log("add task : ", tasks);
     // const task2 = tasks.concat()
     // [...tasks]
-    console.log(tasks)
+    console.log("add task: ", task)
     let id_count = tasks.length;
     console.log(id_count)
     task.id = id_count +1

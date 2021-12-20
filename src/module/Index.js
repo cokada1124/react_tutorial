@@ -3,15 +3,15 @@ import React from "react"
 export class Index extends React.Component{
   constructor(props){
     super(props);
-    this.state ={
-      data_: JSON.parse(localStorage["test"]),
-      vals: Object.values(JSON.parse(localStorage["test"])),
-      vals_: [Object.values(JSON.parse(localStorage["test"])[0])],
-      keys: [Object.keys(JSON.parse(localStorage["test"])[0])],
+    // this.state ={
+    //   data_: JSON.parse(localStorage["test"]),
+    //   vals: Object.values(JSON.parse(localStorage["test"])),
+    //   vals_: [Object.values(JSON.parse(localStorage["test"])[0])],
+    //   keys: [Object.keys(JSON.parse(localStorage["test"])[0])],
 
-      le: this.props.tasks.length,
-      data: this.props.tasks.concat()
-    }
+    //   le: this.props.tasks.length,
+    //   data: this.props.tasks.concat()
+    // }
 
     // localstorageデータ
     // state=[{kind: 'タスク', key:"HBR-HOGE-1", task_name: "summary", manager:"fujiwara", state:"未対応", primary:"高", registration_date:"2021/9/1", start_date:"2021/9/1", deadline_date:"2021/9/1"}]
