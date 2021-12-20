@@ -1,5 +1,6 @@
 import React from "react"
 import {useState} from 'react';
+import { useParams } from "react-router-dom"
 
 import "./App.scss"
 
@@ -10,6 +11,7 @@ import Form from "./module/Form"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 function App() {
+  const { id } = useParams()
   const [tasks,setTasks] = useState([
     {id: "1",task: "タスク", key:"HBR-HOGE-1", title: "summary", author:"fujiwara", status:"対応済", priority:"高", registed_at:"2021-9-1", start_date:"2021-09-01", end_date:"2021-09-01"},
     {id: "2",task: "種別", key:"HBR-HOGE-1", title: "summary", author:"fujiwara", status:"未対応", priority:"高", registed_at:"2021-09-01", start_date:"2021-09-01", end_date:"2021-09-01"}
@@ -30,12 +32,12 @@ function App() {
     // console.log("add task : ", tasks);
     // const task2 = tasks.concat()
     // [...tasks]
-    console.log(task.task)
+    console.log(tasks)
     let id_count = tasks.length;
     console.log(id_count)
     task.id = id_count +1
     //下記ifの条件文に”submitボタンが押されたら”という条件をいれたいのですが、これもステートで状態を持つのがよいでしょうか？
-    if (task.task !== 0){
+    if (task.submit_btn === true){
     tasks.push(task)
     }
     console.log(tasks)
@@ -44,8 +46,21 @@ function App() {
   }
 
   const updateTask = (task) => {
+    const edit_task = tasks.find(task => task.id === id);
+    console.log(tasks)
 
-  // console.log("update task :", task)
+    tasks.map((t, i) => {
+      Object.keys(t).map((key, j) => {
+        if(t[id]===task.id){
+          t=task;
+        }
+      })
+    })
+    //  tasks.find((task) => task.id === tasks.id)
+    console.log(task.id);
+   console.log("update task :", task);
+   console.log(edit_task)
+   
   }
     
     // const addTask(task) => {

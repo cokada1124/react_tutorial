@@ -13,8 +13,8 @@ const Form = (props) => {
     priority    : "",
     registed_at : "",
     start_date  : "",
-    end_date    : "",
-    submit_btn  : false
+    end_date    : ""
+    // submit_btn  : false
   })
 
   const selects = {
