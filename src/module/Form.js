@@ -13,7 +13,8 @@ const Form = (props) => {
     priority    : "",
     registed_at : "",
     start_date  : "",
-    end_date    : ""
+    end_date    : "",
+    submit_btn  : false
   })
 
   const selects = {
@@ -32,7 +33,7 @@ const Form = (props) => {
     if(this_task !== null) {
       setState({...this_task})
     }
-  }, [props.tasks])
+  }, [])
   
   console.log(state)
 
@@ -48,7 +49,7 @@ const Form = (props) => {
   return (
     <div className="main_container fl-right m-top-5">
       <h2>{title}</h2>
-      
+      {/* <form onSubmit={}> */}
       <ul className="FormList">
         <li><label>id</label>{id}</li>
 
@@ -107,8 +108,9 @@ const Form = (props) => {
       </ul>
       
       <div>
-        <button onClick={() => createOrUpdateTask()}>{submit_label}</button>
+        <button onClick={createOrUpdateTask(state)}>{submit_label}</button>
       </div>
+      {/* </form> */}
     </div>
   )
 }
