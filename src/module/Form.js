@@ -114,7 +114,9 @@ const Form = (props) => {
             onClick={()=>createOrUpdateTask(state)}とすると即実行されず
             submitが押されるまで実行を待ち受けますので、"submitボタンが押されたら"という条件を入れる必要がなくなります。
         */}
-        <button onClick={()=>createOrUpdateTask(state)}>{submit_label}</button>
+        <button onClick={()=>
+          createOrUpdateTask(state)
+          }>{submit_label}</button>
       </div>
       {/* </form> */}
     </div>
