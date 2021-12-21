@@ -14,7 +14,6 @@ const Form = (props) => {
     registed_at : "",
     start_date  : "",
     end_date    : ""
-    // submit_btn  : false
   })
 
   const selects = {
@@ -115,17 +114,10 @@ const Form = (props) => {
       </ul>
       
       <div>
-        {/* 
-            onClick={createOrUpdateTask(state)}とすると即実行されるため、
-            "submitボタンが押されたら"という条件を入れたいという妙な希望を持つ事になります笑
-            onClick={()=>createOrUpdateTask(state)}とすると即実行されず
-            submitが押されるまで実行を待ち受けますので、"submitボタンが押されたら"という条件を入れる必要がなくなります。
-        */}
         <button onClick={()=>
           createOrUpdateTask(state,id)
           }>{submit_label}</button>
       </div>
-      {/* </form> */}
     </div>
   )
 }
