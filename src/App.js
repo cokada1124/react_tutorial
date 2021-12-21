@@ -7,14 +7,24 @@ import Side from "./module/Side"
 import {Index} from "./module/Index"
 import Form from "./module/Form"
 
-import { BrowserRouter, Routes, Route , useParams } from "react-router-dom"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 function App() {
-  const { id } = useParams()
-  const [tasks,setTasks] = useState([
-    {id: "1",task: "タスク", key:"HBR-HOGE-1", title: "summary", author:"fujiwara", status:"対応済", priority:"高", registed_at:"2021-9-1", start_date:"2021-09-01", end_date:"2021-09-01"},
-    {id: "2",task: "種別", key:"HBR-HOGE-1", title: "summary", author:"fujiwara", status:"未対応", priority:"高", registed_at:"2021-09-01", start_date:"2021-09-01", end_date:"2021-09-01"}
-  ])
+  //  const { id } = useParams()
+  const local_state = (() => {
+    try{
+      return JSON.parse(localStorage["tasks"])
+    }catch(e) {return [] }
+  })()
+
+  const [tasks,setTasks] = useState(
+    local_state
+  )
+
+  let maxId = {
+    id: 0,
+  }
+
   const keys = {
     id          : "#",
     task        : "種別",
@@ -27,28 +37,35 @@ function App() {
     start_date  : "開始日",
     end_date    : "期限日"
   }
-  console.log(JSON.parse(localStorage["test2"]))
+
+  // console.log(JSON.parse(localStorage["test2"]))
+  
   const addTask = (task) => {
     // console.log("add task : ", tasks);
     // const task2 = tasks.concat()
     // [...tasks]
     console.log("add task: ", task)
-    let id_count = tasks.length;
-    console.log(id_count)
-    task.id = id_count +1
+    // let id_count = tasks.length;
+    // console.log(id_count)
+    // task.id = id_count +1
     //下記ifの条件文に”submitボタンが押されたら”という条件をいれたいのですが、これもステートで状態を持つのがよいでしょうか？
+    maxId.id = maxId.id + 1
+    localStorage["maxId"] = JSON.stringify(maxId.id)
     
+    task.id = localStorage["maxId"]
+    // console.log(maxId.id)
     tasks.push(task)
-    // localStorage["tasks"] = JSON.stringify(tasks)
+    localStorage["tasks"] = JSON.stringify(tasks)
     
     console.log(tasks)
     // console.log(task2)
     // setTasks(task2)
   }
 
-  const updateTask = (task) => {
+  const updateTask = (task,id) => {
     // const edit_task = tasks.find(task => task.id === id);
-    tasks[task.id - 1] = task
+     tasks[tasks.findIndex(t => t.id === id)] = task
+    // console.log(tasks.findIndex(t => t.id === id))
     // localStorage["tasks"] = JSON.stringify(tasks)
     // console.log(id)
 
