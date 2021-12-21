@@ -17,13 +17,20 @@ function App() {
     }catch(e) {return [] }
   })()
 
+  const mid = (() => {
+    try{
+      return JSON.parse(localStorage["maxId"])
+    }catch(e) {return 0}
+  })()
+  console.log(mid)
+
+  let maxId ={
+    id: mid,
+  }
+
   const [tasks,setTasks] = useState(
     local_state
   )
-
-  let maxId = {
-    id: 0,
-  }
 
   const keys = {
     id          : "#",
@@ -49,22 +56,34 @@ function App() {
     // console.log(id_count)
     // task.id = id_count +1
     //下記ifの条件文に”submitボタンが押されたら”という条件をいれたいのですが、これもステートで状態を持つのがよいでしょうか？
+    console.log(maxId)
+
+    // maxId = parseInt(JSON.stringify(maxId))
+    
+    // maxId.id = parseInt(localStorage["maxId"]) 
     maxId.id = maxId.id + 1
     localStorage["maxId"] = JSON.stringify(maxId.id)
     
-    task.id = localStorage["maxId"]
+    task.id = parseInt(localStorage["maxId"])
     // console.log(maxId.id)
-    tasks.push(task)
-    localStorage["tasks"] = JSON.stringify(tasks)
+    // tasks.push(task)
+    setTasks([...tasks, ...[task]])
+    localStorage["tasks"] = JSON.stringify([...tasks, ...[task]])
     
     console.log(tasks)
+    location.href = `/${task.id}`
     // console.log(task2)
     // setTasks(task2)
   }
 
   const updateTask = (task,id) => {
     // const edit_task = tasks.find(task => task.id === id);
-     tasks[tasks.findIndex(t => t.id === id)] = task
+     tasks[tasks.findIndex(t => +t.id === +id)] = task
+     console.log(id)
+     console.log(task.id)
+      setTasks(tasks)
+      localStorage["tasks"] = JSON.stringify(local_state)
+    //  localStorage["tasks"] = JSON.stringify(tasks)
     // console.log(tasks.findIndex(t => t.id === id))
     // localStorage["tasks"] = JSON.stringify(tasks)
     // console.log(id)
@@ -108,7 +127,7 @@ function App() {
         <Side />
         <Routes>
           <Route path="/" element={  <Index title="テスト" tasks={tasks} keys={keys} /> } />
-          <Route path="/new" element={<Form onClickAddTask={addTask} /> } />
+          <Route path="/new" element={<Form onClickAddTask={addTask} num={tasks.length} /> } />
           <Route path="/:id" element={<Form onClickUpdateTask={updateTask} tasks={tasks} /> } />
         </Routes>
       </BrowserRouter>

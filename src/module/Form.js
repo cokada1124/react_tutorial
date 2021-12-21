@@ -29,12 +29,18 @@ const Form = (props) => {
 
   useEffect(() => {
     // console.log("useEffect", id)
-    const this_task = id === undefined ? null : props.tasks.find(task => task.id === id)
+    const this_task = id === undefined ? null : props.tasks.find(task => +task.id === +id)
+    console.log("id: ", id)
+    console.log("props.tasks: ", props.tasks)
+    if(id !== undefined){
+      console.log("this_tasks: ", props.tasks.find(task => +task.id === +id))
+    }
+    console.log("useeffect : ------", this_task)
     if(this_task !== null) {
       setState({...this_task})
     }
   }, [])
-  
+
   console.log(state)
 
   const generateOpt = (key) => {
@@ -45,9 +51,10 @@ const Form = (props) => {
   }
 
   const createOrUpdateTask = props.onClickAddTask || props.onClickUpdateTask
-  
+  console.log(props)
   return (
     <div className="main_container fl-right m-top-5">
+      num: {props.num}
       <h2>{title}</h2>
       {/* <form onSubmit={}> */}
       <ul className="FormList">

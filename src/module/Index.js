@@ -21,18 +21,18 @@ export class Index extends React.Component{
   render(){
     // return null
     // const {tasks} = this.props.tasks;
-    const test = [];
-    const local = (() => {
-      try{
-        return JSON.parse(localStorage["test"])
-      }catch(e) {return null }
-    })()
+    // const test = [];
+    // const local = (() => {
+    //   try{
+    //     return JSON.parse(localStorage["test"])
+    //   }catch(e) {return null }
+    // })()
 
     const ths = Object.keys(this.props.keys).map((key, i) => (
       <th key={`th_${i}`}>{this.props.keys[key]}</th>
     ))
 
-    console.log(ths)
+    console.log(this.props.tasks)
     // console.log(this.state.vals_)
 
     // const ths = Object.keys(this.state.vals_).map((key, i) => (
