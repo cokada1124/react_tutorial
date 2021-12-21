@@ -27,6 +27,7 @@ function App() {
     start_date  : "開始日",
     end_date    : "期限日"
   }
+  console.log(JSON.parse(localStorage["test2"]))
   const addTask = (task) => {
     // console.log("add task : ", tasks);
     // const task2 = tasks.concat()
@@ -38,15 +39,17 @@ function App() {
     //下記ifの条件文に”submitボタンが押されたら”という条件をいれたいのですが、これもステートで状態を持つのがよいでしょうか？
     
     tasks.push(task)
+    // localStorage["tasks"] = JSON.stringify(tasks)
     
     console.log(tasks)
     // console.log(task2)
     // setTasks(task2)
   }
 
-  const updateTask = (task , id) => {
+  const updateTask = (task) => {
     // const edit_task = tasks.find(task => task.id === id);
     tasks[task.id - 1] = task
+    // localStorage["tasks"] = JSON.stringify(tasks)
     // console.log(id)
 
     // tasks.map((t, i) => {
