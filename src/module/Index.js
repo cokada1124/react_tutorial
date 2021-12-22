@@ -2,10 +2,14 @@ import React from "react"
 
 const Index = (props) => {
   const ths = Object.keys(props.keys).map((key, i) => (
-    <th key={`th_${i}`}>{props.keys[key]}</th>
+    <th key={`th_${i}`} onClick={()=>sort()}>{props.keys[key]}</th>
   ))
+  console.log(ths)
 
   console.log(props.tasks)
+  const sort = () => {
+    console.log(props.tasks)
+  }
 
   const trs = props.tasks.map((task, i) => {
     const tds = Object.keys(task).map((td, j) => (
