@@ -124,7 +124,7 @@ const Form = (props) => {
 
         <li>
           <label>task</label>
-          <select onChange={(e)=>setState({...state, ...{task: e.target.value}})} value={state.task}>
+          <select onChange={(e)=>setState({...state, ...{task: e.target.value}})} value={state.task} className={error.task === true ? "" : "-error"}>
           {generateOpt("task")}
           </select>
           {error.task === false && <span className="red txt-indent">タスクを選択して下さい</span>}
@@ -134,19 +134,19 @@ const Form = (props) => {
         
         <li>
           <label>key</label>
-          <input type="text" value={state.key} onChange={(e) => setState({...state, ...{key: e.target.value}})} />
+          <input type="text" value={state.key} onChange={(e) => setState({...state, ...{key: e.target.value}})} className={error.key === true ? "" : "-error"} />
           {error.key === false && <span className="red txt-indent">キーを入力して下さい</span>}
         </li>
         
         <li>
           <label>title</label>
-          <input type="text" value={state.title} onChange={(e) => setState({...state, ...{title: e.target.value}})} />
+          <input type="text" value={state.title} onChange={(e) => setState({...state, ...{title: e.target.value}})} className={error.title === true ? "" : "-error"} />
           {error.title === false && <span className="red txt-indent">タイトルを入力して下さい</span>}
         </li>
         
         <li>
           <label>author</label>
-          <select onChange={(e)=>setState({...state, ...{author: e.target.value}})} value={state.author}>
+          <select onChange={(e)=>setState({...state, ...{author: e.target.value}})} value={state.author} className={error.author === true ? "" : "-error"}>
           {generateOpt("author")}
           </select>
           {error.author === false && <span className="red txt-indent">authorを入力して下さい</span>}
@@ -154,7 +154,7 @@ const Form = (props) => {
         
         <li>
           <label>status</label>
-          <select onChange={(e)=>setState({...state, ...{status: e.target.value}})} value={state.status}>
+          <select onChange={(e)=>setState({...state, ...{status: e.target.value}})} value={state.status} className={error.status === true ? "" : "-error"}>
           {generateOpt("status")}
           </select>
           {error.status === false && <span className="red txt-indent">statusを入力して下さい</span>}
@@ -162,7 +162,7 @@ const Form = (props) => {
         
         <li>
           <label>priority</label>
-          <select onChange={(e)=>setState({...state, ...{priority: e.target.value}})} value={state.priority}>
+          <select onChange={(e)=>setState({...state, ...{priority: e.target.value}})} value={state.priority} className={error.priority === true ? "" : "-error"}>
           {generateOpt("priority")}
           </select>
           {error.priority === false && <span className="red txt-indent">優先度を入力して下さい</span>}
@@ -170,19 +170,19 @@ const Form = (props) => {
         
         <li>
           <label>registed_at</label>
-          <input type="date" value={state.registed_at} onChange={(e) => setState({...state, ...{registed_at: e.target.value}})} />
+          <input type="date" value={state.registed_at} onChange={(e) => setState({...state, ...{registed_at: e.target.value}})} className={error.registed_at === true ? "" : "-error"} />
           {error.registed_at === false && <span className="red txt-indent">登録日を入力して下さい</span>}
         </li>
         
         <li>
           <label>start_date</label>
-          <input type="date" value={state.start_date} onChange={(e) => setState({...state, ...{start_date: e.target.value}})} />
+          <input type="date" value={state.start_date} onChange={(e) => setState({...state, ...{start_date: e.target.value}})} className={error.start_date === true ? "" : "-error"} />
           {error.start_date === false && <span className="red txt-indent">開始日を入力して下さい</span>}
         </li>
         
         <li>
           <label>end_date</label>
-          <input type="date" value={state.end_date} onChange={(e) => setState({...state, ...{end_date: e.target.value}})} />
+          <input type="date" value={state.end_date} onChange={(e) => setState({...state, ...{end_date: e.target.value}})} className={error.end_date === true ? "" : "-error"} />
           {error.end_date === false && <span className="red txt-indent">終了日を入力して下さい</span>}
         </li>
       </ul>

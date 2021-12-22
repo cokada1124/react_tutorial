@@ -111,3 +111,8 @@ table{
     margin-bottom: 20px;
   }
 }
+
+select.-error,
+input.-error {
+  background-color: #fcc;
+}
