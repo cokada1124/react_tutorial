@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
+import { useForm } from 'react-hook-form'
 
 const Form = (props) => {
   const { id } = useParams()
+  
   const [ state, setState ] = useState({
     id          : 0,
     task        : 0,
@@ -16,6 +18,19 @@ const Form = (props) => {
     end_date    : ""
   })
 
+
+  const [ error, setError ] = useState({
+    task        : true,
+    key         : true,
+    title       : true,
+    author      : true,
+    status      : true,
+    priority    : true,
+    registed_at : true,
+    start_date  : true,
+    end_date    : true
+  })
+
   const selects = {
     task     : ["タスク", "検証", "議事録"],
     author   : ["minamoto", "taira", "soga", "fujiwara"],
@@ -25,6 +40,27 @@ const Form = (props) => {
 
   const title = id === undefined ? "課題追加" : "課題編集"
   const submit_label = id === undefined ? "追加" : "更新"
+
+  //即時間数なので再レンダーされるごとに読み込まれる認識で、フォームのtask項目でセレクト内容を変えてみましたが、この処理が実行されない理由がわかりませんでした。（最初の読み込み時は実行されることを確認しました）
+  const errorCheck = (() => {
+    //ここの処理を短くしたいのですが、、良い書き方はありますでしょうか。
+    if(state.task === 0){
+      //setErrorではerror.taskを更新できませんでしたが、setStateだと更新できた理由がわかりませんでした。
+      setState(error.task= false);
+    }
+    if(state.key === ""){
+      setState(error.key= false);
+    }
+    if(state.title === ""){
+      setState(error.title= false);
+    }
+  })()
+  
+  const check_result =(Object.values(error))
+  const result =check_result.every((b) => {
+    return b===true
+  } )
+  console.log(result)
 
   useEffect(() => {
     const this_task = id === undefined ? null : props.tasks.find(task => +task.id === +id)
@@ -46,7 +82,7 @@ const Form = (props) => {
   console.log(props)
   return (
     <div className="main_container fl-right m-top-5">
-      num: {props.num}
+      {/* num: {props.num} */}
       <h2>{title}</h2>
       {/* <form onSubmit={}> */}
       <ul className="FormList">
@@ -57,11 +93,15 @@ const Form = (props) => {
           <select onChange={(e)=>setState({...state, ...{task: e.target.value}})} value={state.task}>
           {generateOpt("task")}
           </select>
+          {error.task === false && <span className="red txt-indent">タスクを選択して下さい</span>}
+          {console.log(error.task)}
+          {console.log(state.task)}
         </li>
         
         <li>
           <label>key</label>
           <input type="text" value={state.key} onChange={(e) => setState({...state, ...{key: e.target.value}})} />
+          {error.key === false && <span className="red txt-indent">キーを入力して下さい</span>}
         </li>
         
         <li>
@@ -112,7 +152,11 @@ const Form = (props) => {
           /newの場合はidがundefinedになりますし、送らなくて良いものは控えた方が
           意図が明確になるかなと。
         */}
-        <button onClick={()=>createOrUpdateTask(state)}>{submit_label}</button>
+        <button onClick={()=>{
+          //resultがtrueの場合だけcreateOrUpdateTask(state)を実行させようとしましたが、うまく処理が書けず、どのように書いたら良いでしょうか？
+          // 現在はcreateOrUpdateTask()がエラーとなっています。
+          result ? createOrUpdateTask(state):createOrUpdateTask()}}>{submit_label}</button>
+        
       </div>
     </div>
   )
