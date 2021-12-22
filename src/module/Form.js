@@ -28,14 +28,7 @@ const Form = (props) => {
   const submit_label = id === undefined ? "追加" : "更新"
 
   useEffect(() => {
-    // console.log("useEffect", id)
     const this_task = id === undefined ? null : props.tasks.find(task => +task.id === +id)
-    console.log("id: ", id)
-    console.log("props.tasks: ", props.tasks)
-    if(id !== undefined){
-      console.log("this_tasks: ", props.tasks.find(task => +task.id === +id))
-    }
-    console.log("useeffect : ------", this_task)
     if(this_task !== null) {
       setState({...this_task})
     }
@@ -115,9 +108,12 @@ const Form = (props) => {
       </ul>
       
       <div>
-        <button onClick={()=>
-          createOrUpdateTask(state,id)
-          }>{submit_label}</button>
+        {/*
+          stateにidが含まれるので、引数はstateだけで良いような気がします。
+          /newの場合はidがundefinedになりますし、送らなくて良いものは控えた方が
+          意図が明確になるかなと。
+        */}
+        <button onClick={()=>createOrUpdateTask(state)}>{submit_label}</button>
       </div>
     </div>
   )
