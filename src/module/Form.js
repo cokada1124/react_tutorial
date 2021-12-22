@@ -42,25 +42,54 @@ const Form = (props) => {
   const submit_label = id === undefined ? "追加" : "更新"
 
   //即時間数なので再レンダーされるごとに読み込まれる認識で、フォームのtask項目でセレクト内容を変えてみましたが、この処理が実行されない理由がわかりませんでした。（最初の読み込み時は実行されることを確認しました）
-  const errorCheck = (() => {
-    //ここの処理を短くしたいのですが、、良い書き方はありますでしょうか。
-    if(state.task === 0){
-      //setErrorではerror.taskを更新できませんでしたが、setStateだと更新できた理由がわかりませんでした。
-      setState(error.task= false);
-    }
-    if(state.key === ""){
-      setState(error.key= false);
-    }
-    if(state.title === ""){
-      setState(error.title= false);
-    }
-  })()
+
+  //// よくわかってないんですが、submitボタンが押されるタイミングでこのerrorCheckを
+  //// 実行したいんですかね？
+  //// 「即時関数」というのは知りませんが、「関数の即時実行」なら知っていて、関数を宣言すると同時に実行するというものです。
+  //// (()=>{}())という書き方はアロー関数を宣言すると同時に()で実行しているため、
+  //// 「アロー関数の即時実行」になっていますね。
+  //// で、このFormはFunctionalComponentなので、再レンダーごとに全部の関数が毎回実行されます。
+  //// (useStateやuseMemoが例外です)
+  //// なのでこのerrorCheckは再レンダーのたびに実行されるはずです。
+  //// 下は俺が直した内容ですが、直す前から再レンダー時に毎回実行されてましたよ。
+
+  // const errorCheck = (() => {
+  //   //ここの処理を短くしたいのですが、、良い書き方はありますでしょうか。
+  //   if(state.task === 0){
+  //     //setErrorではerror.taskを更新できませんでしたが、setStateだと更新できた理由がわかりませんでした。
+  //     setState(error.task= false);
+  //   }
+  //   if(state.key === ""){
+  //     setState(error.key= false);
+  //   }
+  //   if(state.title === ""){
+  //     setState(error.title= false);
+  //   }
+  // })()
+
+  //// errorCheckは再レンダーごとに実行する必要ないかなと思いました。
+  //// inputに１文字入るたびに実行する必要ないですよね？
+  //// ということで、submitボタン押下時に実行するイメージにしました。
+  //// 入力値の判定は単純にif(!state[key])としました。これは初期値が0か''なので、いずれも真偽判定するとfalseが返るという性質を利用したものです。
+  //// 正確に書くならif(state[key] !== 0 && state[key] !== "")ですかね。
+  //// 各要素の入力判定結果をsetErrorすると共に、falseが１つでもあれば全体としてfalseを返すようにしました。
+  //// resultの判定部分でeveryを使ってましたが、この場合は１つでもfalseがあればsubmitを実行しないようにしたいので、
+  //// some()の方が適しています。
+  const errorCheck = () => {
+    const new_error = {...error}
+    Object.keys(error).forEach(key => {
+      if(!state[key]) { new_error[key] = false }
+      else { new_error[key] = true }
+    })
+    setError(new_error)
+    return !(Object.values(new_error).some(e => e === false))
+  }
   
-  const check_result =(Object.values(error))
-  const result =check_result.every((b) => {
-    return b===true
-  } )
-  console.log(result)
+  // const check_result =(Object.values(error))
+  // const result =check_result.every((b) => {
+  //   return b===true
+  // } )
+  // console.log(result)
 
   useEffect(() => {
     const this_task = id === undefined ? null : props.tasks.find(task => +task.id === +id)
@@ -69,8 +98,6 @@ const Form = (props) => {
     }
   }, [])
 
-  console.log(state)
-
   const generateOpt = (key) => {
     // console.log("gen opt: ", selects[key])
     return selects[key].map((opt, i) => (
@@ -78,8 +105,15 @@ const Form = (props) => {
     ))
   }
 
-  const createOrUpdateTask = props.onClickAddTask || props.onClickUpdateTask
-  console.log(props)
+  //// errorCheckは再レンダーごとに実行する必要はないのでは。
+  //// submitされた時に実行すれば良いと思うので、submitメソッドが実行されたらerrorCheckを実行するようにしました。
+  //// errorCheckは各要素に対応したtrue / falseをsetErrorすると共に、一つでもfalseがあればfalseを返却するように作ったので、これがfalseならsubmitを実行しないようにしました。
+  const createOrUpdateTask = (tasks) => {
+    if(!errorCheck()) { return false }
+    const onclick = props.onClickAddTask || props.onClickUpdateTask
+    onclick(tasks)
+  } 
+  
   return (
     <div className="main_container fl-right m-top-5">
       {/* num: {props.num} */}
@@ -107,6 +141,7 @@ const Form = (props) => {
         <li>
           <label>title</label>
           <input type="text" value={state.title} onChange={(e) => setState({...state, ...{title: e.target.value}})} />
+          {error.title === false && <span className="red txt-indent">タイトルを入力して下さい</span>}
         </li>
         
         <li>
@@ -114,6 +149,7 @@ const Form = (props) => {
           <select onChange={(e)=>setState({...state, ...{author: e.target.value}})} value={state.author}>
           {generateOpt("author")}
           </select>
+          {error.author === false && <span className="red txt-indent">authorを入力して下さい</span>}
         </li>
         
         <li>
@@ -121,6 +157,7 @@ const Form = (props) => {
           <select onChange={(e)=>setState({...state, ...{status: e.target.value}})} value={state.status}>
           {generateOpt("status")}
           </select>
+          {error.status === false && <span className="red txt-indent">statusを入力して下さい</span>}
         </li>
         
         <li>
@@ -128,34 +165,35 @@ const Form = (props) => {
           <select onChange={(e)=>setState({...state, ...{priority: e.target.value}})} value={state.priority}>
           {generateOpt("priority")}
           </select>
+          {error.priority === false && <span className="red txt-indent">優先度を入力して下さい</span>}
         </li>
         
         <li>
           <label>registed_at</label>
           <input type="date" value={state.registed_at} onChange={(e) => setState({...state, ...{registed_at: e.target.value}})} />
+          {error.registed_at === false && <span className="red txt-indent">登録日を入力して下さい</span>}
         </li>
         
         <li>
           <label>start_date</label>
           <input type="date" value={state.start_date} onChange={(e) => setState({...state, ...{start_date: e.target.value}})} />
+          {error.start_date === false && <span className="red txt-indent">開始日を入力して下さい</span>}
         </li>
         
         <li>
           <label>end_date</label>
           <input type="date" value={state.end_date} onChange={(e) => setState({...state, ...{end_date: e.target.value}})} />
+          {error.end_date === false && <span className="red txt-indent">終了日を入力して下さい</span>}
         </li>
       </ul>
       
       <div>
-        {/*
-          stateにidが含まれるので、引数はstateだけで良いような気がします。
-          /newの場合はidがundefinedになりますし、送らなくて良いものは控えた方が
-          意図が明確になるかなと。
-        */}
         <button onClick={()=>{
           //resultがtrueの場合だけcreateOrUpdateTask(state)を実行させようとしましたが、うまく処理が書けず、どのように書いたら良いでしょうか？
           // 現在はcreateOrUpdateTask()がエラーとなっています。
-          result ? createOrUpdateTask(state):createOrUpdateTask()}}>{submit_label}</button>
+
+          //// いろいろ書き方がありそうでしたが、ここではsubmitメソッドをwrapする方法を選択しました。
+          createOrUpdateTask(state)}}>{submit_label}</button>
         
       </div>
     </div>
