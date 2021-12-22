@@ -4,7 +4,7 @@ import {useState} from 'react'
 import "./App.scss"
 
 import Side from "./module/Side"
-import Index from "./module/Index"
+import {Index} from "./module/Index"
 import Form from "./module/Form"
 
 import { BrowserRouter, Routes, Route } from "react-router-dom"
@@ -17,20 +17,20 @@ function App() {
     }catch(e) {return [] }
   })()
 
-  /*
-      localStorageから取り出したい値が単純な数字か文字列の場合、
-      JSON.parseする必要はありません・・・
-      欲しいのがNumberなら+hogeで数値化し、
-      ほしいのがStringならhoge+""で文字列化しましょう。
-      localStorageに値が存在しない場合、JSON.parse(undefined)すると
-      エラーになるのでtry{}catch(){}で例外処理が必要ですが、
-      数値化や文字列化が失敗しても例外にはならないので||で初期値をセットできます。
-      この辺はconsoleでたくさん試してみてください。
-  */
-  const mid = +localStorage["maxId"] || 0
+  const mid = (() => {
+    try{
+      return JSON.parse(localStorage["maxId"])
+    }catch(e) {return 0}
+  })()
   console.log(mid)
 
-  const [tasks,setTasks] = useState(local_state)
+  let maxId ={
+    id: mid,
+  }
+
+  const [tasks,setTasks] = useState(
+    local_state
+  )
 
   const keys = {
     id          : "#",
@@ -47,31 +47,21 @@ function App() {
   
   const addTask = (task) => {
     console.log("add task: ", task)
-    const this_id = mid + 1
-    localStorage["maxId"] = this_id
+    maxId.id = maxId.id + 1
+    localStorage["maxId"] = JSON.stringify(maxId.id)
     
-    //// localStorageから読み直し意味がありません。
-    task.id = this_id
-    const added_tasks = [...tasks, ...[task]]
-
-    localStorage["tasks"] = JSON.stringify(added_tasks)
-    setTasks(added_tasks)
+    task.id = parseInt(localStorage["maxId"])
+    setTasks([...tasks, ...[task]])
+    localStorage["tasks"] = JSON.stringify([...tasks, ...[task]])
     
     console.log(tasks)
     location.href = `/${task.id}`
   }
 
-  const updateTask = (task) => {
-    /*
-      万が一存在しないidが指定された場合に例外が起きないように処理する。
-    */
-    const target_task_idx = tasks.findIndex(t => +t.id === +task.id)
-    if(target_task_idx === -1) return false
-    tasks[target_task_idx] = task
-
-    //// local_stateをセットしてましたが、それだと更新が反映されません・・・
-    localStorage["tasks"] = JSON.stringify(tasks)
-    setTasks(tasks)
+  const updateTask = (task,id) => {
+     tasks[tasks.findIndex(t => +t.id === +id)] = task
+     setTasks(tasks)
+     localStorage["tasks"] = JSON.stringify(local_state)
   }
 
   return (

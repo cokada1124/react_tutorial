@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
-import { useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'＝
 
 const Form = (props) => {
   const { id } = useParams()
