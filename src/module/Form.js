@@ -77,14 +77,14 @@ const Form = (props) => {
   }
 
   const noError = () =>{
-    const new_error = {...error}
+    const new_error = error
     const keys = Object.keys(state)
     keys.forEach(key => {
       if (state[key] === 0 || state[key] === ""){
         new_error[key] = false;
       } else { new_error[key] = true; }
     })
-    setError(new_error)
+    setError({...new_error})
 
     console.log(error)
 
@@ -98,8 +98,11 @@ const Form = (props) => {
     
   }
 
-  const createOrUpdateTask = props.onClickAddTask || props.onClickUpdateTask
-  
+  const createOrUpdateTask = (tasks) => {
+    if(!noError()){return}
+    const onclick = props.onClickAddTask || props.onClickUpdateTask
+    onclick(tasks)
+  }
   console.log(props)
   return (
     <div className="main_container fl-right m-top-5">
@@ -183,7 +186,7 @@ const Form = (props) => {
         <button onClick={()=>{
           //resultがtrueの場合だけcreateOrUpdateTask(state)を実行させようとしましたが、うまく処理が書けず、どのように書いたら良いでしょうか？
           // 現在はcreateOrUpdateTask()がエラーとなっています。
-           noError() && createOrUpdateTask(state)}}>{submit_label}</button>
+           createOrUpdateTask(state)}}>{submit_label}</button>
         
       </div>
     </div>
