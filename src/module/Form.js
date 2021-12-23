@@ -89,8 +89,8 @@ const Form = (props) => {
     console.log(error)
 
     const check_result = Object.values(error)
-    const result = check_result.some((b) => {
-    return b === false
+    const result = check_result.every((b) => {
+    return b === true
     })
     console.log(result)
 
@@ -98,15 +98,8 @@ const Form = (props) => {
     
   }
 
-
-
-  const createOrUpdateTask = (tasks) => {
-    props.onClickAddTask || props.onClickUpdateTask
-  }
-
+  const createOrUpdateTask = props.onClickAddTask || props.onClickUpdateTask
   
-  
-
   console.log(props)
   return (
     <div className="main_container fl-right m-top-5">
