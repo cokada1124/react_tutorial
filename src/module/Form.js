@@ -6,7 +6,7 @@ const Form = (props) => {
   const { id } = useParams()
   
   const [ state, setState ] = useState({
-    id          : 0,
+    id          : 1,
     task        : 0,
     key         : "",
     title       : "",
@@ -20,7 +20,7 @@ const Form = (props) => {
  
 
   const [ error, setError ] = useState({
-    // id          : true,
+    id          : true,
     task        : true,
     key         : true,
     title       : true,
@@ -89,9 +89,10 @@ const Form = (props) => {
     console.log(error)
 
     const check_result = Object.values(error)
-    const result = check_result.every((b) => {
-    return b === true
-    })
+    const result = check_result.every(b => b === true)
+    // const testtest = [1,1,1,1,1]
+    // const test = testtest.every(a => a === 1);
+
     console.log(result)
 
     return result;
