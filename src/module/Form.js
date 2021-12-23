@@ -75,14 +75,17 @@ const Form = (props) => {
   //// 各要素の入力判定結果をsetErrorすると共に、falseが１つでもあれば全体としてfalseを返すようにしました。
   //// resultの判定部分でeveryを使ってましたが、この場合は１つでもfalseがあればsubmitを実行しないようにしたいので、
   //// some()の方が適しています。
-  const errorCheck = () => {
+  const can_i_submit = () => {
     const new_error = {...error}
     Object.keys(error).forEach(key => {
-      if(!state[key]) { new_error[key] = false }
+      // if(!state[key])
+      if(state[key] === 0 || state[key] === "") { new_error[key] = false }
       else { new_error[key] = true }
     })
     setError(new_error)
-    return !(Object.values(new_error).some(e => e === false))
+    const result = !(Object.values(new_error).some(e => e === false))
+    console.log(result)
+    return result
   }
   
   // const check_result =(Object.values(error))
@@ -108,12 +111,19 @@ const Form = (props) => {
   //// errorCheckは再レンダーごとに実行する必要はないのでは。
   //// submitされた時に実行すれば良いと思うので、submitメソッドが実行されたらerrorCheckを実行するようにしました。
   //// errorCheckは各要素に対応したtrue / falseをsetErrorすると共に、一つでもfalseがあればfalseを返却するように作ったので、これがfalseならsubmitを実行しないようにしました。
-  const createOrUpdateTask = (tasks) => {
-    if(!errorCheck()) { return false }
-    const onclick = props.onClickAddTask || props.onClickUpdateTask
-    onclick(tasks)
+  const createOrUpdateTask2 = (tasks) => {
+    // if(!errorCheck()) { return false}
+    // const onclick = props.onClickAddTask || props.onClickUpdateTask
+    // onclick(tasks)
+
+    if(errorCheck()) {
+      const onclick = props.onClickAddTask || props.onClickUpdateTask
+      onclick(tasks)
+    }
   } 
   
+  const createOrUpdateTask = props.onClickAddTask || props.onClickUpdateTask
+
   return (
     <div className="main_container fl-right m-top-5">
       {/* num: {props.num} */}
@@ -193,7 +203,11 @@ const Form = (props) => {
           // 現在はcreateOrUpdateTask()がエラーとなっています。
 
           //// いろいろ書き方がありそうでしたが、ここではsubmitメソッドをwrapする方法を選択しました。
-          createOrUpdateTask(state)}}>{submit_label}</button>
+          // can_i_submit() ? createOrUpdateTask(state) : (10 == 10) ? true : false}
+          can_i_submit() && createOrUpdateTask(state) }}>{submit_label}</button>
+
+          {/* true || 実行されない
+          false || 実行される(trueの場合) */}
         
       </div>
     </div>
