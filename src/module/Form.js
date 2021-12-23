@@ -97,7 +97,6 @@ const Form = (props) => {
   }
 
   const createOrUpdateTask = (tasks) => {
-    
     const onclick = props.onClickAddTask(tasks) || props.onClickUpdateTask(tasks)
     onclick(tasks);
     }
