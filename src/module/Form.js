@@ -89,8 +89,9 @@ const Form = (props) => {
     console.log(error)
 
     const check_result = Object.values(error)
-    const result = check_result.every((b) => 
-     b === true)
+    const result = check_result.every((b) => {
+    return b === true
+    })
     console.log(result)
 
     return result;
