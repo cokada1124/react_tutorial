@@ -20,6 +20,7 @@ const Form = (props) => {
  
 
   const [ error, setError ] = useState({
+    id          : true,
     task        : true,
     key         : true,
     title       : true,
@@ -42,25 +43,22 @@ const Form = (props) => {
   const submit_label = id === undefined ? "追加" : "更新"
 
   //即時間数なので再レンダーされるごとに読み込まれる認識で、フォームのtask項目でセレクト内容を変えてみましたが、この処理が実行されない理由がわかりませんでした。（最初の読み込み時は実行されることを確認しました）
-  const errorCheck = (() => {
-    //ここの処理を短くしたいのですが、、良い書き方はありますでしょうか。
-    if(state.task === 0){
-      //setErrorではerror.taskを更新できませんでしたが、setStateだと更新できた理由がわかりませんでした。
-      setState(error.task= false);
-    }
-    if(state.key === ""){
-      setState(error.key= false);
-    }
-    if(state.title === ""){
-      setState(error.title= false);
-    }
-  })()
+  // const errorCheck = (() => {
+  //   //ここの処理を短くしたいのですが、、良い書き方はありますでしょうか。
+  //   if(state.task === 0){
+  //     //setErrorではerror.taskを更新できませんでしたが、setStateだと更新できた理由がわかりませんでした。
+  //     setState(error.task= false);
+  //   }
+  //   if(state.key === ""){
+  //     setState(error.key= false);
+  //   }
+  //   if(state.title === ""){
+  //     setState(error.title= false);
+  //   }
+  // })()
   
-  const check_result =(Object.values(error))
-  const result =check_result.every((b) => {
-    return b===true
-  } )
-  console.log(result)
+  
+  // console.log(result)
 
   useEffect(() => {
     const this_task = id === undefined ? null : props.tasks.find(task => +task.id === +id)
@@ -78,7 +76,35 @@ const Form = (props) => {
     ))
   }
 
-  const createOrUpdateTask = props.onClickAddTask || props.onClickUpdateTask
+  const errorCheck = () =>{
+    const new_error = error
+    const keys = Object.keys(state)
+    keys.forEach(key =>{
+      if(state[key] === 0 || state[key] === ""){
+        new_error[key] = false;
+      }
+      setError(new_error)
+    })
+
+    console.log(error)
+
+    const check_result =(Object.values(error))
+    const result =check_result.every((b) => {
+    return b === true
+    })
+    return result;
+    
+  }
+
+  const createOrUpdateTask = (tasks) => {
+    
+    const onclick = props.onClickAddTask(tasks) || props.onClickUpdateTask(tasks)
+    onclick(tasks);
+    }
+
+  
+  
+
   console.log(props)
   return (
     <div className="main_container fl-right m-top-5">
@@ -155,7 +181,7 @@ const Form = (props) => {
         <button onClick={()=>{
           //resultがtrueの場合だけcreateOrUpdateTask(state)を実行させようとしましたが、うまく処理が書けず、どのように書いたら良いでしょうか？
           // 現在はcreateOrUpdateTask()がエラーとなっています。
-          result ? createOrUpdateTask(state):createOrUpdateTask()}}>{submit_label}</button>
+          errorCheck() && createOrUpdateTask(state)}}>{submit_label}</button>
         
       </div>
     </div>
