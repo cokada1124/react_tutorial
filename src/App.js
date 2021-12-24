@@ -74,6 +74,10 @@ function App() {
     setTasks(tasks)
   }
 
+  const hundleSort = (tasks) => {
+    setTasks({...tasks})
+  }
+
   return (
     <div className="App">
       <header className="App-header">
