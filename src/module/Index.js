@@ -44,7 +44,7 @@ const Index = (props) => {
    *  何も表示が変わりません。あれ？と思ってもう一度押すと降順になるという動きになります。
    *  実際に初期値をtrueにして、確認してみてください。
    */
-  const asc = useRef(false)
+  const asc = useRef(true)
 
   const [ pagenatestatte, setPagenateState] = useState({
     currentPage: 1,
