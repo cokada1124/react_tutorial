@@ -22,12 +22,12 @@ const Index = (props) => {
   const tasksSort = (key) => {
     if(sortstate){
     const desctasks = tasks.sort((a, b) => (a[key] < b[key]) ? 1 : -1)
-    setSortState({!sortstate})
+    setSortState(!sortstate)
     setState([...desctasks])
-    console.log(sortstate)
+    console.log(!sortstate)
   }else{
     const asctasks = tasks.sort((a, b) => (a[key] > b[key]) ? 1 : -1)
-    setSortState({!sortstate})
+    setSortState(!sortstate)
     setState([...asctasks])
   }
 
