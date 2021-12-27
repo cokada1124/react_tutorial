@@ -1,16 +1,14 @@
-import React, { useState, useRef}  from "react"
+import React, { useState}  from "react"
 
 const Index = (props) => {
 
   const [ tasks, setState ] = useState(props.tasks)
 
-  // const [ sortstate, setSortState ] = useState(true)
-  const sortstate  = useRef(true)
+  const [ sortstate, setSortState ] = useState(true)
 
-  const [ pagenatestatte, setPagenateState] = useState({
-    currentPage: 1,
-    tasksPerPage: 5
-  })
+  const [ currentPage, setCurrentPage] = useState(1)
+
+  const tasksPerPage = 5
 
   const ths = Object.keys(props.keys).map((key, i) => (
     <th key={`th_${i}`} onClick={()=>tasksSort(key)}>{props.keys[key]}</th>
@@ -23,16 +21,14 @@ const Index = (props) => {
   const tasksSort = (key) => {
     if(sortstate){
     const desctasks = tasks.sort((a, b) => (a[key] < b[key]) ? 1 : -1)
-    sortstate.current = !sortstate
+    setSortState(!sortstate)
     setState([...desctasks])
     console.log(!sortstate)
   }else{
     const asctasks = tasks.sort((a, b) => (a[key] > b[key]) ? 1 : -1)
-    sortstate.current = !sortstate
-    console.log(sortstate.current)
+    setSortState(!sortstate)
     setState([...asctasks])
   }
-  
 
     // console.log(desctasks)
     // props.onClickHundleSort(stasks)
@@ -42,7 +38,27 @@ const Index = (props) => {
   // }
   
 
-  const trs = tasks.map((task, i) => {
+  const pageOflastTask = currentPage * tasksPerPage
+  const pageOffarstTask = pageOflastTask - tasksPerPage 
+
+  console.log(pageOflastTask)
+  console.log(pageOffarstTask)
+
+  const currentTasks = tasks.slice(pageOffarstTask, pageOflastTask)
+
+  console.log(currentTasks)
+
+  const pageNumber = [];
+
+  for(let i = 1; i <= Math.ceil(tasks.length / tasksPerPage); i++){
+    pageNumber.push(i)
+    console.log(i)
+  }
+  // tasks.map((v,i) => pageNumber.push(i) )
+  console.log(pageNumber)
+
+  // console.log(pageNumber)
+  const trs = currentTasks.map((task, i) => {
     const tds = Object.keys(task).map((td, j) => (
       <td key={`td_${j}`}>{task[td]}</td>
     ))
@@ -57,6 +73,19 @@ const Index = (props) => {
     )
   })
 
+  const numtd = pageNumber.map((v,i) => (
+    <td onClick={()=>hundlePagenate(v)}>{v}</td>
+  ))
+
+  const hundlePagenate = (v) => {
+    // setPagenateState({currentPage : v})
+    setCurrentPage(v)
+    // console.log(currentTasks)
+    // setState([currentTasks])    
+
+  }
+  // console.log()
+
   return(
     <div className="main_container">
     <table className="fl-right m-top-15">
@@ -69,6 +98,13 @@ const Index = (props) => {
           {trs}
         </tbody>
         </table>
+    <table>
+      <tbody>
+        <tr>
+          {numtd}
+        </tr>
+      </tbody>
+    </table>
     </div>
   )
 }
