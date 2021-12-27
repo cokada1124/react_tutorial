@@ -1,10 +1,11 @@
-import React, { useState}  from "react"
+import React, { useState, useRef}  from "react"
 
 const Index = (props) => {
 
   const [ tasks, setState ] = useState(props.tasks)
 
-  const [ sortstate, setSortState ] = useState(true)
+  // const [ sortstate, setSortState ] = useState(true)
+  const sortstate  = useRef(true)
 
   const [ pagenatestatte, setPagenateState] = useState({
     currentPage: 1,
@@ -22,14 +23,16 @@ const Index = (props) => {
   const tasksSort = (key) => {
     if(sortstate){
     const desctasks = tasks.sort((a, b) => (a[key] < b[key]) ? 1 : -1)
-    setSortState(!sortstate)
+    sortstate.current = !sortstate
     setState([...desctasks])
     console.log(!sortstate)
   }else{
     const asctasks = tasks.sort((a, b) => (a[key] > b[key]) ? 1 : -1)
-    setSortState(!sortstate)
+    sortstate.current = !sortstate
+    console.log(sortstate.current)
     setState([...asctasks])
   }
+  
 
     // console.log(desctasks)
     // props.onClickHundleSort(stasks)
