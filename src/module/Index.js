@@ -2,13 +2,9 @@ import React, { useState}  from "react"
 
 const Index = (props) => {
 
-  const [ state, setState ] = useState({
-    tasks: props.tasks
-  })
+  const [ state, setState ] = useState(props.tasks)
 
-  const [ sortstate, setSortState ] = useState({
-    sortstate: true
-  })
+  const [ sortstate, setSortState ] = useState(true)
 
   const [ pagenatestatte, setPagenateState] = useState({
     currentPage: 1,
@@ -25,13 +21,13 @@ const Index = (props) => {
 
   const tasksSort = (key) => {
     if(sortstate){
-    const asctasks = state.tasks.sort((a, b) => (a[key] < b[key]) ? 1 : -1)
-    setSortState(!sortstate)
-    setState({tasks:asctasks})
+    const asctasks = state.sort((a, b) => (a[key] < b[key]) ? 1 : -1)
+    setSortState({sortstate : !sortstate})
+    setState({...asctasks})
   }else{
-    const descstasks = state.tasks.sort((a, b) => (a[key] > b[key]) ? 1 : -1)
-    setSortState(!sortstate)
-    setState({tasks:descstasks})
+    const descstasks = state.sort((a, b) => (a[key] > b[key]) ? 1 : -1)
+    setSortState({sortstate : !sortstate})
+    setState({...descstasks})
   }
 
     console.log("")
@@ -42,7 +38,7 @@ const Index = (props) => {
   // }
   
 
-  const trs = state.tasks.map((task, i) => {
+  const trs = state.map((task, i) => {
     const tds = Object.keys(task).map((td, j) => (
       <td key={`td_${j}`}>{task[td]}</td>
     ))
