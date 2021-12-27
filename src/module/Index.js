@@ -16,7 +16,7 @@ const Index = (props) => {
   ))
   console.log(ths)
   console.log(props.tasks)
-  console.log(tasks.tasks)
+  // console.log(tasks.tasks)
   console.log(props)
 
   const tasksSort = (key) => {
