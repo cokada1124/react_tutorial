@@ -2,7 +2,7 @@ import React, { useState}  from "react"
 
 const Index = (props) => {
 
-  const [ state, setState ] = useState(props.tasks)
+  const [ tasks, setState ] = useState(props.tasks)
 
   const [ sortstate, setSortState ] = useState(true)
 
@@ -16,18 +16,18 @@ const Index = (props) => {
   ))
   console.log(ths)
   console.log(props.tasks)
-  console.log(state.tasks)
+  console.log(tasks.tasks)
   console.log(props)
 
   const tasksSort = (key) => {
     if(sortstate){
-    const asctasks = state.sort((a, b) => (a[key] < b[key]) ? 1 : -1)
+    const desctasks = tasks.sort((a, b) => (a[key] < b[key]) ? 1 : -1)
+    setSortState({sortstate : !sortstate})
+    setState({...desctasks})
+  }else{
+    const asctasks = tasks.sort((a, b) => (a[key] > b[key]) ? 1 : -1)
     setSortState({sortstate : !sortstate})
     setState({...asctasks})
-  }else{
-    const descstasks = state.sort((a, b) => (a[key] > b[key]) ? 1 : -1)
-    setSortState({sortstate : !sortstate})
-    setState({...descstasks})
   }
 
     console.log("")
@@ -38,7 +38,7 @@ const Index = (props) => {
   // }
   
 
-  const trs = state.map((task, i) => {
+  const trs = tasks.map((task, i) => {
     const tds = Object.keys(task).map((td, j) => (
       <td key={`td_${j}`}>{task[td]}</td>
     ))
