@@ -22,15 +22,16 @@ const Index = (props) => {
   const tasksSort = (key) => {
     if(sortstate){
     const desctasks = tasks.sort((a, b) => (a[key] < b[key]) ? 1 : -1)
-    setSortState({sortstate : !sortstate})
-    setState({...desctasks})
+    setSortState({!sortstate})
+    setState([...desctasks])
+    console.log(sortstate)
   }else{
     const asctasks = tasks.sort((a, b) => (a[key] > b[key]) ? 1 : -1)
-    setSortState({sortstate : !sortstate})
-    setState({...asctasks})
+    setSortState({!sortstate})
+    setState([...asctasks])
   }
 
-    console.log("")
+    // console.log(desctasks)
     // props.onClickHundleSort(stasks)
     
   }
