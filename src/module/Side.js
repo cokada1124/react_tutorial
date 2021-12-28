@@ -14,7 +14,7 @@ class Side extends React.Component {
 
   render() {
     return (
-      <ul className="li-st-none f-24 side_bar fl-left">
+      <ul className="side-bar__ul">
         <li>
       <Link to={`/`}>{this.state.title_1}</Link>
       </li>

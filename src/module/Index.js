@@ -3,13 +3,10 @@ import React, { useState}  from "react"
 const Index = (props) => {
 
   const [ tasks, setState ] = useState(props.tasks)
-
   const [ sortstate, setSortState ] = useState(true)
-
   const [ currentPage, setCurrentPage] = useState(1)
 
   const tasksPerPage = 5
-
   const ths = Object.keys(props.keys).map((key, i) => (
     <th key={`th_${i}`} onClick={()=>tasksSort(key)}>{props.keys[key]}</th>
   ))
@@ -29,14 +26,16 @@ const Index = (props) => {
     setSortState(!sortstate)
     setState([...asctasks])
   }
-
-    // console.log(desctasks)
-    // props.onClickHundleSort(stasks)
     
   }
-  // if(state.tasks.length > 5 && state.tasks.length < 11){
+
+  if(location.search.charAt(0) !== "?" || location.search === "/" ){
+    localStorage["currentPage"] = "1"
+    // console.log("bbbbbbbbbbb")
+  }
+  // if (){
+
   // }
-  
 
   const pageOflastTask = currentPage * tasksPerPage
   const pageOffarstTask = pageOflastTask - tasksPerPage 
@@ -58,6 +57,7 @@ const Index = (props) => {
   console.log(pageNumber)
 
   // console.log(pageNumber)
+  
   const trs = currentTasks.map((task, i) => {
     const tds = Object.keys(task).map((td, j) => (
       <td key={`td_${j}`}>{task[td]}</td>
@@ -74,21 +74,35 @@ const Index = (props) => {
   })
 
   const numtd = pageNumber.map((v,i) => (
-    <td onClick={()=>hundlePagenate(v)}>{v}</td>
+    <td key={`pn_td_${i}`} onClick={()=>hundlePagenate(v)}>{v}</td>
   ))
 
   const hundlePagenate = (v) => {
     // setPagenateState({currentPage : v})
+    // location.href = `/?${v}`
     setCurrentPage(v)
-    // console.log(currentTasks)
-    // setState([currentTasks])    
+    // console.log(v)
+    // const cp = v
+    // localStorage["currentPage"] = cp
+    // console.log(localStorage["currentPage"])
+
+    // setState([...currentTasks]) 
+    location.href = `/?${v}`
 
   }
   // console.log()
 
   return(
     <div className="main_container">
-    <table className="fl-right m-top-15">
+    <table className="main_container__table_pagenum">
+      <tbody>
+        <tr>
+          <td>{1+pageOffarstTask}〜{pageOflastTask}件</td>
+          {numtd}
+        </tr>
+      </tbody>
+    </table>
+    <table className="main_container__table">
     <thead>
           <tr>
             {ths}
@@ -98,9 +112,10 @@ const Index = (props) => {
           {trs}
         </tbody>
         </table>
-    <table>
+    <table className="main_container__table_pagenum">
       <tbody>
         <tr>
+          <td>{1+pageOffarstTask}〜{pageOflastTask}件</td>
           {numtd}
         </tr>
       </tbody>
