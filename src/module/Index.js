@@ -1,8 +1,10 @@
 import React, { useState}  from "react"
+import { Link } from "react-router-dom"
 
 const Index = (props) => {
 
   const [ tasks, setState ] = useState(props.tasks)
+  const [ currentTasks , setCurrentTasks ] = useState(tasks.slice(0, 5))
   const [ sortstate, setSortState ] = useState(true)
   const [ currentPage, setCurrentPage] = useState(1)
 
@@ -29,13 +31,15 @@ const Index = (props) => {
     
   }
 
-  if(location.search.charAt(0) !== "?" || location.search === "/" ){
-    localStorage["currentPage"] = "1"
-    // console.log("bbbbbbbbbbb")
-  }
-  // if (){
+  // if(location.search.charAt(0) !== "?" ){
+  //   const pageOflastTask = 1 * tasksPerPage
+  //   const pageOffarstTask = pageOflastTask - tasksPerPage 
 
+  //   const currentT = tasks.slice(pageOffarstTask, pageOflastTask)
+  //   localStorage["currentTage"] = currentT
+  //   console.log(currentT)
   // }
+
 
   const pageOflastTask = currentPage * tasksPerPage
   const pageOffarstTask = pageOflastTask - tasksPerPage 
@@ -43,9 +47,15 @@ const Index = (props) => {
   console.log(pageOflastTask)
   console.log(pageOffarstTask)
 
-  const currentTasks = tasks.slice(pageOffarstTask, pageOflastTask)
+  // const currentT = tasks.slice(pageOffarstTask, pageOflastTask)
 
-  console.log(currentTasks)
+  
+
+  console.log(tasks)
+
+  // (() => {
+  //   setState([...currentTasks]) 
+  // })();
 
   const pageNumber = [];
 
@@ -57,6 +67,8 @@ const Index = (props) => {
   console.log(pageNumber)
 
   // console.log(pageNumber)
+
+  
   
   const trs = currentTasks.map((task, i) => {
     const tds = Object.keys(task).map((td, j) => (
@@ -74,24 +86,52 @@ const Index = (props) => {
   })
 
   const numtd = pageNumber.map((v,i) => (
-    <td key={`pn_td_${i}`} onClick={()=>hundlePagenate(v)}>{v}</td>
+    <td key={`pn_td_${i}`} onClick={()=>hundlePagenate(v)}><span className="main_container__table_pagenum--num"><Link to={`/?${v}`}>{v}</Link></span></td>
   ))
+
 
   const hundlePagenate = (v) => {
     // setPagenateState({currentPage : v})
     // location.href = `/?${v}`
     setCurrentPage(v)
     // console.log(v)
-    // const cp = v
-    // localStorage["currentPage"] = cp
-    // console.log(localStorage["currentPage"])
-
+     const cp = v
+     localStorage["currentPage"] = cp
+    console.log(localStorage["currentPage"])
+    // const pageOflastTask = currentPage * tasksPerPage
+    // const pageOffarstTask = pageOflastTask - tasksPerPage 
+    // const currentTasks = tasks.slice(pageOffarstTask, pageOflastTask)
+    // console.log(currentTasks)
+    // console.log(pageOffarstTask)
+    // console.log(pageOflastTask)
     // setState([...currentTasks]) 
-    location.href = `/?${v}`
+    // changeCurrentTasks(currentT)
+    
+    // const aaa = currentTasks
+  const pageOflastTask = v * tasksPerPage
+  const pageOffarstTask = pageOflastTask - tasksPerPage 
 
+  console.log(pageOflastTask)
+  console.log(pageOffarstTask)
+
+  const currentT = tasks.slice(pageOffarstTask, pageOflastTask)
+  // location.href = `/?${v}`
+
+    changeCurrentTasks(currentT)
+    
+    // setCurrentTasks(currentT)
+    
+    // window.location.replace( `/?${v}`) ;
   }
   // console.log()
+  console.log(tasks)
+    console.log(currentTasks)
 
+    const changeCurrentTasks = (tasks) => {
+      setCurrentTasks([...tasks])
+      localStorage["currentTasks"] = JSON.stringify(tasks)
+      console.log(JSON.parse(localStorage["currentTasks"]))
+    }
   return(
     <div className="main_container">
     <table className="main_container__table_pagenum">
@@ -99,10 +139,11 @@ const Index = (props) => {
         <tr>
           <td>{1+pageOffarstTask}〜{pageOflastTask}件</td>
           {numtd}
+          <td className="main_container__table_pagenum--text" onClick={()=>hundlePagenate(+localStorage["currentPage"]+1)}>次へ</td>
         </tr>
       </tbody>
     </table>
-    <table className="main_container__table">
+    <table className="main_container__table_tasks">
     <thead>
           <tr>
             {ths}
@@ -117,6 +158,7 @@ const Index = (props) => {
         <tr>
           <td>{1+pageOffarstTask}〜{pageOflastTask}件</td>
           {numtd}
+          <td className="main_container__table_pagenum--text" onClick={()=>hundlePagenate(+localStorage["currentPage"]+1)}>次へ</td>
         </tr>
       </tbody>
     </table>

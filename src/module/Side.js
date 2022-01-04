@@ -16,7 +16,7 @@ class Side extends React.Component {
     return (
       <ul className="side-bar__ul">
         <li>
-      <Link to={`/`}>{this.state.title_1}</Link>
+      <a href="/">{this.state.title_1}</a>
       </li>
       <li>
       <a href="/new">{this.state.title_2}</a>
