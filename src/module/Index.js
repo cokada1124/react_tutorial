@@ -1,5 +1,5 @@
 import React, { useState, useRef}  from "react"
-import { useParams, Link, useLocation } from "react-router-dom"
+import { useParams, Link, useLocation, useSearchParams, useNavigate } from "react-router-dom"
 
 const Index = (props) => {
   const { id } = useParams()
@@ -25,8 +25,21 @@ const Index = (props) => {
    * [1]には()でキャプチャした結果が格納されます。
    * ので、[1]で「p=N」の「N」が取れるわけです。
    */
-  const search_p = (() => {try{return +location.search.match(/p\=(\d+)/)[1]}catch(e){return 1}})()
+  // const search_p = (() => {try{return +location.search.match(/p\=(\d+)/)[1]}catch(e){return 1}})()
+
+  /** !
+   * location.searchをmatchで抜いてましたが、
+   * react-routerの標準APIでuseSearchParamsてのがありました。
+   * これで簡単にパラメタ抜けますね。
+   */
+  const [search] = useSearchParams()
+  const search_p = search.get("p") || 1
   const currentPage = useRef(search_p)
+
+  /** !
+   * ページ遷移はuseNavigateを使うのが標準ぽいですね。
+   */
+  const nav = useNavigate()
   const getPosition = (page) => [(page * tasksPerPage) - tasksPerPage, page * tasksPerPage]
   const position = getPosition(currentPage.current)
   const [ currentTasks , setCurrentTasks ] = useState(tasks.slice(position[0], position[1]))
@@ -110,11 +123,13 @@ const Index = (props) => {
       <td key={`td_${j}`}>{task[td]}</td>
     ))
     const toEdit = (id) => {
-      location.href = "/" + id
+      console.log(id)
+      // location.href = "/" + id
+      nav("/" + id)
     }
 
     return (
-      <tr key={`tr_${i}`} onClick ={()=>toEdit(task.id)}>
+      <tr key={`tr_${i}`} onClick={()=>toEdit(task.id)}>
         {tds}
       </tr>
     )
