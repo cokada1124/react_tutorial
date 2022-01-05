@@ -6,9 +6,7 @@ const Index = (props) => {
 
   const tasksPerPage = 5
   const [ tasks, setState ] = useState(props.tasks)
-  // const [ currentTasks , setCurrentTasks ] = useState(tasks.slice(0, 5))
   const [ sortstate, setSortState ] = useState(true)
-  // const [ currentPage, setCurrentPage] = useState(1)
 
   /* ?
    *  const search_pに代入されている関数の中で、[1]がどのような意味であるかわからず、
