@@ -12,6 +12,19 @@ const Index = (props) => {
    *  const search_pに代入されている関数の中で、[1]がどのような意味であるかわからず、
       ご教授いただければ幸いです。
    */
+
+  /** !
+   * developer tookで
+   *  location.search.match(/p\=(\d+)/)
+   * を実行してみてください。
+   * これはlocation.search（URLの?以降の文字列。URLパラメタやクエリパラメタなどとも言う）
+   * の「p=N」（Nというのは任意の数字）のNをマッチさせる正規表現なので、
+   * URLパラメタに「p=N」がある場合、「a=N」などp以外のパラメタ名の場合、そもそも？がないURLの場合など、いろいろなパターンで試してください。
+   * そうするとマッチした場合とそうでない場合で、.match()に結果がどうなるか差がわかるはずです。
+   * 結論を言うと、「p=N」にマッチしたら結果が配列で返ってきまして、[0]には全体マッチ結果、
+   * [1]には()でキャプチャした結果が格納されます。
+   * ので、[1]で「p=N」の「N」が取れるわけです。
+   */
   const search_p = (() => {try{return +location.search.match(/p\=(\d+)/)[1]}catch(e){return 1}})()
   const currentPage = useRef(search_p)
   const getPosition = (page) => [(page * tasksPerPage) - tasksPerPage, page * tasksPerPage]
