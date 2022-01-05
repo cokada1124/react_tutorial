@@ -1,15 +1,26 @@
-import React, { useState}  from "react"
+import React, { useState, useRef}  from "react"
 import { useParams, Link, useLocation } from "react-router-dom"
 
 const Index = (props) => {
   const { id } = useParams()
 
-  const [ tasks, setState ] = useState(props.tasks)
-  const [ currentTasks , setCurrentTasks ] = useState(tasks.slice(0, 5))
-  const [ sortstate, setSortState ] = useState(true)
-  const [ currentPage, setCurrentPage] = useState(1)
-
   const tasksPerPage = 5
+  const [ tasks, setState ] = useState(props.tasks)
+  // const [ currentTasks , setCurrentTasks ] = useState(tasks.slice(0, 5))
+  const [ sortstate, setSortState ] = useState(true)
+  // const [ currentPage, setCurrentPage] = useState(1)
+
+  /* ?
+   *  const search_pに代入されている関数の中で、[1]がどのような意味であるかわからず、
+      ご教授いただければ幸いです。
+   */
+  const search_p = (() => {try{return +location.search.match(/p\=(\d+)/)[1]}catch(e){return 1}})()
+  const currentPage = useRef(search_p)
+  const getPosition = (page) => [(page * tasksPerPage) - tasksPerPage, page * tasksPerPage]
+  const position = getPosition(currentPage.current)
+  const [ currentTasks , setCurrentTasks ] = useState(tasks.slice(position[0], position[1]))
+
+  
   const ths = Object.keys(props.keys).map((key, i) => (
     <th key={`th_${i}`} onClick={()=>tasksSort(key)}><Link to={`/`}>{props.keys[key]}</Link></th>
   ))
@@ -99,7 +110,8 @@ const Index = (props) => {
   })
 
   const numtd = pageNumber.map((v,i) => (
-    <td key={`pn_td_${i}`} onClick={()=>hundlePagenate(v)}><span className="main_container__table_pagenum--num"><Link to={`/?${v}`}>{v}</Link></span></td>
+    // <td key={`pn_td_${i}`} onClick={()=>hundlePagenate(v)}><span className="main_container__table_pagenum--num"><Link to={`/?${v}`}>{v}</Link></span></td>
+    <td key={`pn_td_${i}`} onClick={()=>hundlePagenate(v)}><span className="main_container__table_pagenum--num"><Link to={`/?p=${v}`}>{v}</Link></span></td>
   ))
 
   const location = useLocation();
@@ -107,7 +119,7 @@ const Index = (props) => {
   const hundlePagenate = (v) => {
     // setPagenateState({currentPage : v})
     // location.href = `/?${v}`
-    setCurrentPage(v)
+    // setCurrentPage(v)
     // console.log(v)
     const cp = v
     localStorage["currentPage"] = cp
@@ -126,29 +138,25 @@ const Index = (props) => {
     //   console.log("testtest")
     // }
     // console.log(location)
-  const pageOflastTask = v * tasksPerPage
-  const pageOffarstTask = pageOflastTask - tasksPerPage 
   
   // console.log(pageOflastTask)
   // console.log(pageOffarstTask)
 
-  const currentT = tasks.slice(pageOffarstTask, pageOflastTask)
   // location.href = `/?${v}`
 
+  const position = getPosition(v)
+  const currentT = tasks.slice(position[0], position[1])
   changeCurrentTasks(currentT)
     
     
 
   // console.log(location.search)
-
-  
-    // setCurrentTasks(currentT)
-    
-    // window.location.replace( `/?${v}`) ;
+  // setCurrentTasks(currentT)
+  // window.location.replace( `/?${v}`) ;
   }
   // console.log()
-  console.log(tasks)
-    // console.log(currentTasks)
+  // console.log(tasks)
+  // console.log(currentTasks)
 
   const changeCurrentTasks = (tasks) => {
     setCurrentTasks([...tasks])
@@ -160,7 +168,7 @@ const Index = (props) => {
     <table className="main_container__table_pagenum">
       <tbody>
         <tr>
-          <td>{1+pageOffarstTask}〜{pageOflastTask}件</td>
+          <td>{position[0] + 1}〜{position[1]}件</td>
           {numtd}
           <td className="main_container__table_pagenum--text" onClick={()=>hundlePagenate(+localStorage["currentPage"]+1)}>次へ</td>
         </tr>
@@ -179,7 +187,7 @@ const Index = (props) => {
     <table className="main_container__table_pagenum">
       <tbody>
         <tr>
-          <td>{1+pageOffarstTask}〜{pageOflastTask}件</td>
+          <td>{position[0] + 1}〜{position[1]}件</td>
           {numtd}
           <td className="main_container__table_pagenum--text" onClick={()=>hundlePagenate(+localStorage["currentPage"]+1)}>次へ</td>
         </tr>
