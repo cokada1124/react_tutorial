@@ -86,6 +86,7 @@ function App() {
         <Side />
         <Routes>
           <Route path="/" element={  <Index title="テスト" tasks={tasks} keys={keys} /> } />
+          <Route path="/:id" element={  <Index title="テスト" tasks={tasks} keys={keys} /> } />
           <Route path="/new" element={<Form onClickAddTask={addTask} num={tasks.length} /> } />
           <Route path="/:id" element={<Form onClickUpdateTask={updateTask} tasks={tasks} /> } />
         </Routes>
