@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, useMatch } from "react-router-dom"
 import { useForm } from 'react-hook-form'
 
 const Form = (props) => {
@@ -41,6 +41,8 @@ const Form = (props) => {
 
   const title = id === undefined ? "課題追加" : "課題編集"
   const submit_label = id === undefined ? "追加" : "更新"
+
+  
 
   //即時間数なので再レンダーされるごとに読み込まれる認識で、フォームのtask項目でセレクト内容を変えてみましたが、この処理が実行されない理由がわかりませんでした。（最初の読み込み時は実行されることを確認しました）
   // const errorCheck = (() => {

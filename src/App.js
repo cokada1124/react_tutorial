@@ -81,6 +81,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <p>練習課題 LV.2</p>
       </header>
       <BrowserRouter>
         <Side />

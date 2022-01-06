@@ -52,6 +52,7 @@ body {
 
 ul, li {
   margin: 0px;
+  padding: 0px;
 }
 
 .main_container {
@@ -124,6 +125,11 @@ ul, li {
   background-color: #dadada;
 }
 
+.side-bar__ul li a{
+  width: 100%;
+  display: block;
+}
+
 .main_container{
   width:80%;
   background-color: #f0f0f0;
@@ -146,6 +152,10 @@ ul, li {
 select.-error,
 input.-error {
   background-color: #fcc;
+}
+
+.gray{
+  background-color: #f0f0f0;
 }
 
 

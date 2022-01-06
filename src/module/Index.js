@@ -1,5 +1,5 @@
 import React, { useState, useRef}  from "react"
-import { useParams, Link, useLocation, useSearchParams, useNavigate } from "react-router-dom"
+import { useParams, Link, useLocation, useSearchParams, useNavigate, useMatch } from "react-router-dom"
 
 const Index = (props) => {
   const { id } = useParams()
@@ -36,6 +36,10 @@ const Index = (props) => {
   const search_p = search.get("p") || 1
   const currentPage = useRef(search_p)
 
+  console.log(search.get("p"))
+  // console.log(search.remove())
+
+  
   /** !
    * ページ遷移はuseNavigateを使うのが標準ぽいですね。
    */
