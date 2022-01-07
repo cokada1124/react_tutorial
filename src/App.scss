@@ -96,25 +96,11 @@ header{
 	    width: 25px;
 	    height: 25px;
 	    line-height: 25px;
-      background: rgb(46, 40, 40);
+      background: #fff;
       display: inline-block;
       text-align:center;
       border:solid 1px #c8c8c8;
       margin: 0 10px;
-      
-      .currentNum{
-        font-weight: bold;
-        border-radius: 50%;
-        width: px;
-        height: 25px;
-        line-height: 25px;
-        background: #c8c8c8;
-        display: inline-block;
-        text-align:center;
-        a{
-          color:#fff;
-        }
-      }
     }
 
     &--text {
@@ -128,6 +114,21 @@ header{
       border:solid 1px #c8c8c8;
     }
   }
+}
+
+.currentNum{
+  font-weight: bold;
+  border-radius: 50%;
+  width: px;
+  height: 25px;
+  line-height: 25px;
+  background: #c8c8c8;
+  display: inline-block;
+  text-align:center;
+  a{
+    color:#fff;
+  }
+
 }
 
 .main_container__table_pagenum__num{
