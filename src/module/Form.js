@@ -116,7 +116,7 @@ const Form = (props) => {
         <li><label>id</label>{id}</li>
 
         <li>
-          <label>task</label>
+          <label>タスク</label>
           <select onChange={(e)=>setState({...state, ...{task: e.target.value}})} value={state.task}>
           {generateOpt("task")}
           </select>
@@ -126,19 +126,19 @@ const Form = (props) => {
         </li>
         
         <li>
-          <label>key</label>
+          <label>キー</label>
           <input type="text" value={state.key} onChange={(e) => setState({...state, ...{key: e.target.value}})} />
           {error.key === false && <span className="red txt-indent">キーを入力して下さい</span>}
         </li>
         
         <li>
-          <label>title</label>
-          <input type="text" value={state.title} onChange={(e) => setState({...state, ...{title: e.target.value}})} />
+          <label>タイトル</label>
+          <input type="text" className="form_title" value={state.title} onChange={(e) => setState({...state, ...{title: e.target.value}})} />
           {error.title === false && <span className="red txt-indent">タイトルを入力して下さい</span>}
         </li>
         
         <li>
-          <label>author</label>
+          <label>担当者</label>
           <select onChange={(e)=>setState({...state, ...{author: e.target.value}})} value={state.author}>
           {generateOpt("author")}
           </select>
@@ -146,7 +146,7 @@ const Form = (props) => {
         </li>
         
         <li>
-          <label>status</label>
+          <label>状態</label>
           <select onChange={(e)=>setState({...state, ...{status: e.target.value}})} value={state.status}>
           {generateOpt("status")}
           </select>
@@ -154,7 +154,7 @@ const Form = (props) => {
         </li>
         
         <li>
-          <label>priority</label>
+          <label>優先度</label>
           <select onChange={(e)=>setState({...state, ...{priority: e.target.value}})} value={state.priority}>
           {generateOpt("priority")}
           </select>
@@ -162,19 +162,19 @@ const Form = (props) => {
         </li>
         
         <li>
-          <label>registed_at</label>
+          <label>登録日</label>
           <input type="date" value={state.registed_at} onChange={(e) => setState({...state, ...{registed_at: e.target.value}})} />
           {error.registed_at === false && <span className="red txt-indent">登録日を選択して下さい</span>}
         </li>
         
         <li>
-          <label>start_date</label>
+          <label>開始日</label>
           <input type="date" value={state.start_date} onChange={(e) => setState({...state, ...{start_date: e.target.value}})} />
           {error.start_date === false && <span className="red txt-indent">開始を選択して下さい</span>}
         </li>
         
         <li>
-          <label>end_date</label>
+          <label>期限日</label>
           <input type="date" value={state.end_date} onChange={(e) => setState({...state, ...{end_date: e.target.value}})} />
           {error.end_date === false && <span className="red txt-indent">期限日を選択して下さい</span>}
         </li>

@@ -9,7 +9,7 @@ const Side = () => {
 
   const tasksList = useMatch("/") ? "gray" : ""
   const addTasks = useMatch("/new") ? "gray" : ""
-
+  
   return (
     <ul className="side-bar__ul">
       <li>

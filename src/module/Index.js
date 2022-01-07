@@ -1,5 +1,6 @@
 import React, { useState, useRef}  from "react"
 import { useParams, Link, useLocation, useSearchParams, useNavigate, useMatch } from "react-router-dom"
+import { useEffect } from "react/cjs/react.production.min"
 
 const Index = (props) => {
   const { id } = useParams()
@@ -7,6 +8,7 @@ const Index = (props) => {
   const tasksPerPage = 5
   const [ tasks, setState ] = useState(props.tasks)
   const [ sortstate, setSortState ] = useState(true)
+
 
   /* ?
    *  const search_pに代入されている関数の中で、[1]がどのような意味であるかわからず、
@@ -36,10 +38,21 @@ const Index = (props) => {
   const search_p = search.get("p") || 1
   const currentPage = useRef(search_p)
 
+  //下記作業途中のものになります。
+  if(true){
+  const pageNate = [1,null,+currentPage.curren-2,+currentPage.current-1,+currentPage.current,+currentPage.current+1,+currentPage.current+2,null,tasks.length]
+  }else{
+  const pageNate = [1,null,+currentPage.curren-2,+currentPage.current-1,+currentPage.current,+currentPage.current+1,+currentPage.current+2,null,tasks.length]
+  }
+  // console.log(pageNate)
   console.log(search.get("p"))
   // console.log(search.remove())
+  const test = () => {
+    if(currentPage) {
+    }
+  }
+  //
 
-  
   /** !
    * ページ遷移はuseNavigateを使うのが標準ぽいですね。
    */
@@ -48,6 +61,13 @@ const Index = (props) => {
   const position = getPosition(currentPage.current)
   const [ currentTasks , setCurrentTasks ] = useState(tasks.slice(position[0], position[1]))
 
+  //下記作業途中のものになります。
+  const total_page = tasks.length / tasksPerPage
+  // useEffect
+  if (tasks.length % tasksPerPage > 0){
+    total_page +1
+  }
+  //
   
   const ths = Object.keys(props.keys).map((key, i) => (
     <th key={`th_${i}`} onClick={()=>tasksSort(key)}><Link to={`/`}>{props.keys[key]}</Link></th>
@@ -141,8 +161,10 @@ const Index = (props) => {
 
   const numtd = pageNumber.map((v,i) => (
     // <td key={`pn_td_${i}`} onClick={()=>hundlePagenate(v)}><span className="main_container__table_pagenum--num"><Link to={`/?${v}`}>{v}</Link></span></td>
-    <td key={`pn_td_${i}`} onClick={()=>hundlePagenate(v)}><span className="main_container__table_pagenum--num"><Link to={`/?p=${v}`}>{v}</Link></span></td>
+    <td key={`pn_td_${i}`} onClick={()=>hundlePagenate(v)}><span className={`main_container__table_pagenum--num ${+localStorage["currentPage"] === v ? 'currentNum' : '' }`}><Link to={`/?p=${v}`}>{v}</Link></span></td>
   ))
+
+  console.log(currentPage.current)
 
   const location = useLocation();
 
