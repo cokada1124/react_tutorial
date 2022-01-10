@@ -39,18 +39,18 @@ const Index = (props) => {
   const currentPage = useRef(search_p)
 
   //下記作業途中のものになります。
-  if(true){
-  const pageNate = [1,null,+currentPage.curren-2,+currentPage.current-1,+currentPage.current,+currentPage.current+1,+currentPage.current+2,null,tasks.length]
-  }else{
-  const pageNate = [1,null,+currentPage.curren-2,+currentPage.current-1,+currentPage.current,+currentPage.current+1,+currentPage.current+2,null,tasks.length]
-  }
+  // if(false){
+  // const pageNate = [1,null,+currentPage.curren-2,+currentPage.current-1,+currentPage.current,+currentPage.current+1,+currentPage.current+2,null,tasks.length]
+  // }else{
+  // const pageNate = [1,null,+currentPage.curren-2,+currentPage.current-1,+currentPage.current,+currentPage.current+1,+currentPage.current+2,null,tasks.length]
+  // }
   // console.log(pageNate)
   console.log(search.get("p"))
   // console.log(search.remove())
-  const test = () => {
-    if(currentPage) {
-    }
-  }
+  // const test = () => {
+  //   if(currentPage) {
+  //   }
+  // }
   //
 
   /** !
@@ -62,11 +62,11 @@ const Index = (props) => {
   const [ currentTasks , setCurrentTasks ] = useState(tasks.slice(position[0], position[1]))
 
   //下記作業途中のものになります。
-  const total_page = tasks.length / tasksPerPage
-  // useEffect
-  if (tasks.length % tasksPerPage > 0){
-    total_page +1
-  }
+  // const total_page = tasks.length / tasksPerPage
+  // // useEffect
+  // if (tasks.length % tasksPerPage > 0){
+  //   total_page +1
+  // }
   //
   
   const ths = Object.keys(props.keys).map((key, i) => (
