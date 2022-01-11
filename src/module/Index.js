@@ -1,6 +1,5 @@
 import React, { useState, useRef}  from "react"
 import { useParams, Link, useLocation, useSearchParams, useNavigate, useMatch } from "react-router-dom"
-import { useEffect } from "react/cjs/react.production.min"
 
 const Index = (props) => {
   const { id } = useParams()
@@ -60,6 +59,9 @@ const Index = (props) => {
   const getPosition = (page) => [(page * tasksPerPage) - tasksPerPage, page * tasksPerPage]
   const position = getPosition(currentPage.current)
   const [ currentTasks , setCurrentTasks ] = useState(tasks.slice(position[0], position[1]))
+
+  console.log(position)
+  console.log(currentPage.current)
 
   //下記作業途中のものになります。
   // const total_page = tasks.length / tasksPerPage
@@ -161,7 +163,7 @@ const Index = (props) => {
 
   const numtd = pageNumber.map((v,i) => (
     // <td key={`pn_td_${i}`} onClick={()=>hundlePagenate(v)}><span className="main_container__table_pagenum--num"><Link to={`/?${v}`}>{v}</Link></span></td>
-    <td key={`pn_td_${i}`} onClick={()=>hundlePagenate(v)}><span className={`main_container__table_pagenum--num ${+localStorage["currentPage"] === v ? 'currentNum' : '' }`}><Link to={`/?p=${v}`}>{v}</Link></span></td>
+    <td key={`pn_td_${i}`} onClick={()=>hundlePagenate(v)}><span className={`main_container__table_pagenum--num ${+currentPage.current === v ? 'currentNum' : '' }`}><Link to={`/?p=${v}`}>{v}</Link></span></td>
   ))
 
   console.log(currentPage.current)
@@ -222,7 +224,7 @@ const Index = (props) => {
         <tr>
           <td>{position[0] + 1}〜{position[1]}件</td>
           {numtd}
-          <td className="main_container__table_pagenum--text" onClick={()=>hundlePagenate(+localStorage["currentPage"]+1)}>次へ</td>
+          <td className="main_container__table_pagenum--text" onClick={()=>hundlePagenate(+localStorage["currentPage"]+1)}><Link to={`/?p=${+currentPage.current+1}`}>次へ</Link></td>
         </tr>
       </tbody>
     </table>
@@ -241,7 +243,7 @@ const Index = (props) => {
         <tr>
           <td>{position[0] + 1}〜{position[1]}件</td>
           {numtd}
-          <td className="main_container__table_pagenum--text" onClick={()=>hundlePagenate(+localStorage["currentPage"]+1)}>次へ</td>
+          <td className="main_container__table_pagenum--text" onClick={()=>hundlePagenate(+localStorage["currentPage"]+1)}><Link to={`/?p=${+currentPage.current+1}`}>次へ</Link></td>
         </tr>
       </tbody>
     </table>
