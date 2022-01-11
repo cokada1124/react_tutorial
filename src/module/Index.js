@@ -224,7 +224,7 @@ const Index = (props) => {
         <tr>
           <td>{position[0] + 1}〜{position[1]}件</td>
           {numtd}
-          <td className="main_container__table_pagenum--text" onClick={()=>hundlePagenate(+localStorage["currentPage"]+1)}><Link to={`/?p=${+currentPage.current+1}`}>次へ</Link></td>
+          <td className="main_container__table_pagenum--text" onClick={()=>hundlePagenate(+localStorage["currentPage"]+1)}><Link to={`/?p=${+localStorage["currentPage"]+1}`}>次へ</Link></td>
         </tr>
       </tbody>
     </table>
@@ -243,7 +243,7 @@ const Index = (props) => {
         <tr>
           <td>{position[0] + 1}〜{position[1]}件</td>
           {numtd}
-          <td className="main_container__table_pagenum--text" onClick={()=>hundlePagenate(+localStorage["currentPage"]+1)}><Link to={`/?p=${+currentPage.current+1}`}>次へ</Link></td>
+          <td className="main_container__table_pagenum--text"><Link to={`/?p=${+currentPage.current+1}`} onClick={()=>hundlePagenate(+localStorage["currentPage"]+1)}>次へ</Link></td>
         </tr>
       </tbody>
     </table>
