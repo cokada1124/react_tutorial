@@ -58,7 +58,7 @@ function App() {
     setTasks(added_tasks)
     
     console.log(tasks)
-    location.href = `/${task.id}`
+    location.href = `/`
   }
 
   const updateTask = (task) => {

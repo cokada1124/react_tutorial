@@ -7,7 +7,7 @@ const Index = (props) => {
   const tasksPerPage = 5
   const [ tasks, setState ] = useState(props.tasks)
   const [ sortstate, setSortState ] = useState(true)
-
+  const [ sortkind, setSortKind ] = useState()
 
   /* ?
    *  const search_pに代入されている関数の中で、[1]がどのような意味であるかわからず、
@@ -36,6 +36,12 @@ const Index = (props) => {
   const [search] = useSearchParams()
   const search_p = search.get("p") || 1
   const currentPage = useRef(search_p)
+  // const nextPage = useRef(search_p)+1 
+
+  if(search_p === 1) {
+    localStorage["currentPage"] = search_p
+  }
+
 
   //下記作業途中のものになります。
   // if(false){
@@ -62,6 +68,8 @@ const Index = (props) => {
 
   console.log(position)
   console.log(currentPage.current)
+  console.log(currentPage)
+  // console.log(nextPage)
 
   //下記作業途中のものになります。
   // const total_page = tasks.length / tasksPerPage
@@ -72,7 +80,7 @@ const Index = (props) => {
   //
   
   const ths = Object.keys(props.keys).map((key, i) => (
-    <th key={`th_${i}`} onClick={()=>tasksSort(key)}><Link to={`/`}>{props.keys[key]}</Link></th>
+    <th key={`th_${i}`} onClick={()=>tasksSort(key)}><Link to={`/`}>{props.keys[key]+ (sortkind === key + !sortstate.toString() ? "▼" : sortkind === key + sortstate.toString() ? "aaa":"")}</Link></th>
   ))
   console.log(ths)
   console.log(props.tasks)
@@ -84,20 +92,34 @@ const Index = (props) => {
     const desctasks = tasks.sort((a, b) => (a[key] < b[key]) ? 1 : -1)
     setSortState(!sortstate)
     setState([...desctasks])
-    console.log(!sortstate)
-    const desccurrenttasks = currentTasks.sort((a, b) => (a[key] < b[key]) ? 1 : -1)
-    setCurrentTasks(desccurrenttasks)
+    console.log(sortstate)
+    console.log(key)
+    setSortKind(key + sortstate.toString())
+    console.log(sortkind)
+    // const desccurrenttasks = currentTasks.sort((a, b) => (a[key] < b[key]) ? 1 : -1)
+    // setCurrentTasks(desccurrenttasks)
+    // location.href = `/`
 
   }else{
     const asctasks = tasks.sort((a, b) => (a[key] > b[key]) ? 1 : -1)
     setSortState(!sortstate)
     setState([...asctasks])
-    const asccurrenttasks = currentTasks.sort((a, b) => (a[key] > b[key]) ? 1 : -1)
-    setCurrentTasks(asccurrenttasks)
+    console.log(key)
+    console.log(sortstate)
+    setSortKind(key + sortstate.toString())
+    console.log(sortkind)
+    // location.href = `/`
+    // const asccurrenttasks = currentTasks.sort((a, b) => (a[key] > b[key]) ? 1 : -1)
+    // setCurrentTasks(asccurrenttasks)
   }
-    
+  const currentT = tasks.slice(position[0], position[1])
+  changeCurrentTasks(currentT)
+  localStorage["currentPage"] = 1
+  location.href = `/?p=1`
   }
 
+
+  console.log(sortkind)
   // const location = useLocation();
 
   // console.log(location.search)
@@ -115,8 +137,12 @@ const Index = (props) => {
   // }
 
 
-  const pageOflastTask = currentPage * tasksPerPage
+  const pageOflastTask = +localStorage["currentPage"] * tasksPerPage 
   const pageOffarstTask = pageOflastTask - tasksPerPage 
+  const pageOfmiddle = currentTasks.length + pageOffarstTask
+  const maxPage = Math.ceil(tasks.length / tasksPerPage)
+
+  console.log(currentTasks.length)
 
   console.log(pageOflastTask)
   console.log(pageOffarstTask)
@@ -141,10 +167,9 @@ const Index = (props) => {
   console.log(pageNumber)
 
   // console.log(pageNumber)
-
   
   
-  const trs = currentTasks.map((task, i) => {
+  const trs = JSON.parse(localStorage["currentTasks"]).map((task, i) => {
     const tds = Object.keys(task).map((td, j) => (
       <td key={`td_${j}`}>{task[td]}</td>
     ))
@@ -163,7 +188,7 @@ const Index = (props) => {
 
   const numtd = pageNumber.map((v,i) => (
     // <td key={`pn_td_${i}`} onClick={()=>hundlePagenate(v)}><span className="main_container__table_pagenum--num"><Link to={`/?${v}`}>{v}</Link></span></td>
-    <td key={`pn_td_${i}`} onClick={()=>hundlePagenate(v)}><span className={`main_container__table_pagenum--num ${+currentPage.current === v ? 'currentNum' : '' }`}><Link to={`/?p=${v}`}>{v}</Link></span></td>
+    <td key={`pn_td_${i}`} className="tdnum"><span className={`main_container__table_pagenum--num ${+localStorage["currentPage"] === v ? 'currentNum' : '' }`}><Link to={`/?p=${v}`} onClick={()=>hundlePagenate(v)}>{v}</Link></span></td>
   ))
 
   console.log(currentPage.current)
@@ -222,9 +247,10 @@ const Index = (props) => {
     <table className="main_container__table_pagenum">
       <tbody>
         <tr>
-          <td>{position[0] + 1}〜{position[1]}件</td>
+          <td className="tdcurrentpagenum">{pageOffarstTask+1}〜{currentTasks.length === tasksPerPage ?pageOflastTask :pageOfmiddle}件</td>
           {numtd}
-          <td className="main_container__table_pagenum--text" onClick={()=>hundlePagenate(+localStorage["currentPage"]+1)}><Link to={`/?p=${+localStorage["currentPage"]+1}`}>次へ</Link></td>
+          <td onClick={+maxPage > +localStorage["currentPage"] ? ()=>hundlePagenate(+localStorage["currentPage"]+1) : ()=>{}}><Link to={`/?p=${+maxPage > +localStorage["currentPage"] ? +localStorage["currentPage"]+1 : +localStorage["currentPage"]}`}><span className="main_container__table_pagenum--text">次へ</span></Link></td>
+          <td className="tdnewbtn"><a href="/new"><span className="main_container__table_pagenum--new">新規作成</span></a></td>
         </tr>
       </tbody>
     </table>
@@ -241,9 +267,10 @@ const Index = (props) => {
     <table className="main_container__table_pagenum">
       <tbody>
         <tr>
-          <td>{position[0] + 1}〜{position[1]}件</td>
+        <td className="tdcurrentpagenum">{pageOffarstTask+1}〜{currentTasks.length === tasksPerPage ?pageOflastTask :pageOfmiddle}件</td>
           {numtd}
-          <td className="main_container__table_pagenum--text"><Link to={`/?p=${+currentPage.current+1}`} onClick={()=>hundlePagenate(+localStorage["currentPage"]+1)}>次へ</Link></td>
+          <td className="main_container__table_pagenum--text" onClick={+maxPage > +localStorage["currentPage"] ? ()=>hundlePagenate(+localStorage["currentPage"]+1) : ()=>{}}><Link to={`/?p=${+maxPage > +localStorage["currentPage"] ? +localStorage["currentPage"]+1 : +localStorage["currentPage"]}`}>次へ</Link></td>
+          <td className="tdnewbtn"><a href="/new"><span className="main_container__table_pagenum--new">新規作成</span></a></td>
         </tr>
       </tbody>
     </table>
