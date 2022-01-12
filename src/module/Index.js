@@ -7,7 +7,6 @@ const Index = (props) => {
   const tasksPerPage = 5
   const [ tasks, setState ] = useState(props.tasks)
   const [ sortstate, setSortState ] = useState(true)
-  const [ sortkind, setSortKind ] = useState()
 
   /* ?
    *  const search_pに代入されている関数の中で、[1]がどのような意味であるかわからず、
@@ -37,7 +36,6 @@ const Index = (props) => {
   const search_p = search.get("p") || 1
   const currentPage = useRef(search_p)
 
-
   if(search_p === 1) {
     localStorage["currentPage"] = search_p
   }
@@ -49,40 +47,36 @@ const Index = (props) => {
   const getPosition = (page) => [(page * tasksPerPage) - tasksPerPage, page * tasksPerPage]
   const position = getPosition(currentPage.current)
   const [ currentTasks , setCurrentTasks ] = useState(tasks.slice(position[0], position[1]))
-
   
   const ths = Object.keys(props.keys).map((key, i) => (
     <th key={`th_${i}`} onClick={()=>tasksSort(key)}><Link to={`/`}>{props.keys[key]+ (localStorage["currentSort"] === key + "false" ? "▲" : localStorage["currentSort"] === key + "true" ? "▼" : "")}</Link></th>
   ))
-  console.log(ths)
-  console.log(props.tasks)
-  // console.log(tasks.tasks)
-  console.log(props)
 
   const tasksSort = (key) => {
     if(sortstate){
     const desctasks = tasks.sort((a, b) => (a[key] < b[key]) ? 1 : -1)
     setSortState(!sortstate)
     setState([...desctasks])
-    setSortKind(key + sortstate.toString())
     localStorage["currentSort"] = key + sortstate.toString()
-  } else {
+  }else{
     const asctasks = tasks.sort((a, b) => (a[key] > b[key]) ? 1 : -1)
     setSortState(!sortstate)
     setState([...asctasks])
     localStorage["currentSort"] = key + sortstate.toString()
-    setSortKind(key + sortstate.toString())
   }
-    const currentT = tasks.slice(position[0], position[1])
-    changeCurrentTasks(currentT)
-    localStorage["currentPage"] = 1
-    location.href = `/?p=1`
+  const currentT = tasks.slice(position[0], position[1])
+  changeCurrentTasks(currentT)
+  localStorage["currentPage"] = 1
+  location.href = `/?p=1`
   }
+
+
 
   const pageOflastTask = +localStorage["currentPage"] * tasksPerPage 
   const pageOffarstTask = pageOflastTask - tasksPerPage 
   const pageOfmiddle = currentTasks.length + pageOffarstTask
   const maxPage = Math.ceil(tasks.length / tasksPerPage)
+
 
   let pageNumber = [];
 
@@ -95,7 +89,7 @@ const Index = (props) => {
     pageNumber = [1,2,3,4,5,null,maxPage]
   }
   if(+localStorage["currentPage"] >= 3 && maxPage >= +localStorage["currentPage"] +2){
-    pageNumber = [+localStorage["currentPage"] -2, +localStorage["currentPage"] -1,+localStorage["currentPage"],+localStorage["currentPage"] +1,+localStorage["currentPage"] +2,null,maxPage]
+    pageNumber = [+localStorage["currentPage"] -2,+localStorage["currentPage"] -1,+localStorage["currentPage"],+localStorage["currentPage"] +1,+localStorage["currentPage"] +2,null,maxPage]
   }
   if(+localStorage["currentPage"] === maxPage -2){
     pageNumber = [+localStorage["currentPage"] -2, +localStorage["currentPage"] -1,+localStorage["currentPage"],+localStorage["currentPage"] +1,+localStorage["currentPage"] +2]
@@ -103,7 +97,6 @@ const Index = (props) => {
   if(+localStorage["currentPage"] >= maxPage -1){
     pageNumber = [maxPage -4,maxPage -3,maxPage -2,maxPage -1,maxPage]
   }
-
 
   const trs = JSON.parse(localStorage["currentTasks"]).map((task, i) => {
     const tds = Object.keys(task).map((td, j) => (
@@ -123,15 +116,18 @@ const Index = (props) => {
   })
 
   const numtd = pageNumber.map((v,i) => (
-    <td key={`pn_td_${i}`} className="tdnum"><span className={`main_container__table_pagenum--num ${+localStorage["currentPage"] === v ? 'currentNum' : '' }`}><Link to={`/?p=${v}`} onClick={()=>hundlePagenate(v)}>{v === null ? "..." : v}</Link></span></td>
+    <td key={`pn_td_${i}`} className="tdnum"><span className={`main_container__table_pagenum--num ${+localStorage["currentPage"] === v ? 'currentNum' : '' }`}><Link to={`/?p=${v}`} onClick={()=>hundlePagenate(v)}>{v === null ? "..." : v }</Link></span></td>
   ))
 
   const backtd = 
-    <td className="tdbacktext" onClick={1 < +localStorage["currentPage"] ? ()=>hundlePagenate(+localStorage["currentPage"]-1) : ()=>{}}><Link to={`/?p=${1 < +localStorage["currentPage"] ? +localStorage["currentPage"]-1 : +localStorage["currentPage"]}`}><span  className="main_container__table_pagenum--text">戻る</span></Link></td>
+    <td className="tdbacktext" onClick={1 < +localStorage["currentPage"] ? ()=>hundlePagenate(+localStorage["currentPage"] -1) : ()=>{}}><Link to={`/?p=${1 < +localStorage["currentPage"] ? +localStorage["currentPage"] -1 : +localStorage["currentPage"]}`}><span  className="main_container__table_pagenum--text">戻る</span></Link></td>
+
+  const location = useLocation();
 
   const hundlePagenate = (v) => {
     const cp = v
     localStorage["currentPage"] = cp
+    console.log(localStorage["currentPage"])
     const position = getPosition(v)
     const currentT = tasks.slice(position[0], position[1])
     changeCurrentTasks(currentT)
@@ -147,10 +143,10 @@ const Index = (props) => {
     <table className="main_container__table_pagenum">
       <tbody>
         <tr>
-          <td className="tdcurrentpagenum">{pageOffarstTask+1}〜{currentTasks.length === tasksPerPage ?pageOflastTask :pageOfmiddle}件</td>
+          <td className="tdcurrentpagenum">{pageOffarstTask +1}〜{currentTasks.length === tasksPerPage ?pageOflastTask :pageOfmiddle}件</td>
           {numtd}
           {backtd}
-          <td onClick={+maxPage > +localStorage["currentPage"] ? ()=>hundlePagenate(+localStorage["currentPage"]+1) : ()=>{}}><Link to={`/?p=${+maxPage > +localStorage["currentPage"] ? +localStorage["currentPage"]+1 : +localStorage["currentPage"]}`}><span className="main_container__table_pagenum--text">次へ</span></Link></td>
+          <td onClick={+maxPage > +localStorage["currentPage"] ? ()=>hundlePagenate(+localStorage["currentPage"] +1) : ()=>{}}><Link to={`/?p=${+maxPage > +localStorage["currentPage"] ? +localStorage["currentPage"] +1 : +localStorage["currentPage"]}`}><span className="main_container__table_pagenum--text">次へ</span></Link></td>
           <td className="tdnewbtn"><a href="/new"><span className="main_container__table_pagenum--new">新規作成</span></a></td>
         </tr>
       </tbody>
@@ -171,7 +167,7 @@ const Index = (props) => {
         <td className="tdcurrentpagenum">{pageOffarstTask+1}〜{currentTasks.length === tasksPerPage ?pageOflastTask :pageOfmiddle}件</td>
           {numtd}
           {backtd}
-          <td onClick={+maxPage > +localStorage["currentPage"] ? ()=>hundlePagenate(+localStorage["currentPage"]+1) : ()=>{}}><Link to={`/?p=${+maxPage > +localStorage["currentPage"] ? +localStorage["currentPage"]+1 : +localStorage["currentPage"]}`}><span className="main_container__table_pagenum--text">次へ</span></Link></td>
+          <td onClick={+maxPage > +localStorage["currentPage"] ? ()=>hundlePagenate(+localStorage["currentPage"] +1) : ()=>{}}><Link to={`/?p=${+maxPage > +localStorage["currentPage"] ? +localStorage["currentPage"] +1 : +localStorage["currentPage"]}`}><span className="main_container__table_pagenum--text">次へ</span></Link></td>
           <td className="tdnewbtn"><a href="/new"><span className="main_container__table_pagenum--new">新規作成</span></a></td>
         </tr>
       </tbody>
