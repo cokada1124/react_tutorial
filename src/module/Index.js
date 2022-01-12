@@ -52,7 +52,7 @@ const Index = (props) => {
 
   
   const ths = Object.keys(props.keys).map((key, i) => (
-    <th key={`th_${i}`} onClick={()=>tasksSort(key)}><Link to={`/`}>{props.keys[key]+ (localStorage["currentSort"] === key + "false" ? "▲" : localStorage["currentSort"] === key + "true" ? "▼":"")}</Link></th>
+    <th key={`th_${i}`} onClick={()=>tasksSort(key)}><Link to={`/`}>{props.keys[key]+ (localStorage["currentSort"] === key + "false" ? "▲" : localStorage["currentSort"] === key + "true" ? "▼" : "")}</Link></th>
   ))
   console.log(ths)
   console.log(props.tasks)
@@ -123,7 +123,7 @@ const Index = (props) => {
   })
 
   const numtd = pageNumber.map((v,i) => (
-    <td key={`pn_td_${i}`} className="tdnum"><span className={`main_container__table_pagenum--num ${+localStorage["currentPage"] === v ? 'currentNum' : '' }`}><Link to={`/?p=${v}`} onClick={()=>hundlePagenate(v)}>{v===null ? "..." : v}</Link></span></td>
+    <td key={`pn_td_${i}`} className="tdnum"><span className={`main_container__table_pagenum--num ${+localStorage["currentPage"] === v ? 'currentNum' : '' }`}><Link to={`/?p=${v}`} onClick={()=>hundlePagenate(v)}>{v === null ? "..." : v}</Link></span></td>
   ))
 
   const backtd = 
