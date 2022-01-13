@@ -8,30 +8,6 @@ const Index = (props) => {
   const [ tasks, setState ] = useState(props.tasks)
   const [ sortstate, setSortState ] = useState(true)
 
-  /* ?
-   *  const search_pに代入されている関数の中で、[1]がどのような意味であるかわからず、
-      ご教授いただければ幸いです。
-   */
-
-  /** !
-   * developer tookで
-   *  location.search.match(/p\=(\d+)/)
-   * を実行してみてください。
-   * これはlocation.search（URLの?以降の文字列。URLパラメタやクエリパラメタなどとも言う）
-   * の「p=N」（Nというのは任意の数字）のNをマッチさせる正規表現なので、
-   * URLパラメタに「p=N」がある場合、「a=N」などp以外のパラメタ名の場合、そもそも？がないURLの場合など、いろいろなパターンで試してください。
-   * そうするとマッチした場合とそうでない場合で、.match()に結果がどうなるか差がわかるはずです。
-   * 結論を言うと、「p=N」にマッチしたら結果が配列で返ってきまして、[0]には全体マッチ結果、
-   * [1]には()でキャプチャした結果が格納されます。
-   * ので、[1]で「p=N」の「N」が取れるわけです。
-   */
-  // const search_p = (() => {try{return +location.search.match(/p\=(\d+)/)[1]}catch(e){return 1}})()
-
-  /** !
-   * location.searchをmatchで抜いてましたが、
-   * react-routerの標準APIでuseSearchParamsてのがありました。
-   * これで簡単にパラメタ抜けますね。
-   */
   const [search] = useSearchParams()
   const search_p = search.get("p") || 1
   const currentPage = useRef(search_p)
@@ -40,11 +16,16 @@ const Index = (props) => {
     localStorage["currentPage"] = search_p
   }
 
-  fetch("https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
-  method: "GET"
-  })
-  .then(res => res.json())
-  .then(json => localStorage["testtest"] = JSON.stringify(json))
+  /** !!!
+   * 通常はしないですが、fetch結果をlocalStrageに入れて以後localStorageから参照しているので、
+   * 毎回fetchする必要がないです。
+   * APIロードはなるべく減らしたほうがいいので、開発中はコメントアウトしました。
+   */
+  // fetch("https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
+  // method: "GET"
+  // })
+  // .then(res => res.json())
+  // .then(json => localStorage["testtest"] = JSON.stringify(json))
   /** !
    * ページ遷移はuseNavigateを使うのが標準ぽいですね。
    */
@@ -59,24 +40,24 @@ const Index = (props) => {
   ))
 
   const ttest = JSON.parse(localStorage["testtest"]).map((t,i) => (
-    <tr>
-    <td key={`tt_${i}`}>{t.id}</td>
-    <td key={`tt_${i}`}>{t.projectId}</td>
-    <td key={`tt_${i}`}>{t.issueKey}</td>
-    <td key={`tt_${i}`}>{t.keyId}</td>
+    <tr key={`tr_${i}`}>
+    <td key={`tt_${Math.random()}`}>{t.id}</td>
+    <td key={`tt_${Math.random()}`}>{t.projectId}</td>
+    <td key={`tt_${Math.random()}`}>{t.issueKey}</td>
+    <td key={`tt_${Math.random()}`}>{t.keyId}</td>
 
-    <td key={`tt_${i}`}>{t.issueType.id}</td>
-    <td key={`tt_${i}`}>{t.issueType.projectId}</td>
-    <td key={`tt_${i}`}>{t.issueType.name}</td>
-    <td key={`tt_${i}`}>{t.issueType.color}</td>
-    <td key={`tt_${i}`}>{t.issueType.displayOrder}</td>
+    <td key={`tt_${Math.random()}`}>{t.issueType.id}</td>
+    <td key={`tt_${Math.random()}`}>{t.issueType.projectId}</td>
+    <td key={`tt_${Math.random()}`}>{t.issueType.name}</td>
+    <td key={`tt_${Math.random()}`}>{t.issueType.color}</td>
+    <td key={`tt_${Math.random()}`}>{t.issueType.displayOrder}</td>
 
-    <td key={`tt_${i}`}>{t.summary}</td>
-    <td key={`tt_${i}`}>{t.description}</td>
-    <td key={`tt_${i}`}>{t.resolution}</td>
+    <td key={`tt_${Math.random()}`}>{t.summary}</td>
+    <td key={`tt_${Math.random()}`}>{t.description}</td>
+    <td key={`tt_${Math.random()}`}>{t.resolution}</td>
 
-    <td key={`tt_${i}`}>{t.priority.id}</td>
-    <td key={`tt_${i}`}>{t.priority.name}</td>
+    <td key={`tt_${Math.random()}`}>{t.priority.id}</td>
+    <td key={`tt_${Math.random()}`}>{t.priority.name}</td>
     </tr>
   ))
   
@@ -126,37 +107,42 @@ const Index = (props) => {
     pageNumber = [maxPage -4,maxPage -3,maxPage -2,maxPage -1,maxPage]
   }
 
-  // const trs = JSON.parse(localStorage["currentTasks"]).map((task, i) => {
-  //   const tds = Object.keys(task).map((td, j) => (
-  //     <td key={`td_${j}`}>{task[td]}</td>
-  //   ))
-  //   const toEdit = (id) => {
-  //     console.log(id)
-  //     // location.href = "/" + id
-  //     nav("/" + id)
-
-  //   }
-
-  //   return (
-  //     <tr key={`tr_${i}`} onClick={()=>toEdit(task.id)}>
-  //       {tds}
-  //     </tr>
-  //   )
-  // })
-
   // !質問
   // 先ほどのmapのネストでbacklogのデータで行ってみると
   // エラーが出てしまいました。
   // レンダーしたい場合は、配列にする必要があるような
   // 表記のエラーだったのですが、どのようにしたらよいでしょうか？
+
+  /** !!!
+   * issueTypeとpriority以外にもObjectがあったからということと、
+   * createdUserとかのようにさらに内部にObjectがある（３階層目）ものがあったからじゃないかと思います。
+   * まずはそもそものカラムをfilterで今回使うものだけに絞り、
+   * さらに内部にobjectを持つcreatedUserだけ独立してname属性のみ取るようにしました。
+   */
   const ttrs = JSON.parse(localStorage["testtest"]).map((task, i) => {
-    const tds = Object.keys(task).map((td, j) => {
-      if(td==="issuetype" || td === "priority"){
-        return Object.keys(task).map((tdd, i) => (
-          <td>{tdd}</td>
+    const tds = Object.keys(task).filter(key => (
+      [
+        "id",
+        "issueType",
+        "issueKey",
+        "summary",
+        "createdUser",
+        "status",
+        "priority",
+        "created",
+        "startDate",
+        "dueDate"
+      ].includes(key)
+    )).map((td, j) => {
+      if(td === "createdUser") {
+        return <td key={`${td}_${i}_${j}`}>{task[td]["name"]}</td>
+      }
+      if(["issueType", "priority", "status"].includes(td)){
+        return Object.keys(task[td]).map((tdd, i) => (
+          <td key={`${td}-${tdd}_${i}_${j}`}>{task[td][tdd]}</td>
         ))
       }
-      return <td key={`td_${j}`}>{task[td]}</td>
+      return <td key={`${td}_${i}_${j}`}>{task[td]}</td>
     })
 
     return (
@@ -166,8 +152,6 @@ const Index = (props) => {
     )
   })
 
-  // console.log(trs)
-  
 
   const numtd = pageNumber.map((v,i) => (
     <td key={`pn_td_${i}`} className="tdnum"><span className={`main_container__table_pagenum--num ${+localStorage["currentPage"] === v ? 'currentNum' : '' }`}><Link to={`/?p=${v}`} onClick={()=>hundlePagenate(v)}>{v === null ? "..." : v }</Link></span></td>
@@ -212,7 +196,7 @@ const Index = (props) => {
         </tr>
       </thead>
       <tbody>
-        {/* {trs} */}
+        {ttrs}
       </tbody>
     </table>
     <table className="main_container__table_pagenum">
@@ -226,9 +210,13 @@ const Index = (props) => {
         </tr>
       </tbody>
     </table>
+
     <table>
-    {ttest}
-    {ttrs}
+      <tbody>
+      {ttest}
+      <tr><td>---------</td></tr>
+      {ttrs}
+      </tbody>
     </table>
     </div>
   )
