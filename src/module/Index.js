@@ -40,9 +40,15 @@ const Index = (props) => {
     localStorage["currentPage"] = search_p
   }
 
+  fetch("https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
+  method: "GET"
+  })
+  .then(res => res.json())
+  .then(json => localStorage["testtest"] = JSON.stringify(json))
   /** !
    * ページ遷移はuseNavigateを使うのが標準ぽいですね。
    */
+  console.log(localStorage["testtest"])
   const nav = useNavigate()
   const getPosition = (page) => [(page * tasksPerPage) - tasksPerPage, page * tasksPerPage]
   const position = getPosition(currentPage.current)
@@ -52,6 +58,28 @@ const Index = (props) => {
     <th key={`th_${i}`} onClick={()=>tasksSort(key)}><Link to={`/`}>{props.keys[key]+ (localStorage["currentSort"] === key + "false" ? "▲" : localStorage["currentSort"] === key + "true" ? "▼" : "")}</Link></th>
   ))
 
+  const ttest = JSON.parse(localStorage["testtest"]).map((t,i) => (
+    <tr>
+    <td key={`tt_${i}`}>{t.id}</td>
+    <td key={`tt_${i}`}>{t.projectId}</td>
+    <td key={`tt_${i}`}>{t.issueKey}</td>
+    <td key={`tt_${i}`}>{t.keyId}</td>
+
+    <td key={`tt_${i}`}>{t.issueType.id}</td>
+    <td key={`tt_${i}`}>{t.issueType.projectId}</td>
+    <td key={`tt_${i}`}>{t.issueType.name}</td>
+    <td key={`tt_${i}`}>{t.issueType.color}</td>
+    <td key={`tt_${i}`}>{t.issueType.displayOrder}</td>
+
+    <td key={`tt_${i}`}>{t.summary}</td>
+    <td key={`tt_${i}`}>{t.description}</td>
+    <td key={`tt_${i}`}>{t.resolution}</td>
+
+    <td key={`tt_${i}`}>{t.priority.id}</td>
+    <td key={`tt_${i}`}>{t.priority.name}</td>
+    </tr>
+  ))
+  
   const tasksSort = (key) => {
     if(sortstate){
     const desctasks = tasks.sort((a, b) => (a[key] < b[key]) ? 1 : -1)
@@ -98,22 +126,48 @@ const Index = (props) => {
     pageNumber = [maxPage -4,maxPage -3,maxPage -2,maxPage -1,maxPage]
   }
 
-  const trs = JSON.parse(localStorage["currentTasks"]).map((task, i) => {
-    const tds = Object.keys(task).map((td, j) => (
-      <td key={`td_${j}`}>{task[td]}</td>
-    ))
-    const toEdit = (id) => {
-      console.log(id)
-      // location.href = "/" + id
-      nav("/" + id)
-    }
+  // const trs = JSON.parse(localStorage["currentTasks"]).map((task, i) => {
+  //   const tds = Object.keys(task).map((td, j) => (
+  //     <td key={`td_${j}`}>{task[td]}</td>
+  //   ))
+  //   const toEdit = (id) => {
+  //     console.log(id)
+  //     // location.href = "/" + id
+  //     nav("/" + id)
+
+  //   }
+
+  //   return (
+  //     <tr key={`tr_${i}`} onClick={()=>toEdit(task.id)}>
+  //       {tds}
+  //     </tr>
+  //   )
+  // })
+
+  // !質問
+  // 先ほどのmapのネストでbacklogのデータで行ってみると
+  // エラーが出てしまいました。
+  // レンダーしたい場合は、配列にする必要があるような
+  // 表記のエラーだったのですが、どのようにしたらよいでしょうか？
+  const ttrs = JSON.parse(localStorage["testtest"]).map((task, i) => {
+    const tds = Object.keys(task).map((td, j) => {
+      if(td==="issuetype" || td === "priority"){
+        return Object.keys(task).map((tdd, i) => (
+          <td>{tdd}</td>
+        ))
+      }
+      return <td key={`td_${j}`}>{task[td]}</td>
+    })
 
     return (
-      <tr key={`tr_${i}`} onClick={()=>toEdit(task.id)}>
+      <tr key={`tr_${i}`}>
         {tds}
       </tr>
     )
   })
+
+  // console.log(trs)
+  
 
   const numtd = pageNumber.map((v,i) => (
     <td key={`pn_td_${i}`} className="tdnum"><span className={`main_container__table_pagenum--num ${+localStorage["currentPage"] === v ? 'currentNum' : '' }`}><Link to={`/?p=${v}`} onClick={()=>hundlePagenate(v)}>{v === null ? "..." : v }</Link></span></td>
@@ -158,7 +212,7 @@ const Index = (props) => {
         </tr>
       </thead>
       <tbody>
-        {trs}
+        {/* {trs} */}
       </tbody>
     </table>
     <table className="main_container__table_pagenum">
@@ -171,6 +225,10 @@ const Index = (props) => {
           <td className="tdnewbtn"><a href="/new"><span className="main_container__table_pagenum--new">新規作成</span></a></td>
         </tr>
       </tbody>
+    </table>
+    <table>
+    {ttest}
+    {ttrs}
     </table>
     </div>
   )

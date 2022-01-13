@@ -33,7 +33,7 @@ function App() {
   const [tasks,setTasks] = useState(local_state)
 
   const keys = {
-    id          : "#",
+    // id          : "#",
     task        : "種別",
     key         : "キー",
     title       : "件名",
@@ -42,7 +42,8 @@ function App() {
     priority    : "優先度",
     registed_at : "登録日",
     start_date  : "開始日",
-    end_date    : "期限日"
+    end_date    : "期限日",
+    // aaa         : "test"
   }
   
   const addTask = (task) => {
@@ -58,7 +59,7 @@ function App() {
     setTasks(added_tasks)
     
     console.log(tasks)
-    location.href = `/`
+    location.href = `/${task.id}`
   }
 
   const updateTask = (task) => {
