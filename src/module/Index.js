@@ -126,51 +126,51 @@ const Index = (props) => {
     pageNumber = [maxPage -4,maxPage -3,maxPage -2,maxPage -1,maxPage]
   }
 
-  // const trs = JSON.parse(localStorage["currentTasks"]).map((task, i) => {
-  //   const tds = Object.keys(task).map((td, j) => (
-  //     <td key={`td_${j}`}>{task[td]}</td>
-  //   ))
-  //   const toEdit = (id) => {
-  //     console.log(id)
-  //     // location.href = "/" + id
-  //     nav("/" + id)
+  const trs = JSON.parse(localStorage["currentTasks"]).map((task, i) => {
+    const tds = Object.keys(task).map((td, j) => (
+      <td key={`td_${j}`}>{task[td]}</td>
+    ))
+    const toEdit = (id) => {
+      console.log(id)
+      // location.href = "/" + id
+      nav("/" + id)
 
-  //   }
+    }
 
-  //   return (
-  //     <tr key={`tr_${i}`} onClick={()=>toEdit(task.id)}>
-  //       {tds}
-  //     </tr>
-  //   )
-  // })
+    return (
+      <tr key={`tr_${i}`} onClick={()=>toEdit(task.id)}>
+        {tds}
+      </tr>
+    )
+  })
 
   // !質問
   // 先ほどのmapのネストでbacklogのデータで行ってみると
   // エラーが出てしまいました。
   // レンダーしたい場合は、配列にする必要があるような
   // 表記のエラーだったのですが、どのようにしたらよいでしょうか？
-  const ttrs = JSON.parse(localStorage["testtest"]).map((task, i) => {
-    const tds = Object.keys(task).map((td, j) => {
-      if(td==="issueType"){
-        return Object.keys(task).map((tdd, i) => (
-          <td key={`td_issuetype_${i}`}>{task[td][tdd]}</td>
-        ))
-      }
-      if(td === "priority"){
-        return Object.keys(task).map((tddd, i) => (
-          <td key={`td_priority_${i}`}>{task[td][tddd]}</td>
-        ))
-      }
+  // onst ttrs = JSON.parse(localStorage["testtest"]).map((task, i) => {
+  //   const tds = Object.keys(task).map((td, j) => {
+  //     if(td==="issueType"){
+  //       return Object.keys(task).map((tdd, i) => (
+  //         <td key={`td_issuetype_${i}`}>{task[td][tdd]}</td>
+  //       ))
+  //     }
+  //     if(td === "priority"){
+  //       return Object.keys(task).map((tddd, i) => (
+  //         <td key={`td_priority_${i}`}>{task[td][tddd]}</td>
+  //       ))
+  //     }
 
-      return <td key={`td_${j}`}>{task[td]}</td>
-    })
+  //     return <td key={`td_${j}`}>{task[td]}</td>
+  //   })
 
-    return (
-      <tr key={`tr_${i}`}>
-        {tds}
-      </tr>
-    )
-  })
+  //   return (
+  //     <tr key={`tr_${i}`}>
+  //       {tds}
+  //     </tr>
+  //   )
+  // })c
 
   // console.log(trs)
   
@@ -234,7 +234,7 @@ const Index = (props) => {
     </table>
     <table>
     {ttest}
-    {ttrs}
+    {/* {ttrs} */}
     </table>
     </div>
   )
