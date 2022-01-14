@@ -151,11 +151,17 @@ const Index = (props) => {
   // 表記のエラーだったのですが、どのようにしたらよいでしょうか？
   const ttrs = JSON.parse(localStorage["testtest"]).map((task, i) => {
     const tds = Object.keys(task).map((td, j) => {
-      if(td==="issuetype" || td === "priority"){
+      if(td==="issueType"){
         return Object.keys(task).map((tdd, i) => (
-          <td>{tdd}</td>
+          <td key={`td_issuetype_${i}`}>{task[td][tdd]}</td>
         ))
       }
+      if(td === "priority"){
+        return Object.keys(task).map((tddd, i) => (
+          <td key={`td_priority_${i}`}>{task[td][tddd]}</td>
+        ))
+      }
+
       return <td key={`td_${j}`}>{task[td]}</td>
     })
 
