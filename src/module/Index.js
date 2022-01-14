@@ -35,9 +35,47 @@ const Index = (props) => {
   const position = getPosition(currentPage.current)
   const [ currentTasks , setCurrentTasks ] = useState(tasks.slice(position[0], position[1]))
   
+  // const ths = Object.keys(props.keys).map((key, i) => (
+  //   <th key={`th_${i}`} onClick={()=>tasksSort(key)}><Link to={`/`}>{props.keys[key]+ (localStorage["currentSort"] === key + "false" ? "▲" : localStorage["currentSort"] === key + "true" ? "▼" : "")}</Link></th>
+  // ))
+
   const ths = Object.keys(props.keys).map((key, i) => (
     <th key={`th_${i}`} onClick={()=>tasksSort(key)}><Link to={`/`}>{props.keys[key]+ (localStorage["currentSort"] === key + "false" ? "▲" : localStorage["currentSort"] === key + "true" ? "▼" : "")}</Link></th>
   ))
+
+  const tths = JSON.parse(localStorage["testtest"]).map((task, i) => {
+   const ttths = Object.keys(JSON.parse(localStorage["testtest"])).filter(key => (
+        [
+          "id",
+          "issueType",
+          "issueKey",
+          "summary",
+          "createdUser",
+          "status",
+          "priority",
+          "created",
+          "startDate",
+          "dueDate"
+        ].includes(key)
+      )).map((kkey,j) => {
+        if(kkey === "createdUser"){
+          return <th key={`${kkey}_${i}_${j}`}>{`${kkey}_name`}</th>
+        }
+        if(["issueType", "priority", "status"].includes(kkey)){
+          return Object.keys(task[kkey]).map((tdd, i) => (
+            <th key={`${kkey}-${tdd}_${i}_${j}`}>{`${kkey}_${tdd}`}</th>
+          ))
+        }
+        return <th key={`${kkey}_${i}_${j}`}>{kkey}</th>
+      })
+      return (
+        <tr key={`tr_${i}`}>
+          {ttths}
+        </tr>
+      )
+  })
+  console.log(tths)
+    
 
   const ttest = JSON.parse(localStorage["testtest"]).map((t,i) => (
     <tr key={`tr_${i}`}>
@@ -152,6 +190,8 @@ const Index = (props) => {
     )
   })
 
+  console.log(ttrs)
+
 
   const numtd = pageNumber.map((v,i) => (
     <td key={`pn_td_${i}`} className="tdnum"><span className={`main_container__table_pagenum--num ${+localStorage["currentPage"] === v ? 'currentNum' : '' }`}><Link to={`/?p=${v}`} onClick={()=>hundlePagenate(v)}>{v === null ? "..." : v }</Link></span></td>
@@ -217,6 +257,12 @@ const Index = (props) => {
       <tr><td>---------</td></tr>
       {ttrs}
       </tbody>
+    </table>
+    <table>
+      {tths}
+      <tr>
+        <td>-------</td>
+      </tr>
     </table>
     </div>
   )
