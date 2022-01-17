@@ -43,8 +43,11 @@ const Index = (props) => {
     <th key={`th_${i}`} onClick={()=>tasksSort(key)}><Link to={`/`}>{props.keys[key]+ (localStorage["currentSort"] === key + "false" ? "▲" : localStorage["currentSort"] === key + "true" ? "▼" : "")}</Link></th>
   ))
 
+  console.log(props.keys)
+  console.log(props.values)
+
   const tths = JSON.parse(localStorage["testtest"]).map((task, i) => {
-   const ttths = Object.keys(JSON.parse(localStorage["testtest"])).filter(key => (
+   const ttths = Object.keys(task).filter(key => (
         [
           "id",
           "issueType",
@@ -69,13 +72,15 @@ const Index = (props) => {
         return <th key={`${kkey}_${i}_${j}`}>{kkey}</th>
       })
       return (
-        <tr key={`tr_${i}`}>
+        <th key={`tr_${i}`}>
           {ttths}
-        </tr>
+        </th>
       )
   })
   console.log(tths)
     
+  // const ttt = Object.kesy
+  // JSON.parse(localStorage["tasks"])
 
   const ttest = JSON.parse(localStorage["testtest"]).map((t,i) => (
     <tr key={`tr_${i}`}>
@@ -234,6 +239,7 @@ const Index = (props) => {
         <tr>
           {ths}
         </tr>
+        {tths}
       </thead>
       <tbody>
         {ttrs}

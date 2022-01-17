@@ -44,6 +44,15 @@ function App() {
     start_date  : "開始日",
     end_date    : "期限日",
     // aaa         : "test"
+    // id          : "ID",
+    // issueKey    : "issueKey",
+    // issueType   : "issueType",
+    // issueKeys   : "issueKeys",
+    // summary     : "summary",
+    // prioritys   : "prioritys",
+    // created     : "created",
+    // startDate   : "",
+    // dueDate     : ""
   }
   
   const addTask = (task) => {
