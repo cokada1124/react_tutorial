@@ -71,10 +71,12 @@ const Index = (props) => {
         }
         return <th key={`${kkey}_${i}_${j}`}>{kkey}</th>
       })
+
+
       return (
-        <th key={`tr_${i}`}>
+        <tr key={`tr_${i}`}>
           {ttths}
-        </th>
+        </tr>
       )
   })
   console.log(tths)
@@ -265,10 +267,12 @@ const Index = (props) => {
       </tbody>
     </table>
     <table>
+      <tbody>
       {tths}
       <tr>
         <td>-------</td>
       </tr>
+      </tbody>
     </table>
     </div>
   )
