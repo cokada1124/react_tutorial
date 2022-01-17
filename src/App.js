@@ -43,18 +43,19 @@ function App() {
     registed_at : "登録日",
     start_date  : "開始日",
     end_date    : "期限日",
-    // aaa         : "test"
-    // id          : "ID",
-    // issueKey    : "issueKey",
-    // issueType   : "issueType",
-    // issueKeys   : "issueKeys",
-    // summary     : "summary",
-    // prioritys   : "prioritys",
-    // created     : "created",
-    // startDate   : "",
-    // dueDate     : ""
+    id          : "ID",
+    issueKey    : "キー",
+    issueType   : "種別",
+    summary     : "タイトル",
+    prioritys   : "優先度",
+    created     : "登録日",
+    startDate   : "開始日",
+    createdUser : {idd: "作成者"},
+    dueDate     : "期限日"
   }
   
+  console.log(keys.createdUser.idd)
+  // console.log(Obuject.keys(keys))
   const addTask = (task) => {
     console.log("add task: ", task)
     const this_id = mid + 1

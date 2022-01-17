@@ -1,4 +1,4 @@
-import React, { useState, useRef}  from "react"
+import React, { useState, useRef, useEffect}  from "react"
 import { useParams, Link, useLocation, useSearchParams, useNavigate, useMatch } from "react-router-dom"
 
 const Index = (props) => {
@@ -16,6 +16,13 @@ const Index = (props) => {
     localStorage["currentPage"] = search_p
   }
 
+  useEffect(() => {
+    fetch("https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
+    method: "GET"
+    })
+    .then(res => res.json())
+    .then(json => localStorage["testtest"] = JSON.stringify(json))
+  },[])
   /** !!!
    * 通常はしないですが、fetch結果をlocalStrageに入れて以後localStorageから参照しているので、
    * 毎回fetchする必要がないです。
@@ -29,6 +36,38 @@ const Index = (props) => {
   /** !
    * ページ遷移はuseNavigateを使うのが標準ぽいですね。
    */
+
+  /** ? 質問
+   * 課題追加時にfetchが使われていますが、
+   * パラメーターに登録項目を追加して、URLにアクセスすると登録されるのでしょうか？
+   * 実行結果を見るとbody内に記述していない値も返ってきており、仕組みがよく理解できていません。
+   */
+  /** ? 質問
+   * 課題取得後にcountとoffsetを使ってページング するとなっていましたが、
+   * countとoffsetとはメソッドのことでしょうか？
+   * またはlengthを使ってcountする考え方ということでしょうか？
+   * イメージが付けられておらず、伺えれば幸いです。
+   */
+
+  const body = {
+    projectId: 1073938367,
+    summary: "test hogeこれはテスト",
+    issueTypeId: 1074691455,
+    priorityId: 2
+  }
+  const params = Object.keys(body).map(key => {
+    return (key + "=" + encodeURI(JSON.stringify(body[key])))
+  }).join("&")
+  fetch(`https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&${params}`, {
+    method       : "POST",
+    headers      : {
+      "Content-Type" : "application/x-www-form-urlencoded"
+    }
+  })
+  .then(res => res.json())
+  .then(json => console.log(json))
+
+  //
   console.log(localStorage["testtest"])
   const nav = useNavigate()
   const getPosition = (page) => [(page * tasksPerPage) - tasksPerPage, page * tasksPerPage]
@@ -43,9 +82,12 @@ const Index = (props) => {
     <th key={`th_${i}`} onClick={()=>tasksSort(key)}><Link to={`/`}>{props.keys[key]+ (localStorage["currentSort"] === key + "false" ? "▲" : localStorage["currentSort"] === key + "true" ? "▼" : "")}</Link></th>
   ))
 
-  console.log(props.keys)
-  console.log(props.values)
-
+  
+  /** ? 質問
+   * 現在表示されているデータ用の項目名を取得したいのですが、下記の形だと
+   * 外側のmapで不要な<tr>保存されてしまいます。
+   * mapを1回目でbreakしたいのですが、どのように書けばよいでしょうか？
+   */
   const tths = JSON.parse(localStorage["testtest"]).map((task, i) => {
    const ttths = Object.keys(task).filter(key => (
         [
@@ -58,20 +100,23 @@ const Index = (props) => {
           "priority",
           "created",
           "startDate",
-          "dueDate"
+          "dueDate",
         ].includes(key)
       )).map((kkey,j) => {
         if(kkey === "createdUser"){
-          return <th key={`${kkey}_${i}_${j}`}>{`${kkey}_name`}</th>
+          return <th key={`${kkey}_${i}_${j}`} onClick={()=>tasksSort(kkey)}>
+            <Link to={`/`}>{props.keys[kkey].idd + (localStorage["currentSort"] === kkey + "false" ? "▲" : localStorage["currentSort"] === kkey + "true" ? "▼" : "")}</Link>
+          </th>
         }
         if(["issueType", "priority", "status"].includes(kkey)){
           return Object.keys(task[kkey]).map((tdd, i) => (
-            <th key={`${kkey}-${tdd}_${i}_${j}`}>{`${kkey}_${tdd}`}</th>
+            <th key={`${kkey}-${tdd}_${i}_${j}`} onClick={()=>tasksSort(kkey)}>
+            <Link to={`/`}>{`${kkey}_${tdd}` + (localStorage["currentSort"] === kkey + "false" ? "▲" : localStorage["currentSort"] === kkey + "true" ? "▼" : "")}</Link>
+            </th>
           ))
         }
-        return <th key={`${kkey}_${i}_${j}`}>{kkey}</th>
+        return <th key={`${kkey}_${i}_${j}`} onClick={()=>tasksSort(kkey)}><Link to={`/`}>{`${kkey}` + (localStorage["currentSort"] === kkey + "false" ? "▲" : localStorage["currentSort"] === kkey + "true" ? "▼" : "")}</Link></th>
       })
-
 
       return (
         <tr key={`tr_${i}`}>
@@ -79,6 +124,9 @@ const Index = (props) => {
         </tr>
       )
   })
+
+  // Object.keys(props.keys).map((key, i) => (
+  //   <th key={`th_${i}`} onClick={()=>tasksSort(key)}><Link to={`/`}>{props.keys[key]+ (localStorage["currentSort"] === key + "false" ? "▲" : localStorage["currentSort"] === key + "true" ? "▼" : "")}</Link></th>
   console.log(tths)
     
   // const ttt = Object.kesy
@@ -164,6 +212,24 @@ const Index = (props) => {
    * まずはそもそものカラムをfilterで今回使うものだけに絞り、
    * さらに内部にobjectを持つcreatedUserだけ独立してname属性のみ取るようにしました。
    */
+
+    // const trs = JSON.parse(localStorage["currentTasks"]).map((task, i) => {
+  //   const tds = Object.keys(task).map((td, j) => (
+  //     <td key={`td_${j}`}>{task[td]}</td>
+  //   ))
+  //   const toEdit = (id) => {
+  //     console.log(id)
+  //     // location.href = "/" + id
+  //     nav("/" + id)
+
+  //   }
+
+  //   return (
+  //     <tr key={`tr_${i}`} onClick={()=>toEdit(task.id)}>
+  //       {tds}
+  //     </tr>
+  //   )
+  // })
   const ttrs = JSON.parse(localStorage["testtest"]).map((task, i) => {
     const tds = Object.keys(task).filter(key => (
       [
@@ -189,9 +255,15 @@ const Index = (props) => {
       }
       return <td key={`${td}_${i}_${j}`}>{task[td]}</td>
     })
+    const toEdit = (id) => {
+          console.log(id)
+          // location.href = "/" + id
+          nav("/" + id)
+    
+    }
 
     return (
-      <tr key={`tr_${i}`}>
+      <tr key={`tr_${i}`} onClick={()=>toEdit(task.id)}>
         {tds}
       </tr>
     )
