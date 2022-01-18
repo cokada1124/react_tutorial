@@ -87,6 +87,7 @@ const Index = (props) => {
    * 現在表示されているデータ用の項目名を取得したいのですが、下記の形だと
    * 外側のmapで不要な<tr>保存されてしまいます。
    * mapを1回目でbreakしたいのですが、どのように書けばよいでしょうか？
+   * もしくはこの場合キーはこれまでと同じような形で固定の変数で持つ形の方がいいのでしょうか？
    */
   const tths = JSON.parse(localStorage["testtest"]).map((task, i) => {
    const ttths = Object.keys(task).filter(key => (
