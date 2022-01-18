@@ -5,14 +5,9 @@ const Index = (props) => {
   const { id } = useParams()
   
   const tasksPerPage = 5
-  const [ tasks, setState ] = useState([])
+  const [ tasks, setState ] = useState(props.tasks)
   const [ sortstate, setSortState ] = useState(true)
-<<<<<<< HEAD
   // const [ ct ,setCT ] = useState()
-=======
-  const currentSortKey = useRef("")
-  const currentSortVector = useRef(true)
->>>>>>> 629c6ce60cc37d519868c5c0cc331162dd0047ff
 
   const [search] = useSearchParams()
   const search_p = search.get("p") || 1
@@ -30,7 +25,6 @@ const Index = (props) => {
     method: "GET"
     })
     .then(res => res.json())
-<<<<<<< HEAD
     .then(json => console.log(JSON.stringify(json)))
   },[currentPage])
   
@@ -54,10 +48,6 @@ const Index = (props) => {
    * パラメーターに登録項目を追加して、URLにアクセスすると登録されるのでしょうか？
    * 実行結果を見るとbody内に記述していない値も返ってきており、仕組みがよく理解できていません。
    */
-=======
-    .then(json => setState(json))
-  }, [])
->>>>>>> 629c6ce60cc37d519868c5c0cc331162dd0047ff
   /** ? 質問
    * 課題取得後にcountとoffsetを使ってページング するとなっていましたが、
    * countとoffsetとはメソッドのことでしょうか？
@@ -65,7 +55,6 @@ const Index = (props) => {
    * イメージが付けられておらず、伺えれば幸いです。
    */
 
-<<<<<<< HEAD
   // const body = {
   //   projectId: 1073938367,
   //   summary: "test hogeこれはテスト",
@@ -83,33 +72,21 @@ const Index = (props) => {
   // })
   // .then(res => res.json())
   // .then(json => console.log(json))
-=======
-  /** !
-   * 既に回答済みですが、countとoffsetはbacklog apiの課題一覧取得時のクエリパラメタです。
-   * offsetが「●件目から取得」という取得開始位置で、countが件数です。
-   */
->>>>>>> 629c6ce60cc37d519868c5c0cc331162dd0047ff
 
+  //
+  console.log(localStorage["testtest"])
   const nav = useNavigate()
   const getPosition = (page) => [(page * tasksPerPage) - tasksPerPage, page * tasksPerPage]
   const position = getPosition(currentPage.current)
   const [ currentTasks , setCurrentTasks ] = useState(tasks.slice(position[0], position[1]))
+  
+  // const ths = Object.keys(props.keys).map((key, i) => (
+  //   <th key={`th_${i}`} onClick={()=>tasksSort(key)}><Link to={`/`}>{props.keys[key]+ (localStorage["currentSort"] === key + "false" ? "▲" : localStorage["currentSort"] === key + "true" ? "▼" : "")}</Link></th>
+  // ))
 
-  const ths = Object.keys(props.keys).map((key, i) => {
-    const sortVector = (() => {
-      if(currentSortKey.current === key) {
-        return currentSortVector.current ? "▼" : "▲"
-      }
-      return ""
-    })()
-    return (
-      <th key={ `th_${i}` } onClick={ () => tasksSort(key) }>
-        <Link to={`/`}>
-          { props.keys[key] + sortVector }
-        </Link>
-      </th>
-    )
-  })
+  const ths = Object.keys(props.keys).map((key, i) => (
+    <th key={`th_${i}`} onClick={()=>tasksSort(key)}><Link to={`/`}>{props.keys[key]+ (localStorage["currentSort"] === key + "false" ? "▲" : localStorage["currentSort"] === key + "true" ? "▼" : "")}</Link></th>
+  ))
 
   
   /** ? 質問
@@ -118,54 +95,7 @@ const Index = (props) => {
    * mapを1回目でbreakしたいのですが、どのように書けばよいでしょうか？
    * もしくはこの場合キーはこれまでと同じような形で固定の変数で持つ形の方がいいのでしょうか？
    */
-<<<<<<< HEAD
-  // const tths = JSON.parse(localStorage["testtest"]).map((task, i) => {
-  //  const ttths = Object.keys(task).filter(key => (
-  //       [
-  //         "id",
-  //         "issueType",
-  //         "issueKey",
-  //         "summary",
-  //         "createdUser",
-  //         "status",
-  //         "priority",
-  //         "created",
-  //         "startDate",
-  //         "dueDate",
-  //       ].includes(key)
-  //     )).map((kkey,j) => {
-  //       if(kkey === "createdUser"){
-  //         return <th key={`${kkey}_${i}_${j}`} onClick={()=>tasksSort(kkey)}>
-  //           <Link to={`/`}>{props.keys[kkey].idd + (localStorage["currentSort"] === kkey + "false" ? "▲" : localStorage["currentSort"] === kkey + "true" ? "▼" : "")}</Link>
-  //         </th>
-  //       }
-  //       if(["issueType", "priority", "status"].includes(kkey)){
-  //         return Object.keys(task[kkey]).map((tdd, i) => (
-  //           <th key={`${kkey}-${tdd}_${i}_${j}`} onClick={()=>tasksSort(kkey)}>
-  //           <Link to={`/`}>{`${kkey}_${tdd}` + (localStorage["currentSort"] === kkey + "false" ? "▲" : localStorage["currentSort"] === kkey + "true" ? "▼" : "")}</Link>
-  //           </th>
-  //         ))
-  //       }
-  //       return <th key={`${kkey}_${i}_${j}`} onClick={()=>tasksSort(kkey)}><Link to={`/`}>{`${kkey}` + (localStorage["currentSort"] === kkey + "false" ? "▲" : localStorage["currentSort"] === kkey + "true" ? "▼" : "")}</Link></th>
-  //     })
-
-  //     return (
-  //       <tr key={`tr_${i}`}>
-  //         {ttths}
-  //       </tr>
-  //     )
-  // })
-
-  // Object.keys(props.keys).map((key, i) => (
-  //   <th key={`th_${i}`} onClick={()=>tasksSort(key)}><Link to={`/`}>{props.keys[key]+ (localStorage["currentSort"] === key + "false" ? "▲" : localStorage["currentSort"] === key + "true" ? "▼" : "")}</Link></th>
-  // console.log(tths)
-    
-  // const ttt = Object.kesy
-  // JSON.parse(localStorage["tasks"])
-
-  const ttest = JSON.parse(localStorage["testtest"]).map((t,i) => (
-=======
-  const tths = tasks.map((task, i) => {
+  const tths = JSON.parse(localStorage["testtest"]).map((task, i) => {
    const ttths = Object.keys(task).filter(key => (
         [
           "id",
@@ -180,26 +110,19 @@ const Index = (props) => {
           "dueDate",
         ].includes(key)
       )).map((kkey,j) => {
-        const sortVector = (() => {
-          if(currentSortKey.current === kkey) {
-            return currentSortVector.current ? "▼" : "▲"
-          }
-          return ""
-        })()
-
         if(kkey === "createdUser"){
           return <th key={`${kkey}_${i}_${j}`} onClick={()=>tasksSort(kkey)}>
-            <Link to={`/`}>{props.keys[kkey].idd + sortVector}</Link>
+            <Link to={`/`}>{props.keys[kkey].idd + (localStorage["currentSort"] === kkey + "false" ? "▲" : localStorage["currentSort"] === kkey + "true" ? "▼" : "")}</Link>
           </th>
         }
         if(["issueType", "priority", "status"].includes(kkey)){
           return Object.keys(task[kkey]).map((tdd, i) => (
             <th key={`${kkey}-${tdd}_${i}_${j}`} onClick={()=>tasksSort(kkey)}>
-            <Link to={`/`}>{`${kkey}_${tdd}` + sortVector}</Link>
+            <Link to={`/`}>{`${kkey}_${tdd}` + (localStorage["currentSort"] === kkey + "false" ? "▲" : localStorage["currentSort"] === kkey + "true" ? "▼" : "")}</Link>
             </th>
           ))
         }
-        return <th key={`${kkey}_${i}_${j}`} onClick={()=>tasksSort(kkey)}><Link to={`/`}>{`${kkey}` + sortVector}</Link></th>
+        return <th key={`${kkey}_${i}_${j}`} onClick={()=>tasksSort(kkey)}><Link to={`/`}>{`${kkey}` + (localStorage["currentSort"] === kkey + "false" ? "▲" : localStorage["currentSort"] === kkey + "true" ? "▼" : "")}</Link></th>
       })
 
       return (
@@ -207,10 +130,17 @@ const Index = (props) => {
           {ttths}
         </tr>
       )
+      break;
   })
 
-  const ttest = tasks.map((t,i) => (
->>>>>>> 629c6ce60cc37d519868c5c0cc331162dd0047ff
+  // Object.keys(props.keys).map((key, i) => (
+  //   <th key={`th_${i}`} onClick={()=>tasksSort(key)}><Link to={`/`}>{props.keys[key]+ (localStorage["currentSort"] === key + "false" ? "▲" : localStorage["currentSort"] === key + "true" ? "▼" : "")}</Link></th>
+  // console.log(tths)
+    
+  // const ttt = Object.kesy
+  // JSON.parse(localStorage["tasks"])
+
+  const ttest = JSON.parse(localStorage["testtest"]).map((t,i) => (
     <tr key={`tr_${i}`}>
     <td key={`tt_${Math.random()}`}>{t.id}</td>
     <td key={`tt_${Math.random()}`}>{t.projectId}</td>
@@ -233,22 +163,21 @@ const Index = (props) => {
   ))
   
   const tasksSort = (key) => {
-    currentSortKey.current = key
-    currentSortVector.current = sortstate
-
     if(sortstate){
-      const desctasks = tasks.sort((a, b) => (a[key] < b[key]) ? 1 : -1)
-      setSortState(!sortstate)
-      setState([...desctasks])
-    }else{
-      const asctasks = tasks.sort((a, b) => (a[key] > b[key]) ? 1 : -1)
-      setSortState(!sortstate)
-      setState([...asctasks])
-    }
-    const currentT = tasks.slice(position[0], position[1])
-    changeCurrentTasks(currentT)
-    localStorage["currentPage"] = 1
-    location.href = `/?p=1`
+    const desctasks = tasks.sort((a, b) => (a[key] < b[key]) ? 1 : -1)
+    setSortState(!sortstate)
+    setState([...desctasks])
+    localStorage["currentSort"] = key + sortstate.toString()
+  }else{
+    const asctasks = tasks.sort((a, b) => (a[key] > b[key]) ? 1 : -1)
+    setSortState(!sortstate)
+    setState([...asctasks])
+    localStorage["currentSort"] = key + sortstate.toString()
+  }
+  const currentT = tasks.slice(position[0], position[1])
+  changeCurrentTasks(currentT)
+  localStorage["currentPage"] = 1
+  location.href = `/?p=1`
   }
 
 
@@ -263,6 +192,7 @@ const Index = (props) => {
 
   for(let i = 1; i <= Math.ceil(tasks.length / tasksPerPage); i++){
     pageNumber.push(i)
+    console.log(i)
   }
 
   if(+localStorage["currentPage"] >= 1 && +localStorage["currentPage"] < 3){
@@ -278,7 +208,6 @@ const Index = (props) => {
     pageNumber = [maxPage -4,maxPage -3,maxPage -2,maxPage -1,maxPage]
   }
 
-<<<<<<< HEAD
   // !質問
   // 先ほどのmapのネストでbacklogのデータで行ってみると
   // エラーが出てしまいました。
@@ -310,9 +239,6 @@ const Index = (props) => {
   //   )
   // })
   const ttrs = JSON.parse(localStorage["testtesttest"]).map((task, i) => {
-=======
-  const ttrs = tasks.map((task, i) => {
->>>>>>> 629c6ce60cc37d519868c5c0cc331162dd0047ff
     const tds = Object.keys(task).filter(key => (
       [
         "id",
@@ -351,12 +277,11 @@ const Index = (props) => {
     )
   })
 
+  console.log(ttrs)
+
+
   const numtd = pageNumber.map((v,i) => (
-    <td key={`pn_td_${i}`} className="tdnum">
-      <span className={`main_container__table_pagenum--num ${+localStorage["currentPage"] === v ? 'currentNum' : '' }`}>
-        <Link to={`/?p=${v}`} onClick={()=>hundlePagenate(v)}>{v === null ? "..." : v }</Link>
-      </span>
-    </td>
+    <td key={`pn_td_${i}`} className="tdnum"><span className={`main_container__table_pagenum--num ${+localStorage["currentPage"] === v ? 'currentNum' : '' }`}><Link to={`/?p=${v}`} onClick={()=>hundlePagenate(v)}>{v === null ? "..." : v }</Link></span></td>
   ))
 
   const backtd = 
@@ -378,8 +303,8 @@ const Index = (props) => {
     localStorage["currentTasks"] = JSON.stringify(tasks)
     console.log(JSON.parse(localStorage["currentTasks"]))
   }
-
-  const pagenate = (
+  return(
+    <div className="main_container">
     <table className="main_container__table_pagenum">
       <tbody>
         <tr>
@@ -391,11 +316,6 @@ const Index = (props) => {
         </tr>
       </tbody>
     </table>
-  )
-
-  return(
-    <div className="main_container">
-      {pagenate}
     <table className="main_container__table_tasks">
       <thead>
         <tr>
@@ -407,7 +327,17 @@ const Index = (props) => {
         {ttrs}
       </tbody>
     </table>
-      {pagenate}
+    <table className="main_container__table_pagenum">
+      <tbody>
+        <tr>
+        <td className="tdcurrentpagenum">{pageOffarstTask+1}〜{currentTasks.length === tasksPerPage ?pageOflastTask :pageOfmiddle}件</td>
+          {numtd}
+          {backtd}
+          <td onClick={+maxPage > +localStorage["currentPage"] ? ()=>hundlePagenate(+localStorage["currentPage"] +1) : ()=>{}}><Link to={`/?p=${+maxPage > +localStorage["currentPage"] ? +localStorage["currentPage"] +1 : +localStorage["currentPage"]}`}><span className="main_container__table_pagenum--text">次へ</span></Link></td>
+          <td className="tdnewbtn"><a href="/new"><span className="main_container__table_pagenum--new">新規作成</span></a></td>
+        </tr>
+      </tbody>
+    </table>
 
     {/* <table>
       <tbody>
