@@ -3,26 +3,32 @@ import { useParams, Link, useLocation, useSearchParams, useNavigate, useMatch } 
 
 const Index = (props) => {
   const { id } = useParams()
-
+  
   const tasksPerPage = 5
   const [ tasks, setState ] = useState(props.tasks)
   const [ sortstate, setSortState ] = useState(true)
+  // const [ ct ,setCT ] = useState()
 
   const [search] = useSearchParams()
   const search_p = search.get("p") || 1
   const currentPage = useRef(search_p)
+
+  // setCT(search_p)
+
 
   if(search_p === 1) {
     localStorage["currentPage"] = search_p
   }
 
   useEffect(() => {
-    fetch("https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
+    fetch(`"https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367&count=5&offset=${currentPage*tasksPerPage}"`, {
     method: "GET"
     })
     .then(res => res.json())
-    .then(json => localStorage["testtest"] = JSON.stringify(json))
-  },[])
+    .then(json => console.log(JSON.stringify(json)))
+  },[currentPage])
+  
+  console.log(search_p)
   /** !!!
    * 通常はしないですが、fetch結果をlocalStrageに入れて以後localStorageから参照しているので、
    * 毎回fetchする必要がないです。
@@ -49,23 +55,23 @@ const Index = (props) => {
    * イメージが付けられておらず、伺えれば幸いです。
    */
 
-  const body = {
-    projectId: 1073938367,
-    summary: "test hogeこれはテスト",
-    issueTypeId: 1074691455,
-    priorityId: 2
-  }
-  const params = Object.keys(body).map(key => {
-    return (key + "=" + encodeURI(JSON.stringify(body[key])))
-  }).join("&")
-  fetch(`https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&${params}`, {
-    method       : "POST",
-    headers      : {
-      "Content-Type" : "application/x-www-form-urlencoded"
-    }
-  })
-  .then(res => res.json())
-  .then(json => console.log(json))
+  // const body = {
+  //   projectId: 1073938367,
+  //   summary: "test hogeこれはテスト",
+  //   issueTypeId: 1074691455,
+  //   priorityId: 2
+  // }
+  // const params = Object.keys(body).map(key => {
+  //   return (key + "=" + encodeURI(JSON.stringify(body[key])))
+  // }).join("&")
+  // fetch(`https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&${params}`, {
+  //   method       : "POST",
+  //   headers      : {
+  //     "Content-Type" : "application/x-www-form-urlencoded"
+  //   }
+  // })
+  // .then(res => res.json())
+  // .then(json => console.log(json))
 
   //
   console.log(localStorage["testtest"])
@@ -89,46 +95,46 @@ const Index = (props) => {
    * mapを1回目でbreakしたいのですが、どのように書けばよいでしょうか？
    * もしくはこの場合キーはこれまでと同じような形で固定の変数で持つ形の方がいいのでしょうか？
    */
-  const tths = JSON.parse(localStorage["testtest"]).map((task, i) => {
-   const ttths = Object.keys(task).filter(key => (
-        [
-          "id",
-          "issueType",
-          "issueKey",
-          "summary",
-          "createdUser",
-          "status",
-          "priority",
-          "created",
-          "startDate",
-          "dueDate",
-        ].includes(key)
-      )).map((kkey,j) => {
-        if(kkey === "createdUser"){
-          return <th key={`${kkey}_${i}_${j}`} onClick={()=>tasksSort(kkey)}>
-            <Link to={`/`}>{props.keys[kkey].idd + (localStorage["currentSort"] === kkey + "false" ? "▲" : localStorage["currentSort"] === kkey + "true" ? "▼" : "")}</Link>
-          </th>
-        }
-        if(["issueType", "priority", "status"].includes(kkey)){
-          return Object.keys(task[kkey]).map((tdd, i) => (
-            <th key={`${kkey}-${tdd}_${i}_${j}`} onClick={()=>tasksSort(kkey)}>
-            <Link to={`/`}>{`${kkey}_${tdd}` + (localStorage["currentSort"] === kkey + "false" ? "▲" : localStorage["currentSort"] === kkey + "true" ? "▼" : "")}</Link>
-            </th>
-          ))
-        }
-        return <th key={`${kkey}_${i}_${j}`} onClick={()=>tasksSort(kkey)}><Link to={`/`}>{`${kkey}` + (localStorage["currentSort"] === kkey + "false" ? "▲" : localStorage["currentSort"] === kkey + "true" ? "▼" : "")}</Link></th>
-      })
+  // const tths = JSON.parse(localStorage["testtest"]).map((task, i) => {
+  //  const ttths = Object.keys(task).filter(key => (
+  //       [
+  //         "id",
+  //         "issueType",
+  //         "issueKey",
+  //         "summary",
+  //         "createdUser",
+  //         "status",
+  //         "priority",
+  //         "created",
+  //         "startDate",
+  //         "dueDate",
+  //       ].includes(key)
+  //     )).map((kkey,j) => {
+  //       if(kkey === "createdUser"){
+  //         return <th key={`${kkey}_${i}_${j}`} onClick={()=>tasksSort(kkey)}>
+  //           <Link to={`/`}>{props.keys[kkey].idd + (localStorage["currentSort"] === kkey + "false" ? "▲" : localStorage["currentSort"] === kkey + "true" ? "▼" : "")}</Link>
+  //         </th>
+  //       }
+  //       if(["issueType", "priority", "status"].includes(kkey)){
+  //         return Object.keys(task[kkey]).map((tdd, i) => (
+  //           <th key={`${kkey}-${tdd}_${i}_${j}`} onClick={()=>tasksSort(kkey)}>
+  //           <Link to={`/`}>{`${kkey}_${tdd}` + (localStorage["currentSort"] === kkey + "false" ? "▲" : localStorage["currentSort"] === kkey + "true" ? "▼" : "")}</Link>
+  //           </th>
+  //         ))
+  //       }
+  //       return <th key={`${kkey}_${i}_${j}`} onClick={()=>tasksSort(kkey)}><Link to={`/`}>{`${kkey}` + (localStorage["currentSort"] === kkey + "false" ? "▲" : localStorage["currentSort"] === kkey + "true" ? "▼" : "")}</Link></th>
+  //     })
 
-      return (
-        <tr key={`tr_${i}`}>
-          {ttths}
-        </tr>
-      )
-  })
+  //     return (
+  //       <tr key={`tr_${i}`}>
+  //         {ttths}
+  //       </tr>
+  //     )
+  // })
 
   // Object.keys(props.keys).map((key, i) => (
   //   <th key={`th_${i}`} onClick={()=>tasksSort(key)}><Link to={`/`}>{props.keys[key]+ (localStorage["currentSort"] === key + "false" ? "▲" : localStorage["currentSort"] === key + "true" ? "▼" : "")}</Link></th>
-  console.log(tths)
+  // console.log(tths)
     
   // const ttt = Object.kesy
   // JSON.parse(localStorage["tasks"])
@@ -231,7 +237,7 @@ const Index = (props) => {
   //     </tr>
   //   )
   // })
-  const ttrs = JSON.parse(localStorage["testtest"]).map((task, i) => {
+  const ttrs = JSON.parse(localStorage["testtesttest"]).map((task, i) => {
     const tds = Object.keys(task).filter(key => (
       [
         "id",
@@ -314,7 +320,7 @@ const Index = (props) => {
         <tr>
           {ths}
         </tr>
-        {tths}
+        {/* {tths} */}
       </thead>
       <tbody>
         {ttrs}
@@ -332,21 +338,21 @@ const Index = (props) => {
       </tbody>
     </table>
 
-    <table>
+    {/* <table>
       <tbody>
       {ttest}
       <tr><td>---------</td></tr>
       {ttrs}
       </tbody>
-    </table>
-    <table>
+    </table> */}
+    {/* <table>
       <tbody>
       {tths}
       <tr>
         <td>-------</td>
       </tr>
       </tbody>
-    </table>
+    </table> */}
     </div>
   )
 }
