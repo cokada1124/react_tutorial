@@ -24,6 +24,12 @@ const Index = (props) => {
     })
     .then(res => res.json())
     .then(json => setState(json))
+    fetch("https://2012.backlog.jp/api/v2/issues/count?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
+    method: "GET"
+    })
+    .then(res => res.json())
+    .then(json => console.log(json.count))
+
   }, [])
   /** ? 質問
    * 課題取得後にcountとoffsetを使ってページング するとなっていましたが、
@@ -31,7 +37,7 @@ const Index = (props) => {
    * またはlengthを使ってcountする考え方ということでしょうか？
    * イメージが付けられておらず、伺えれば幸いです。
    */
-
+  console.log(tasks)
   /** !
    * 既に回答済みですが、countとoffsetはbacklog apiの課題一覧取得時のクエリパラメタです。
    * offsetが「●件目から取得」という取得開始位置で、countが件数です。
@@ -157,6 +163,8 @@ const Index = (props) => {
   const pageOfmiddle = currentTasks.length + pageOffarstTask
   const maxPage = Math.ceil(tasks.length / tasksPerPage)
 
+  console.log(maxPage)
+  console.log(tasks.length)
 
   let pageNumber = [];
 
@@ -248,7 +256,7 @@ const Index = (props) => {
     <table className="main_container__table_pagenum">
       <tbody>
         <tr>
-          <td className="tdcurrentpagenum">{pageOffarstTask +1}〜{currentTasks.length === tasksPerPage ?pageOflastTask :pageOfmiddle}件</td>
+          <td className="tdcurrentpagenum">{pageOffarstTask +1}〜{currentTasks.length === tasksPerPage ? pageOflastTask :pageOfmiddle}件</td>
           {numtd}
           {backtd}
           <td onClick={+maxPage > +localStorage["currentPage"] ? ()=>hundlePagenate(+localStorage["currentPage"] +1) : ()=>{}}><Link to={`/?p=${+maxPage > +localStorage["currentPage"] ? +localStorage["currentPage"] +1 : +localStorage["currentPage"]}`}><span className="main_container__table_pagenum--text">次へ</span></Link></td>
