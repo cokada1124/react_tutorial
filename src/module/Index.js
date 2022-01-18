@@ -266,7 +266,7 @@ const Index = (props) => {
         <tr>
           {ths}
         </tr>
-        {tths}
+        {/* {tths} */}
       </thead>
       <tbody>
         {ttrs}
