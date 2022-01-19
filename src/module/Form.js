@@ -112,7 +112,52 @@ const Form = (props) => {
       {/* num: {props.num} */}
       <h2>{title}</h2>
       {/* <form onSubmit={}> */}
-      <ul className="FormList">
+      <div>
+        {/* <label>タスク</label> */}
+        <select onChange={(e)=>setState({...state, ...{task: e.target.value}})} value={state.task}>
+          {generateOpt("task")}
+          </select>
+          {error.task === false && <span className="red txt-indent">タスクを選択して下さい</span>}
+          {console.log(error.task)}
+          {console.log(state.task)}
+      </div>
+      <div>
+        <input type="text" className="form_title" value={state.title} onChange={(e) => setState({...state, ...{title: e.target.value}})} placeholder="タイトル" />
+            {error.title === false && <span className="red txt-indent">タイトルを入力して下さい</span>}
+      </div>
+      <div className="taskDetail"> 
+        <div>
+          <input type="text" value={state.key} onChange={(e) => setState({...state, ...{key: e.target.value}})}  placeholder="本文" />
+          {error.key === false && <span className="red txt-indent">キーを入力して下さい</span>}
+        </div>
+        <div>
+          <div>
+            <div>
+              <select onChange={(e)=>setState({...state, ...{author: e.target.value}})} value={state.author}>
+            {generateOpt("author")}
+              </select>
+              {error.author === false && <span className="red txt-indent">担当者を選択して下さい</span>}
+            </div>
+            <div>
+              <input type="date" value={state.start_date} onChange={(e) => setState({...state, ...{start_date: e.target.value}})} />
+              {error.start_date === false && <span className="red txt-indent">開始を選択して下さい</span>}
+            </div>
+          </div>
+          <div>
+            <div>
+              <select onChange={(e)=>setState({...state, ...{priority: e.target.value}})} value={state.priority}>
+            {generateOpt("priority")}
+              </select>
+              {error.priority === false && <span className="red txt-indent">優先度を選択して下さい</span>}
+            </div>
+            <div>
+              <input type="date" value={state.end_date} onChange={(e) => setState({...state, ...{end_date: e.target.value}})} />
+              {error.end_date === false && <span className="red txt-indent">期限日を選択して下さい</span>}
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* <ul className="FormList">
         <li><label>id</label>{id}</li>
 
         <li>
@@ -178,7 +223,7 @@ const Form = (props) => {
           <input type="date" value={state.end_date} onChange={(e) => setState({...state, ...{end_date: e.target.value}})} />
           {error.end_date === false && <span className="red txt-indent">期限日を選択して下さい</span>}
         </li>
-      </ul>
+      </ul> */}
       
       <div>
         {/*
@@ -189,7 +234,7 @@ const Form = (props) => {
         <button onClick={()=>{
           //resultがtrueの場合だけcreateOrUpdateTask(state)を実行させようとしましたが、うまく処理が書けず、どのように書いたら良いでしょうか？
           // 現在はcreateOrUpdateTask()がエラーとなっています。
-           createOrUpdateTask(state)}}>{submit_label}</button>
+           createOrUpdateTask(state)}} className="submitbtn">{submit_label}</button>
         
       </div>
     </div>

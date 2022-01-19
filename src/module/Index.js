@@ -54,6 +54,7 @@ const Index = (props) => {
   const nav = useNavigate()
   const getPosition = (page) => [(page * tasksPerPage) - tasksPerPage, page * tasksPerPage]
   const position = getPosition(currentPage.current)
+  console.log(tasks)
   const [ currentTasks , setCurrentTasks ] = useState(tasks.slice(position[0], position[1]))
 
   
