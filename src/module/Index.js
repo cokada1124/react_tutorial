@@ -14,6 +14,8 @@ const Index = (props) => {
   const search_p = search.get("p") || 1
   const currentPage = useRef(search_p)
 
+  console.log(currentPage.current)
+
   if(search_p === 1) {
     localStorage["currentPage"] = search_p
   }
@@ -43,24 +45,22 @@ const Index = (props) => {
    * offsetが「●件目から取得」という取得開始位置で、countが件数です。
    */
 
-    const [ count, setCount ] = useState(0);
-
     /* 
   * useEffectは、第一引数にcallbackを入れて、第二引数に依存する値の配列を入れる
   * 依存する値が変更される度にcallbackが実行される
   */
-    useEffect(
-        () => {
-            console.log(count);
-        },
-        [ count ]
-    )
 
   
   const nav = useNavigate()
   const getPosition = (page) => [(page * tasksPerPage) - tasksPerPage, page * tasksPerPage]
   const position = getPosition(currentPage.current)
   const [ currentTasks , setCurrentTasks ] = useState(tasks.slice(position[0], position[1]))
+
+  
+  console.log(position)
+  console.log(tasks)
+  console.log(currentTasks)
+  console.log(tasks.slice(position[0], position[1]))
 
   const ths = Object.keys(props.keys).map((key, i) => {
     const sortVector = (() => {
@@ -199,7 +199,9 @@ const Index = (props) => {
     pageNumber = [maxPage -4,maxPage -3,maxPage -2,maxPage -1,maxPage]
   }
 
-  const ttrs = currentTasks.map((task, i) => {
+
+  console.log(currentTasks)
+  const ttrs = tasks.map((task, i) => {
     const tds = Object.keys(task).filter(key => (
       [
         "id",
@@ -282,10 +284,6 @@ const Index = (props) => {
 
   return(
     <div className="main_container">
-      <div>
-            <p>{count}</p>
-            <button onClick={() => setCount(count + 1)}>カウント</button>
-      </div>
       {pagenate}
     <table className="main_container__table_tasks">
       <thead>
