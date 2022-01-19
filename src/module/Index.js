@@ -43,6 +43,20 @@ const Index = (props) => {
    * offsetが「●件目から取得」という取得開始位置で、countが件数です。
    */
 
+    const [ count, setCount ] = useState(0);
+
+    /* 
+  * useEffectは、第一引数にcallbackを入れて、第二引数に依存する値の配列を入れる
+  * 依存する値が変更される度にcallbackが実行される
+  */
+    useEffect(
+        () => {
+            console.log(count);
+        },
+        [ count ]
+    )
+
+  
   const nav = useNavigate()
   const getPosition = (page) => [(page * tasksPerPage) - tasksPerPage, page * tasksPerPage]
   const position = getPosition(currentPage.current)
@@ -172,20 +186,20 @@ const Index = (props) => {
     pageNumber.push(i)
   }
 
-  if(+localStorage["currentPage"] >= 1 && +localStorage["currentPage"] < 3){
+  if(+localStorage["currentPage"] > 5 && +localStorage["currentPage"] <= 3){
     pageNumber = [1,2,3,4,5,null,maxPage]
   }
   if(+localStorage["currentPage"] >= 3 && maxPage >= +localStorage["currentPage"] +2){
     pageNumber = [+localStorage["currentPage"] -2,+localStorage["currentPage"] -1,+localStorage["currentPage"],+localStorage["currentPage"] +1,+localStorage["currentPage"] +2,null,maxPage]
   }
-  if(+localStorage["currentPage"] === maxPage -2){
+  if(+localStorage["currentPage"].length > 5 && +localStorage["currentPage"] === maxPage -2){
     pageNumber = [+localStorage["currentPage"] -2, +localStorage["currentPage"] -1,+localStorage["currentPage"],+localStorage["currentPage"] +1,+localStorage["currentPage"] +2]
   }
-  if(+localStorage["currentPage"] >= maxPage -1){
+  if(+localStorage["currentPage"].length > 5 && +localStorage["currentPage"] >= maxPage -1){
     pageNumber = [maxPage -4,maxPage -3,maxPage -2,maxPage -1,maxPage]
   }
 
-  const ttrs = tasks.map((task, i) => {
+  const ttrs = currentTasks.map((task, i) => {
     const tds = Object.keys(task).filter(key => (
       [
         "id",
@@ -268,6 +282,10 @@ const Index = (props) => {
 
   return(
     <div className="main_container">
+      <div>
+            <p>{count}</p>
+            <button onClick={() => setCount(count + 1)}>カウント</button>
+      </div>
       {pagenate}
     <table className="main_container__table_tasks">
       <thead>
