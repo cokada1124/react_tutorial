@@ -114,7 +114,7 @@ const Form = (props) => {
       {/* <form onSubmit={}> */}
       <div>
         {/* <label>タスク</label> */}
-        <select onChange={(e)=>setState({...state, ...{task: e.target.value}})} value={state.task}>
+        <select onChange={(e)=>setState({...state, ...{task: e.target.value}})} value={state.task} className="form_task">
           {generateOpt("task")}
           </select>
           {error.task === false && <span className="red txt-indent">タスクを選択して下さい</span>}
@@ -126,32 +126,36 @@ const Form = (props) => {
             {error.title === false && <span className="red txt-indent">タイトルを入力して下さい</span>}
       </div>
       <div className="taskDetail"> 
-        <div>
-          <input type="text" value={state.key} onChange={(e) => setState({...state, ...{key: e.target.value}})}  placeholder="本文" />
+        <div className="detailTop">
+          <textarea type="text" value={state.key} onChange={(e) => setState({...state, ...{key: e.target.value}})}  placeholder="本文" className="form_content"/>
           {error.key === false && <span className="red txt-indent">キーを入力して下さい</span>}
         </div>
         <div>
           <div className="splitLeft">
             <div className="splitLeft--farst">
-              <select onChange={(e)=>setState({...state, ...{author: e.target.value}})} value={state.author}>
+            <label>担当者</label>
+              <select onChange={(e)=>setState({...state, ...{author: e.target.value}})} value={state.author} className="form_author">
             {generateOpt("author")}
               </select>
               {error.author === false && <span className="red txt-indent">担当者を選択して下さい</span>}
             </div>
             <div className="splitLeft--second">
-              <input type="date" value={state.start_date} onChange={(e) => setState({...state, ...{start_date: e.target.value}})} />
+            <label>開始日</label>
+              <input type="date" value={state.start_date} onChange={(e) => setState({...state, ...{start_date: e.target.value}})} className="form_start_date" />
               {error.start_date === false && <span className="red txt-indent">開始を選択して下さい</span>}
             </div>
           </div>
           <div className="splitRight">
             <div className="splitRight--farst">
-              <select onChange={(e)=>setState({...state, ...{priority: e.target.value}})} value={state.priority}>
+            <label>優先度</label>
+              <select onChange={(e)=>setState({...state, ...{priority: e.target.value}})} value={state.priority} className="form_priority">
             {generateOpt("priority")}
               </select>
               {error.priority === false && <span className="red txt-indent">優先度を選択して下さい</span>}
             </div>
             <div className="splitRight--second">
-              <input type="date" value={state.end_date} onChange={(e) => setState({...state, ...{end_date: e.target.value}})} />
+            <label>期限日</label>
+              <input type="date" value={state.end_date} onChange={(e) => setState({...state, ...{end_date: e.target.value}})} className="form_end_date" />
               {error.end_date === false && <span className="red txt-indent">期限日を選択して下さい</span>}
             </div>
           </div>
@@ -225,18 +229,17 @@ const Form = (props) => {
         </li>
       </ul> */}
       
-      <div>
+        <div className="submit">
         {/*
           stateにidが含まれるので、引数はstateだけで良いような気がします。
           /newの場合はidがundefinedになりますし、送らなくて良いものは控えた方が
           意図が明確になるかなと。
         */}
-        <button onClick={()=>{
-          //resultがtrueの場合だけcreateOrUpdateTask(state)を実行させようとしましたが、うまく処理が書けず、どのように書いたら良いでしょうか？
-          // 現在はcreateOrUpdateTask()がエラーとなっています。
-           createOrUpdateTask(state)}} className="submitbtn">{submit_label}</button>
-        
-      </div>
+          <button onClick={()=>{
+            //resultがtrueの場合だけcreateOrUpdateTask(state)を実行させようとしましたが、うまく処理が書けず、どのように書いたら良いでしょうか？
+            // 現在はcreateOrUpdateTask()がエラーとなっています。
+            createOrUpdateTask(state)}} className="submitbtn">{submit_label}</button>
+        </div>
     </div>
   )
 }
