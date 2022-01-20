@@ -9,6 +9,7 @@ const Index = (props) => {
   const [ sortstate, setSortState ] = useState(true)
   const currentSortKey = useRef("")
   const currentSortVector = useRef(true)
+  const tasksCount = useRef(0)
 
   const [search] = useSearchParams()
   const search_p = search.get("p") || 1
@@ -21,16 +22,53 @@ const Index = (props) => {
   }
 
   useEffect(() => {
-    fetch("https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
-    method: "GET"
+    /** !
+     * async / awaitを使うと非同期処理を同期的に扱うことができます。
+     * .then()でつなぐのと同じですが、then()だとネストが深くなってしまい可読性が落ちます。
+     * async / awaitなら同じ階層で書けるので、可読性が担保しやすいです。
+     * 
+     * ただこの記述だと、
+     * ・タスク取得
+     * ・タスクのレスポンスをparse
+     * ・タスク件数取得
+     * ・タスク件数のレスポンスをparse
+     * と本来は並列実行できる処理を１段階ずつ実行するので、待ちが生じます。
+     * Promise.all()を使うと並列でfetchできるので、本来はそっちの方が早いので有利です。
+     */
+    const firstFetch = async () => {
+      const tasks = await fetch("https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
+      method: "GET"
+      })
+      const tasks_res = await tasks.json()
+      // .then(json => setState(json))
+
+      const count = await fetch("https://2012.backlog.jp/api/v2/issues/count?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
+      method: "GET"
+      })
+      const count_res = await count.json()
+      // .then(json => console.log(json.count))
+
+      tasksCount.current = count_res.count
+      setState(tasks_res)
+    }
+    // firstFetch()
+
+    const get_tasks = Promise.resolve().then(() => {
+      return fetch("https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
+        method: "GET"
+      }).then(res => res.json())
     })
-    .then(res => res.json())
-    .then(json => setState(json))
-    fetch("https://2012.backlog.jp/api/v2/issues/count?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
-    method: "GET"
+    const get_count = Promise.resolve().then(() => {
+      return fetch("https://2012.backlog.jp/api/v2/issues/count?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
+        method: "GET"
+      }).then(res => res.json())
     })
-    .then(res => res.json())
-    .then(json => console.log(json.count))
+    Promise.all([get_tasks, get_count])
+    .then(res => {
+      tasksCount.current = res[1]
+      setState(res[0])
+    })
+    
 
   }, [])
   /** ? 質問

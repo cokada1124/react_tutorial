@@ -49,6 +49,7 @@
     "babel-loader": "^8.2.3",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "core-js": "^3.20.3",
     "css-loader": "^6.5.1",
     "mini-css-extract-plugin": "^2.4.5",
     "node-sass": "^7.0.0",

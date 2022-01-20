@@ -13,10 +13,17 @@ const Side = () => {
   return (
     <ul className="side-bar__ul">
       <li>
-        <a href="/" className={tasksList}>{title_1}</a>
+        {/** !
+         * なぜ<a></a>にしてたんですっけ？？
+         * アンカーだとページ全体がリフレッシュしてしまい、せっかくreactで組んだSPAが台無しです。
+         * Linkを使うことでreact-routerの動作によりコンポーネントの描画が行われ、
+         * 高速な動作が保証されるのです。
+         * 通常はLinkを使いましょう。
+         */}
+        <Link to="/" className={tasksList}>{title_1}</Link>
       </li>
       <li>
-        <a href="/new" className={addTasks}>{title_2}</a>
+        <Link to="/new" className={addTasks}>{title_2}</Link>
       </li>
     </ul>
   )
