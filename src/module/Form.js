@@ -114,7 +114,7 @@ const Form = (props) => {
       {/* <form onSubmit={}> */}
       <div>
         {/* <label>タスク</label> */}
-        <select onChange={(e)=>setState({...state, ...{task: e.target.value}})} value={state.task} className="form_task">
+        <select onChange={(e)=>setState({...state, ...{task: e.target.value}})} value={state.task} className="form form--task">
           {generateOpt("task")}
           </select>
           {error.task === false && <span className="red txt-indent">タスクを選択して下さい</span>}
@@ -122,40 +122,40 @@ const Form = (props) => {
           {console.log(state.task)}
       </div>
       <div>
-        <input type="text" className="form_title" value={state.title} onChange={(e) => setState({...state, ...{title: e.target.value}})} placeholder="タイトル" />
+        <input type="text" className="form form--title" value={state.title} onChange={(e) => setState({...state, ...{title: e.target.value}})} placeholder="タイトル" />
             {error.title === false && <span className="red txt-indent">タイトルを入力して下さい</span>}
       </div>
       <div className="taskDetail"> 
         <div className="detailTop">
-          <textarea type="text" value={state.key} onChange={(e) => setState({...state, ...{key: e.target.value}})}  placeholder="本文" className="form_content"/>
+          <textarea type="text" value={state.key} onChange={(e) => setState({...state, ...{key: e.target.value}})}  placeholder="本文" className="form form--content"/>
           {error.key === false && <span className="red txt-indent">キーを入力して下さい</span>}
         </div>
         <div>
           <div className="splitLeft">
             <div className="splitLeft--farst">
             <label>担当者</label>
-              <select onChange={(e)=>setState({...state, ...{author: e.target.value}})} value={state.author} className="form_author">
+              <select onChange={(e)=>setState({...state, ...{author: e.target.value}})} value={state.author} className="form">
             {generateOpt("author")}
               </select>
               {error.author === false && <span className="red txt-indent">担当者を選択して下さい</span>}
             </div>
             <div className="splitLeft--second">
             <label>開始日</label>
-              <input type="date" value={state.start_date} onChange={(e) => setState({...state, ...{start_date: e.target.value}})} className="form_start_date" />
+              <input type="date" value={state.start_date} onChange={(e) => setState({...state, ...{start_date: e.target.value}})} className="form" />
               {error.start_date === false && <span className="red txt-indent">開始を選択して下さい</span>}
             </div>
           </div>
           <div className="splitRight">
             <div className="splitRight--farst">
             <label>優先度</label>
-              <select onChange={(e)=>setState({...state, ...{priority: e.target.value}})} value={state.priority} className="form_priority">
+              <select onChange={(e)=>setState({...state, ...{priority: e.target.value}})} value={state.priority} className="form">
             {generateOpt("priority")}
               </select>
               {error.priority === false && <span className="red txt-indent">優先度を選択して下さい</span>}
             </div>
             <div className="splitRight--second">
             <label>期限日</label>
-              <input type="date" value={state.end_date} onChange={(e) => setState({...state, ...{end_date: e.target.value}})} className="form_end_date" />
+              <input type="date" value={state.end_date} onChange={(e) => setState({...state, ...{end_date: e.target.value}})} className="form" />
               {error.end_date === false && <span className="red txt-indent">期限日を選択して下さい</span>}
             </div>
           </div>

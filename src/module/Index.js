@@ -54,7 +54,7 @@ const Index = (props) => {
     // firstFetch()
 
     const get_tasks = () => {
-      return fetch("https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
+      return fetch("https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367&count=5&offset=0", {
         method: "GET"
       }).then(res => res.json()).then(js => {console.log(js);return js})
     }
@@ -72,6 +72,7 @@ const Index = (props) => {
     
 
   }, [])
+  console.log(tasksCount.current)
   /** ? 質問
    * 課題取得後にcountとoffsetを使ってページング するとなっていましたが、
    * countとoffsetとはメソッドのことでしょうか？
@@ -215,27 +216,27 @@ const Index = (props) => {
   const pageOflastTask = +localStorage["currentPage"] * tasksPerPage 
   const pageOffarstTask = pageOflastTask - tasksPerPage 
   const pageOfmiddle = currentTasks.length + pageOffarstTask
-  const maxPage = Math.ceil(tasks.length / tasksPerPage)
+  const maxPage = Math.ceil(tasksCount.current.count / tasksPerPage)
 
   console.log(maxPage)
   console.log(tasks.length)
 
   let pageNumber = [];
 
-  for(let i = 1; i <= Math.ceil(tasks.length / tasksPerPage); i++){
+  for(let i = 1; i <= Math.ceil(tasksCount.current.count / tasksPerPage); i++){
     pageNumber.push(i)
   }
 
-  if(+localStorage["currentPage"] > 5 && +localStorage["currentPage"] <= 3){
+  if(maxPage > 5 && +localStorage["currentPage"] <= 3){
     pageNumber = [1,2,3,4,5,null,maxPage]
   }
   if(+localStorage["currentPage"] >= 3 && maxPage >= +localStorage["currentPage"] +2){
     pageNumber = [+localStorage["currentPage"] -2,+localStorage["currentPage"] -1,+localStorage["currentPage"],+localStorage["currentPage"] +1,+localStorage["currentPage"] +2,null,maxPage]
   }
-  if(+localStorage["currentPage"].length > 5 && +localStorage["currentPage"] === maxPage -2){
+  if(+localStorage["currentPage"] > 5 && +localStorage["currentPage"] === maxPage -2){
     pageNumber = [+localStorage["currentPage"] -2, +localStorage["currentPage"] -1,+localStorage["currentPage"],+localStorage["currentPage"] +1,+localStorage["currentPage"] +2]
   }
-  if(+localStorage["currentPage"].length > 5 && +localStorage["currentPage"] >= maxPage -1){
+  if(+localStorage["currentPage"] > 5 && +localStorage["currentPage"] >= maxPage -1){
     pageNumber = [maxPage -4,maxPage -3,maxPage -2,maxPage -1,maxPage]
   }
 
@@ -299,7 +300,7 @@ const Index = (props) => {
     console.log(localStorage["currentPage"])
     const position = getPosition(v)
     const currentT = tasks.slice(position[0], position[1])
-    changeCurrentTasks(currentT)
+    setState(currentT)
   }
 
   const changeCurrentTasks = (tasks) => {

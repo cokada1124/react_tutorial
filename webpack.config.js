@@ -27,7 +27,7 @@ module.exports = {
     // static: {
     //   directory: path.resolve('dist')
     // }
-    port: "8888"
+    port: "3000"
   },
   target: "web"
 };

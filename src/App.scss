@@ -265,60 +265,24 @@ input.-error {
   color: red;
 }
 
-.form_title{
-  width:80%;
-  border:1px solid #dadada;
-  font-size:1.5em;
-  padding:5px;
-  margin-bottom: 10px;
-  border-radius: 7px;
-}
-
-.form_content{
-  width:99%;
-  height:15em;
-  border:1px solid #dadada;
-  font-size:1.5em;
-  padding:5px;
-  margin-bottom: 10px;
-  border-radius: 7px;
-
-}
-
-.form_task{
-  border:1px solid #dadada;
-  font-size:1.5em;
-  padding:5px;
-  margin-bottom: 10px;
-  border-radius: 7px;
-}
-
-.form_author{
+.form{
   border:1px solid #dadada;
   font-size:1.5em;
   padding:5px;
   border-radius: 7px;
-}
 
-.form_start_date{
-  border:1px solid #dadada;
-  font-size:1.5em;
-  padding:5px;
-  border-radius: 7px;
-}
-
-.form_end_date{
-  border:1px solid #dadada;
-  font-size:1.5em;
-  padding:5px;
-  border-radius: 7px;
-}
-
-.form_priority{
-  border:1px solid #dadada;
-  font-size:1.5em;
-  padding:5px;
-  border-radius: 7px;
+  &--title{
+    width:80%;
+    margin-bottom: 10px;
+  }
+  &--content{
+    width:99%;
+    height:15em;
+    margin-bottom: 10px;
+  }
+  &--task{
+    margin-bottom: 10px;
+  }
 }
 
 textarea::placeholder {
@@ -389,14 +353,6 @@ width:45%;
 
 }
 
-.splitLeft_farst{
-  // clear:both;
-}
-
-.splitLeft_farst{
-  // clear:both;
-}
-
 .splitRight{
   float:right;
   width:45%;
@@ -423,8 +379,4 @@ width:45%;
       margin-right: 1rem;
     }
   }
-}
-
-.splitRight:after{
-  // clear:both;
 }
