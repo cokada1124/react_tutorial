@@ -20,8 +20,6 @@ const Index = (props) => {
   if(search_p === 1) {
     localStorage["currentPage"] = search_p
   }
-  const pageOflastTask = currentPage.current * tasksPerPage 
-  const pageOffarstTask = pageOflastTask - tasksPerPage 
 
   useEffect(() => {
     /** !
@@ -54,13 +52,13 @@ const Index = (props) => {
       setState(tasks_res)
     }
     // firstFetch()
-    const fu = `https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367&count=${tasksPerPage}&offset=${pageOffarstTask}`
+    const pagenateFetchURL = `https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367&count=${tasksPerPage}&offset=${pageOffarstTask}`
 
-    console.log(fu)
+    console.log(pagenateFetchURL)
     console.log(tasksPerPage)
     console.log(pageOffarstTask)
     const get_tasks = () => {
-      return fetch(fu, {
+      return fetch(pagenateFetchURL, {
         method: "GET"
       }).then(res => res.json()).then(js => {console.log(js);return js})
     }
@@ -219,8 +217,8 @@ const Index = (props) => {
 
 
 
-  // const pageOflastTask = +localStorage["currentPage"] * tasksPerPage 
-  // const pageOffarstTask = pageOflastTask - tasksPerPage 
+  const pageOflastTask = +localStorage["currentPage"] * tasksPerPage 
+  const pageOffarstTask = pageOflastTask - tasksPerPage 
   const pageOfmiddle = currentTasks.length + pageOffarstTask
   const maxPage = Math.ceil(tasksCount.current.count / tasksPerPage)
 
