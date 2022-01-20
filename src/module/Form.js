@@ -131,26 +131,26 @@ const Form = (props) => {
           {error.key === false && <span className="red txt-indent">キーを入力して下さい</span>}
         </div>
         <div>
-          <div>
-            <div>
+          <div className="splitLeft">
+            <div className="splitLeft--farst">
               <select onChange={(e)=>setState({...state, ...{author: e.target.value}})} value={state.author}>
             {generateOpt("author")}
               </select>
               {error.author === false && <span className="red txt-indent">担当者を選択して下さい</span>}
             </div>
-            <div>
+            <div className="splitLeft--second">
               <input type="date" value={state.start_date} onChange={(e) => setState({...state, ...{start_date: e.target.value}})} />
               {error.start_date === false && <span className="red txt-indent">開始を選択して下さい</span>}
             </div>
           </div>
-          <div>
-            <div>
+          <div className="splitRight">
+            <div className="splitRight--farst">
               <select onChange={(e)=>setState({...state, ...{priority: e.target.value}})} value={state.priority}>
             {generateOpt("priority")}
               </select>
               {error.priority === false && <span className="red txt-indent">優先度を選択して下さい</span>}
             </div>
-            <div>
+            <div className="splitRight--second">
               <input type="date" value={state.end_date} onChange={(e) => setState({...state, ...{end_date: e.target.value}})} />
               {error.end_date === false && <span className="red txt-indent">期限日を選択して下さい</span>}
             </div>

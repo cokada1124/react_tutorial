@@ -267,6 +267,7 @@ input.-error {
 
 .taskDetail{
 width: 80%;
+height: 500px;
 background-color: #fff;
 padding: 10px 20px;
 margin: 10px 0;
@@ -279,4 +280,52 @@ color: #fff;
 border: none;
 width: 100px;
 padding: 5px;
+}
+.dettailTop{
+
+}
+
+.detailBottom{
+
+}
+.splitLeft{
+float:left;
+width:50%;
+// clear:left;
+  &--farst{
+    border-top: 1px solid #909090;
+    padding:10px 0;
+  }
+  &--second{
+    border-top: 1px solid #909090;
+    border-bottom: 1px solid #909090;
+    padding:10px 0;
+  }
+
+}
+
+.splitLeft_farst{
+  // clear:both;
+}
+
+.splitLeft_farst{
+  // clear:both;
+}
+
+.splitRight{
+  float:right;
+  width:50%;
+  &--farst{
+    border-top: 1px solid #909090;
+    padding:10px 0;
+  }
+  &--second{
+    border-top: 1px solid #909090;
+    border-bottom: 1px solid #909090;
+    padding:10px 0;
+  }
+}
+
+.splitRight:after{
+  // clear:both;
 }
