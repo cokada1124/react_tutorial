@@ -53,18 +53,19 @@ const Index = (props) => {
     }
     // firstFetch()
 
-    const get_tasks = Promise.resolve().then(() => {
+    const get_tasks = () => {
       return fetch("https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
         method: "GET"
-      }).then(res => res.json())
-    })
-    const get_count = Promise.resolve().then(() => {
+      }).then(res => res.json()).then(js => {console.log(js);return js})
+    }
+    const get_count = () => {
       return fetch("https://2012.backlog.jp/api/v2/issues/count?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
         method: "GET"
-      }).then(res => res.json())
-    })
-    Promise.all([get_tasks, get_count])
+      }).then(res => res.json()).then(js => {console.log(js);return js})
+    }
+    Promise.all([get_tasks(), get_count()])
     .then(res => {
+      console.log(res)
       tasksCount.current = res[1]
       setState(res[0])
     })
