@@ -7,6 +7,7 @@ const Index = (props) => {
   const tasksPerPage = 5
   const [ tasks, setState ] = useState([])
   const [ sortstate, setSortState ] = useState(true)
+  
   const currentSortKey = useRef("")
   const currentSortVector = useRef(true)
   const tasksCount = useRef(0)
@@ -15,6 +16,9 @@ const Index = (props) => {
   const search_p = search.get("p") || 1
   const currentPage = useRef(search_p)
 
+  const [ offset, setOffset] = useState(currentPage)
+  const offSet = useRef(0)
+
   console.log(currentPage.current)
 
   if(search_p === 1) {
@@ -22,41 +26,8 @@ const Index = (props) => {
   }
 
   useEffect(() => {
-    /** !
-     * async / awaitを使うと非同期処理を同期的に扱うことができます。
-     * .then()でつなぐのと同じですが、then()だとネストが深くなってしまい可読性が落ちます。
-     * async / awaitなら同じ階層で書けるので、可読性が担保しやすいです。
-     * 
-     * ただこの記述だと、
-     * ・タスク取得
-     * ・タスクのレスポンスをparse
-     * ・タスク件数取得
-     * ・タスク件数のレスポンスをparse
-     * と本来は並列実行できる処理を１段階ずつ実行するので、待ちが生じます。
-     * Promise.all()を使うと並列でfetchできるので、本来はそっちの方が早いので有利です。
-     */
-    const firstFetch = async () => {
-      const tasks = await fetch("https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
-      method: "GET"
-      })
-      const tasks_res = await tasks.json()
-      // .then(json => setState(json))
+    const pagenateFetchURL = `https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367&count=${tasksPerPage}&offset=${offSet.current}`
 
-      const count = await fetch("https://2012.backlog.jp/api/v2/issues/count?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
-      method: "GET"
-      })
-      const count_res = await count.json()
-      // .then(json => console.log(json.count))
-
-      tasksCount.current = count_res.count
-      setState(tasks_res)
-    }
-    // firstFetch()
-    const pagenateFetchURL = `https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367&count=${tasksPerPage}&offset=${pageOffarstTask}`
-
-    console.log(pagenateFetchURL)
-    console.log(tasksPerPage)
-    console.log(pageOffarstTask)
     const get_tasks = () => {
       return fetch(pagenateFetchURL, {
         method: "GET"
@@ -75,15 +46,36 @@ const Index = (props) => {
     })
     
 
-  }, [])
-  console.log(tasksCount.current)
+  }, [offset])
+
+
+  // useEffect(() => {
+  //   const get_tasks = () => {
+  //     return fetch(pagenateFetchURL, {
+  //       method: "GET"
+  //     }).then(res => res.json()).then(js => {console.log(js);return js})
+  //   }
+  //   const get_count = () => {
+  //     return fetch("https://2012.backlog.jp/api/v2/issues/count?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
+  //       method: "GET"
+  //     }).then(res => res.json()).then(js => {console.log(js);return js})
+  //   }
+  //   Promise.all([get_tasks(), get_count()])
+  //   .then(res => {
+  //     console.log(res)
+  //     tasksCount.current = res[1]
+  //     setState(res[0])
+  //   })
+    
+
+  // }, [currentSortVector.current])
+  // console.log(ppp.current)
   /** ? 質問
    * 課題取得後にcountとoffsetを使ってページング するとなっていましたが、
    * countとoffsetとはメソッドのことでしょうか？
    * またはlengthを使ってcountする考え方ということでしょうか？
    * イメージが付けられておらず、伺えれば幸いです。
    */
-  console.log(tasks)
   /** !
    * 既に回答済みですが、countとoffsetはbacklog apiの課題一覧取得時のクエリパラメタです。
    * offsetが「●件目から取得」という取得開始位置で、countが件数です。
@@ -93,7 +85,11 @@ const Index = (props) => {
   * useEffectは、第一引数にcallbackを入れて、第二引数に依存する値の配列を入れる
   * 依存する値が変更される度にcallbackが実行される
   */
+  
 
+  const makeSortFetchURL = (key) => {
+    return `https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367&sort=${key}`
+  }
   
   const nav = useNavigate()
   const getPosition = (page) => [(page * tasksPerPage) - tasksPerPage, page * tasksPerPage]
@@ -101,11 +97,6 @@ const Index = (props) => {
   console.log(tasks)
   const [ currentTasks , setCurrentTasks ] = useState(tasks.slice(position[0], position[1]))
 
-  
-  console.log(position)
-  console.log(tasks)
-  console.log(currentTasks)
-  console.log(tasks.slice(position[0], position[1]))
 
   const ths = Object.keys(props.keys).map((key, i) => {
     const sortVector = (() => {
@@ -154,7 +145,7 @@ const Index = (props) => {
 
         if(kkey === "createdUser"){
           return <th key={`${kkey}_${i}_${j}`} onClick={()=>tasksSort(kkey)}>
-            <Link to={`/`}>{props.keys[kkey].idd + sortVector}</Link>
+            <Link to={`/`}>{props.keys[kkey] + sortVector}</Link>
           </th>
         }
         if(["issueType", "priority", "status"].includes(kkey)){
@@ -174,40 +165,26 @@ const Index = (props) => {
       )
   })
 
-  const ttest = tasks.map((t,i) => (
-    <tr key={`tr_${i}`}>
-    <td key={`tt_${Math.random()}`}>{t.id}</td>
-    <td key={`tt_${Math.random()}`}>{t.projectId}</td>
-    <td key={`tt_${Math.random()}`}>{t.issueKey}</td>
-    <td key={`tt_${Math.random()}`}>{t.keyId}</td>
-
-    <td key={`tt_${Math.random()}`}>{t.issueType.id}</td>
-    <td key={`tt_${Math.random()}`}>{t.issueType.projectId}</td>
-    <td key={`tt_${Math.random()}`}>{t.issueType.name}</td>
-    <td key={`tt_${Math.random()}`}>{t.issueType.color}</td>
-    <td key={`tt_${Math.random()}`}>{t.issueType.displayOrder}</td>
-
-    <td key={`tt_${Math.random()}`}>{t.summary}</td>
-    <td key={`tt_${Math.random()}`}>{t.description}</td>
-    <td key={`tt_${Math.random()}`}>{t.resolution}</td>
-
-    <td key={`tt_${Math.random()}`}>{t.priority.id}</td>
-    <td key={`tt_${Math.random()}`}>{t.priority.name}</td>
-    </tr>
-  ))
   
   const tasksSort = (key) => {
     currentSortKey.current = key
     currentSortVector.current = sortstate
 
+    fetch(makeSortFetchURL(key), {
+  method: "GET"
+    })
+    .then(res => res.json())
+    .then(json => setState(json))
+    // console.log(makeSortFetchURL(key))
     if(sortstate){
       const desctasks = tasks.sort((a, b) => (a[key] < b[key]) ? 1 : -1)
-      setSortState(!sortstate)
-      setState([...desctasks])
+      
+      // setSortState(!sortstate)
+      // setState([...desctasks])
     }else{
       const asctasks = tasks.sort((a, b) => (a[key] > b[key]) ? 1 : -1)
-      setSortState(!sortstate)
-      setState([...asctasks])
+      // setSortState(!sortstate)
+      // setState([...asctasks])
     }
     const currentT = tasks.slice(position[0], position[1])
     changeCurrentTasks(currentT)
@@ -249,7 +226,6 @@ const Index = (props) => {
   const ttrs = tasks.map((task, i) => {
     const tds = Object.keys(task).filter(key => (
       [
-        "id",
         "issueType",
         "issueKey",
         "summary",
@@ -264,10 +240,8 @@ const Index = (props) => {
       if(td === "createdUser") {
         return <td key={`${td}_${i}_${j}`}>{task[td]["name"]}</td>
       }
-      if(["issueType", "priority", "status"].includes(td)){
-        return Object.keys(task[td]).map((tdd, i) => (
-          <td key={`${td}-${tdd}_${i}_${j}`}>{task[td][tdd]}</td>
-        ))
+      if(["createdUser","issueType", "priority", "status"].includes(td)){
+        return <td key={`${td}_${i}_${j}`}>{task[td]["name"]}</td>
       }
       return <td key={`${td}_${i}_${j}`}>{task[td]}</td>
     })
@@ -301,11 +275,15 @@ const Index = (props) => {
   const hundlePagenate = (v) => {
     const cp = v
     localStorage["currentPage"] = cp
+    currentPage.current = v
     // console.log(localStorage["currentPage"])
     // const position = getPosition(v)
     // const currentT = tasks.slice(position[0], position[1])
     // setState(currentT)
-    this.get_tasks()
+    // setOffset(tasksPerPage*localStorage["currentPage"])
+    offSet.current = tasksPerPage * currentPage.current
+    console.log(offSet.current)
+    console.log(currentPage.current)
   }
 
   const changeCurrentTasks = (tasks) => {
