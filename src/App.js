@@ -36,15 +36,15 @@ function App() {
 
   const keys = {
     // id          : "#",
-    task        : "種別",
-    key         : "キー",
-    title       : "件名",
-    author      : "担当者",
-    status      : "状態",
-    priority    : "優先度",
-    registed_at : "登録日",
-    start_date  : "開始日",
-    end_date    : "期限日",
+    issueType        : "種別",
+    issueKey         : "キー",
+    summary          : "件名",
+    createdUser      : "担当者",
+    status           : "状態",
+    priority         : "優先度",
+    created          : "登録日",
+    startDate        : "開始日",
+    dueDate          : "期限日",
 
   }
   

@@ -6,7 +6,7 @@ const Index = (props) => {
 
   const tasksPerPage = 5
   const [ tasks, setState ] = useState([])
-  const [ sortstate, setSortState ] = useState(true)
+  const [ sortState, setSortState ] = useState(true)
   
   const currentSortKey = useRef("")
   const currentSortVector = useRef(true)
@@ -16,20 +16,28 @@ const Index = (props) => {
   const search_p = search.get("p") || 1
   const currentPage = useRef(search_p)
 
-  const [ offset, setOffset] = useState(currentPage)
-  const offSet = useRef(0)
+  const currentOrder = useRef("asc")
 
-  console.log(currentPage.current)
+  const [ offSet, setOffset] = useState(currentPage)
+  const currentOffset = useRef(0)
+
 
   if(search_p === 1) {
     localStorage["currentPage"] = search_p
   }
 
+  const pagenateFetchURL = () => {
+    return `https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367&count=${tasksPerPage}&offset=${currentOffset.current}`
+  }
+
+  const makeSortFetchURL = () =>{
+    return `https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367&sort=${currentSortKey.current}&order=${currentOrder.current}&count=${tasksPerPage}`
+  }
+
   useEffect(() => {
-    const pagenateFetchURL = `https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367&count=${tasksPerPage}&offset=${offSet.current}`
 
     const get_tasks = () => {
-      return fetch(pagenateFetchURL, {
+      return fetch(pagenateFetchURL(), {
         method: "GET"
       }).then(res => res.json()).then(js => {console.log(js);return js})
     }
@@ -46,29 +54,17 @@ const Index = (props) => {
     })
     
 
-  }, [offset])
+  }, [offSet])
 
 
-  // useEffect(() => {
-  //   const get_tasks = () => {
-  //     return fetch(pagenateFetchURL, {
-  //       method: "GET"
-  //     }).then(res => res.json()).then(js => {console.log(js);return js})
-  //   }
-  //   const get_count = () => {
-  //     return fetch("https://2012.backlog.jp/api/v2/issues/count?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
-  //       method: "GET"
-  //     }).then(res => res.json()).then(js => {console.log(js);return js})
-  //   }
-  //   Promise.all([get_tasks(), get_count()])
-  //   .then(res => {
-  //     console.log(res)
-  //     tasksCount.current = res[1]
-  //     setState(res[0])
-  //   })
-    
+  useEffect(() => {
 
-  // }, [currentSortVector.current])
+    fetch(makeSortFetchURL(), {
+        method: "GET"
+      })
+      .then(res => res.json())
+      .then(js => {setState(js)})
+  }, [sortState])
   // console.log(ppp.current)
   /** ? 質問
    * 課題取得後にcountとoffsetを使ってページング するとなっていましたが、
@@ -85,11 +81,9 @@ const Index = (props) => {
   * useEffectは、第一引数にcallbackを入れて、第二引数に依存する値の配列を入れる
   * 依存する値が変更される度にcallbackが実行される
   */
-  
 
-  const makeSortFetchURL = (key) => {
-    return `https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367&sort=${key}`
-  }
+    console.log(tasks)
+  
   
   const nav = useNavigate()
   const getPosition = (page) => [(page * tasksPerPage) - tasksPerPage, page * tasksPerPage]
@@ -100,7 +94,7 @@ const Index = (props) => {
 
   const ths = Object.keys(props.keys).map((key, i) => {
     const sortVector = (() => {
-      if(currentSortKey.current === key) {
+      if(currentSortKey.current === (key || `${key}.name`)) {
         return currentSortVector.current ? "▼" : "▲"
       }
       return ""
@@ -115,81 +109,83 @@ const Index = (props) => {
   })
 
   
-  /** ? 質問
-   * 現在表示されているデータ用の項目名を取得したいのですが、下記の形だと
-   * 外側のmapで不要な<tr>保存されてしまいます。
-   * mapを1回目でbreakしたいのですが、どのように書けばよいでしょうか？
-   * もしくはこの場合キーはこれまでと同じような形で固定の変数で持つ形の方がいいのでしょうか？
-   */
-  const tths = tasks.map((task, i) => {
-   const ttths = Object.keys(task).filter(key => (
-        [
-          "id",
-          "issueType",
-          "issueKey",
-          "summary",
-          "createdUser",
-          "status",
-          "priority",
-          "created",
-          "startDate",
-          "dueDate",
-        ].includes(key)
-      )).map((kkey,j) => {
-        const sortVector = (() => {
-          if(currentSortKey.current === kkey) {
-            return currentSortVector.current ? "▼" : "▲"
-          }
-          return ""
-        })()
+  // const tths = tasks.map((task, i) => {
+  //  const ttths = Object.keys(task).filter(key => (
+  //       [
+  //         "id",
+  //         "issueType",
+  //         "issueKey",
+  //         "summary",
+  //         "createdUser",
+  //         "status",
+  //         "priority",
+  //         "created",
+  //         "startDate",
+  //         "dueDate",
+  //       ].includes(key)
+  //     )).map((kkey,j) => {
+  //       const sortVector = (() => {
+  //         if(currentSortKey.current === kkey) {
+  //           return currentSortVector.current ? "▼" : "▲"
+  //         }
+  //         return ""
+  //       })()
 
-        if(kkey === "createdUser"){
-          return <th key={`${kkey}_${i}_${j}`} onClick={()=>tasksSort(kkey)}>
-            <Link to={`/`}>{props.keys[kkey] + sortVector}</Link>
-          </th>
-        }
-        if(["issueType", "priority", "status"].includes(kkey)){
-          return Object.keys(task[kkey]).map((tdd, i) => (
-            <th key={`${kkey}-${tdd}_${i}_${j}`} onClick={()=>tasksSort(kkey)}>
-            <Link to={`/`}>{`${kkey}_${tdd}` + sortVector}</Link>
-            </th>
-          ))
-        }
-        return <th key={`${kkey}_${i}_${j}`} onClick={()=>tasksSort(kkey)}><Link to={`/`}>{`${kkey}` + sortVector}</Link></th>
-      })
+  //       if(kkey === "createdUser"){
+  //         return <th key={`${kkey}_${i}_${j}`} onClick={()=>tasksSort(kkey)}>
+  //           <Link to={`/`}>{props.keys[kkey] + sortVector}</Link>
+  //         </th>
+  //       }
+  //       if(["issueType", "priority", "status"].includes(kkey)){
+  //         return Object.keys(task[kkey]).map((tdd, i) => (
+  //           <th key={`${kkey}-${tdd}_${i}_${j}`} onClick={()=>tasksSort(kkey)}>
+  //           <Link to={`/`}>{`${kkey}_${tdd}` + sortVector}</Link>
+  //           </th>
+  //         ))
+  //       }
+  //       return <th key={`${kkey}_${i}_${j}`} onClick={()=>tasksSort(kkey)}><Link to={`/`}>{`${kkey}` + sortVector}</Link></th>
+  //     })
 
-      return (
-        <tr key={`tr_${i}`}>
-          {ttths}
-        </tr>
-      )
-  })
+  //     return (
+  //       <tr key={`tr_${i}`}>
+  //         {ttths}
+  //       </tr>
+  //     )
+  // })
 
-  
+
+
   const tasksSort = (key) => {
+    if(key === ("createUser" || "issueType" || "priority" || "status")){
+      currentSortKey.current = `${key}.name`
+    }else {
     currentSortKey.current = key
-    currentSortVector.current = sortstate
-
-    fetch(makeSortFetchURL(key), {
-  method: "GET"
-    })
-    .then(res => res.json())
-    .then(json => setState(json))
-    // console.log(makeSortFetchURL(key))
-    if(sortstate){
-      const desctasks = tasks.sort((a, b) => (a[key] < b[key]) ? 1 : -1)
-      
-      // setSortState(!sortstate)
-      // setState([...desctasks])
-    }else{
-      const asctasks = tasks.sort((a, b) => (a[key] > b[key]) ? 1 : -1)
-      // setSortState(!sortstate)
-      // setState([...asctasks])
     }
-    const currentT = tasks.slice(position[0], position[1])
-    changeCurrentTasks(currentT)
-    localStorage["currentPage"] = 1
-    location.href = `/?p=1`
+    currentSortVector.current = sortState
+
+    if (currentOrder.current === "asc" ){
+      currentOrder.current = "desc"
+    }else if(currentOrder.current === "desc"){
+      currentOrder.current = "asc"
+    }
+
+    setSortState(!sortState)
+
+    // console.log(makeSortFetchURL(key))
+    // if(sortstate){
+    //   const desctasks = tasks.sort((a, b) => (a[key] < b[key]) ? 1 : -1)
+      
+    //   setSortState(!sortstate)
+    //   setState([...desctasks])
+    // }else{
+    //   const asctasks = tasks.sort((a, b) => (a[key] > b[key]) ? 1 : -1)
+    //   setSortState(!sortstate)
+    //   setState([...asctasks])
+    // }
+    // const currentT = tasks.slice(position[0], position[1])
+    // changeCurrentTasks(currentT)
+    // localStorage["currentPage"] = 1
+    // location.href = `/?p=1`
   }
 
 
@@ -199,8 +195,6 @@ const Index = (props) => {
   const pageOfmiddle = currentTasks.length + pageOffarstTask
   const maxPage = Math.ceil(tasksCount.current.count / tasksPerPage)
 
-  console.log(maxPage)
-  console.log(tasks.length)
 
   let pageNumber = [];
 
@@ -222,7 +216,6 @@ const Index = (props) => {
   }
 
 
-  console.log(currentTasks)
   const ttrs = tasks.map((task, i) => {
     const tds = Object.keys(task).filter(key => (
       [
@@ -237,20 +230,26 @@ const Index = (props) => {
         "dueDate"
       ].includes(key)
     )).map((td, j) => {
-      if(td === "createdUser") {
+      if(td === "issueType") {
+        return <td key={`${td}_${i}_${j}`}>{task[td]["name"]}</td>
+      }else if(td === "createdUser") {
+        return <td key={`${td}_${i}_${j}`}>{task[td]["name"]}</td>
+      }else if(td === "status") {
+        return <td key={`${td}_${i}_${j}`}>{task[td]["name"]}</td>
+      }else if(td === "priority") {
         return <td key={`${td}_${i}_${j}`}>{task[td]["name"]}</td>
       }
-      if(["createdUser","issueType", "priority", "status"].includes(td)){
-        return <td key={`${td}_${i}_${j}`}>{task[td]["name"]}</td>
-      }
+      // if(["createdUser","issueType", "priority", "status"].includes(td)){
+      //   return <td key={`${td}_${i}_${j}`}>{task[td]["name"]}</td>
+      // }
       return <td key={`${td}_${i}_${j}`}>{task[td]}</td>
     })
     const toEdit = (id) => {
-          console.log(id)
           // location.href = "/" + id
           nav("/" + id)
     
     }
+    console.log(tds)
 
     return (
       <tr key={`tr_${i}`} onClick={()=>toEdit(task.id)}>
@@ -259,7 +258,7 @@ const Index = (props) => {
     )
   })
 
-  const numtd = pageNumber.map((v,i) => (
+  const numTd = pageNumber.map((v,i) => (
     <td key={`pn_td_${i}`} className="tdnum">
       <span className={`main_container__table_pagenum--num ${+localStorage["currentPage"] === v ? 'currentNum' : '' }`}>
         <Link to={`/?p=${v}`} onClick={()=>hundlePagenate(v)}>{v === null ? "..." : v }</Link>
@@ -267,29 +266,25 @@ const Index = (props) => {
     </td>
   ))
 
-  const backtd = 
+  const backTd = 
     <td className="tdbacktext" onClick={1 < +localStorage["currentPage"] ? ()=>hundlePagenate(+localStorage["currentPage"] -1) : ()=>{}}><Link to={`/?p=${1 < +localStorage["currentPage"] ? +localStorage["currentPage"] -1 : +localStorage["currentPage"]}`}><span  className="main_container__table_pagenum--text">戻る</span></Link></td>
 
-  const location = useLocation();
+  const nextTd =
+    <td onClick={+maxPage > +localStorage["currentPage"] ? ()=>hundlePagenate(+localStorage["currentPage"] +1) : ()=>{}}><Link to={`/?p=${+maxPage > +localStorage["currentPage"] ? +localStorage["currentPage"] +1 : +localStorage["currentPage"]}`}><span className="main_container__table_pagenum--text">次へ</span></Link></td>
 
   const hundlePagenate = (v) => {
     const cp = v
     localStorage["currentPage"] = cp
     currentPage.current = v
-    // console.log(localStorage["currentPage"])
-    // const position = getPosition(v)
-    // const currentT = tasks.slice(position[0], position[1])
-    // setState(currentT)
-    // setOffset(tasksPerPage*localStorage["currentPage"])
-    offSet.current = tasksPerPage * currentPage.current
-    console.log(offSet.current)
-    console.log(currentPage.current)
+    currentOffset.current = tasksPerPage * currentPage.current
+    setOffset(currentOffset.current)
   }
+
+    // const location = useLocation();
 
   const changeCurrentTasks = (tasks) => {
     setCurrentTasks([...tasks])
     localStorage["currentTasks"] = JSON.stringify(tasks)
-    console.log(JSON.parse(localStorage["currentTasks"]))
   }
 
   const pagenate = (
@@ -297,9 +292,9 @@ const Index = (props) => {
       <tbody>
         <tr>
           <td className="tdcurrentpagenum">{pageOffarstTask +1}〜{currentTasks.length === tasksPerPage ? pageOflastTask :pageOfmiddle}件</td>
-          {numtd}
-          {backtd}
-          <td onClick={+maxPage > +localStorage["currentPage"] ? ()=>hundlePagenate(+localStorage["currentPage"] +1) : ()=>{}}><Link to={`/?p=${+maxPage > +localStorage["currentPage"] ? +localStorage["currentPage"] +1 : +localStorage["currentPage"]}`}><span className="main_container__table_pagenum--text">次へ</span></Link></td>
+          {numTd}
+          {backTd}
+          {nextTd}
           <td className="tdnewbtn"><a href="/new"><span className="main_container__table_pagenum--new">新規作成</span></a></td>
         </tr>
       </tbody>
@@ -314,29 +309,12 @@ const Index = (props) => {
         <tr>
           {ths}
         </tr>
-        {/* {tths} */}
       </thead>
       <tbody>
         {ttrs}
       </tbody>
     </table>
       {pagenate}
-
-    {/* <table>
-      <tbody>
-      {ttest}
-      <tr><td>---------</td></tr>
-      {ttrs}
-      </tbody>
-    </table>
-    <table>
-      <tbody>
-      {tths}
-      <tr>
-        <td>-------</td>
-      </tr>
-      </tbody>
-    </table> */}
     </div>
   )
 }
