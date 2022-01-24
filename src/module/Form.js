@@ -32,12 +32,26 @@ const Form = (props) => {
     end_date    : true
   })
 
+  const [ errors, setErrors ] = useState({
+    projectId   : true,
+    summary     : true,
+    content     : true,
+    issueTypeId : true,
+    issuType    : true,
+    priorityId  : true,
+    priority    : true,
+    startDate   : true,
+    dueDate     : true
+  })
+
   const selects = {
-    task     : ["タスク", "検証", "議事録"],
+    issuType     : ["タスク", "検証", "議事録"],
     author   : ["minamoto", "taira", "soga", "fujiwara"],
     status   : ["未対応", "対応済"],
     priority : ["高", "中", "低"]
   }
+
+  const [ addTask, setAddTask ] = useState()
 
   const title = id === undefined ? "課題追加" : "課題編集"
   const submit_label = id === undefined ? "追加" : "更新"
@@ -69,7 +83,34 @@ const Form = (props) => {
     }
   }, [])
 
-  console.log(state)
+
+  const [body, setBody ] = useState({
+    projectId: 1073938367,
+    summary: "",
+    content: "",
+    issueTypeId: "",
+    issueType: "",
+    priorityId: "",
+    priority: "",
+    startDate: "",
+    dueDate: ""
+  })
+
+
+  useEffect(() => {
+    const params = Object.keys(body).map(key => {
+      return (key + "=" + encodeURI(JSON.stringify(body[key])))
+    }).join("&")
+    fetch(`https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&${params}`, {
+      method       : "POST",
+      headers      : {
+        "Content-Type" : "application/x-www-form-urlencoded"
+      }
+    })
+    .then(res => res.json())
+    .then(json => console.log(json))
+  },[body])
+
 
   const generateOpt = (key) => {
     // console.log("gen opt: ", selects[key])
@@ -114,49 +155,49 @@ const Form = (props) => {
       {/* <form onSubmit={}> */}
       <div>
         {/* <label>タスク</label> */}
-        <select onChange={(e)=>setState({...state, ...{task: e.target.value}})} value={state.task} className="form form--task">
-          {generateOpt("task")}
+        <select onChange={(e)=>setBody({...body, ...{issueType: e.target.value}})} value={body.issueType} className="form form--task">
+          {generateOpt("issueType")}
           </select>
-          {error.task === false && <span className="red txt-indent">タスクを選択して下さい</span>}
-          {console.log(error.task)}
-          {console.log(state.task)}
+          {errors.issueType === false && <span className="red txt-indent">タスクを選択して下さい</span>}
+          {console.log(error.issueType)}
+          {console.log(state.issueType)}
       </div>
       <div>
-        <input type="text" className="form form--title" value={state.title} onChange={(e) => setState({...state, ...{title: e.target.value}})} placeholder="タイトル" />
-            {error.title === false && <span className="red txt-indent">タイトルを入力して下さい</span>}
+        <input type="text" className="form form--title" value={body.summary} onChange={(e) => setBody({...body, ...{summary: e.target.value}})} placeholder="タイトル" />
+            {errors.summary === false && <span className="red txt-indent">タイトルを入力して下さい</span>}
       </div>
       <div className="taskDetail"> 
         <div className="detailTop">
-          <textarea type="text" value={state.key} onChange={(e) => setState({...state, ...{key: e.target.value}})}  placeholder="本文" className="form form--content"/>
-          {error.key === false && <span className="red txt-indent">キーを入力して下さい</span>}
+          <textarea type="text" value={body.content} onChange={(e) => setBody({...body, ...{content: e.target.value}})}  placeholder="本文" className="form form--content"/>
+          {errors.content === false && <span className="red txt-indent">本文を入力して下さい</span>}
         </div>
         <div>
           <div className="splitLeft">
             <div className="splitLeft--farst">
             <label>担当者</label>
-              <select onChange={(e)=>setState({...state, ...{author: e.target.value}})} value={state.author} className="form">
-            {generateOpt("author")}
+              <select onChange={(e)=>setBody({...body, ...{createUser: e.target.value}})} value={body.createUser} className="form">
+            {generateOpt("createUser")}
               </select>
-              {error.author === false && <span className="red txt-indent">担当者を選択して下さい</span>}
+              {errors.createUser === false && <span className="red txt-indent">担当者を選択して下さい</span>}
             </div>
             <div className="splitLeft--second">
             <label>開始日</label>
-              <input type="date" value={state.start_date} onChange={(e) => setState({...state, ...{start_date: e.target.value}})} className="form" />
-              {error.start_date === false && <span className="red txt-indent">開始を選択して下さい</span>}
+              <input type="date" value={body.startDate} onChange={(e) => setBody({...body, ...{startDate: e.target.value}})} className="form" />
+              {errors.startDate === false && <span className="red txt-indent">開始を選択して下さい</span>}
             </div>
           </div>
           <div className="splitRight">
             <div className="splitRight--farst">
             <label>優先度</label>
-              <select onChange={(e)=>setState({...state, ...{priority: e.target.value}})} value={state.priority} className="form">
+              <select onChange={(e)=>setBody({...body, ...{priority: e.target.value}})} value={body.priority} className="form">
             {generateOpt("priority")}
               </select>
-              {error.priority === false && <span className="red txt-indent">優先度を選択して下さい</span>}
+              {errors.priority === false && <span className="red txt-indent">優先度を選択して下さい</span>}
             </div>
             <div className="splitRight--second">
             <label>期限日</label>
-              <input type="date" value={state.end_date} onChange={(e) => setState({...state, ...{end_date: e.target.value}})} className="form" />
-              {error.end_date === false && <span className="red txt-indent">期限日を選択して下さい</span>}
+              <input type="date" value={body.dueDate} onChange={(e) => setBody({...body, ...{dueDate: e.target.value}})} className="form" />
+              {errors.dueDate === false && <span className="red txt-indent">期限日を選択して下さい</span>}
             </div>
           </div>
         </div>
@@ -238,7 +279,8 @@ const Form = (props) => {
           <button onClick={()=>{
             //resultがtrueの場合だけcreateOrUpdateTask(state)を実行させようとしましたが、うまく処理が書けず、どのように書いたら良いでしょうか？
             // 現在はcreateOrUpdateTask()がエラーとなっています。
-            createOrUpdateTask(state)}} className="submitbtn">{submit_label}</button>
+            createOrUpdateTask(state)
+            setAddTask(true)}} className="submitbtn">{submit_label}</button>
         </div>
     </div>
   )

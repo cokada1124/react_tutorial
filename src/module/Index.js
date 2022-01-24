@@ -83,8 +83,8 @@ const Index = (props) => {
   */
 
     console.log(tasks)
-  
-  
+
+
   const nav = useNavigate()
   const getPosition = (page) => [(page * tasksPerPage) - tasksPerPage, page * tasksPerPage]
   const position = getPosition(currentPage.current)
