@@ -110,7 +110,7 @@ const Index = (props) => {
        * props.keysは絶対にtrucyなので`${key}.name`との比較が発動することはないように見えます。
        * 
        */
-      if(currentSortKey.current === (key || `${key}.name`)) {
+      if(currentSortKey.current === (key)) {
         return currentOrder.current === "asc" ? "▲" : "▼"
       }
       return ""

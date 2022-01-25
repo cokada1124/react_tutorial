@@ -35,23 +35,48 @@ const Form = (props) => {
   const [ errors, setErrors ] = useState({
     projectId   : true,
     summary     : true,
-    content     : true,
+    // content     : true,
     issueTypeId : true,
-    issuType    : true,
+    issueType    : true,
     priorityId  : true,
     priority    : true,
     startDate   : true,
     dueDate     : true
   })
 
+  // ????????????????
+  // 質問
+  //issueTypeIdにどのような番号を入れて良いか、調べてみましたがわかりませんでした。
+  //issueType: {id:}と同じ意味でしょうか？それともあらかじめ一意の連番を作成し
+  //入れるものでしょうか？
+  //またpriorityIdは番号を入れるとして、「高」の場合は2を入れたい場合、
+  //useState内で条件分岐するとうまくいかないのですが、どのように書くとよいでしょうか？
+  // 質問
+  // ????????????????
+  const [body, setBody ] = useState({
+    projectId: 1073938367,
+    summary: "",
+    createUser: "",
+    // content: "",
+    issueTypeId: "1",
+    issueType: "",
+    priorityId: "2",
+    priority: "",
+    startDate: "",
+    dueDate: ""
+  })
+
+  console.log(errors.projectId + "-----------------")
+  console.log(errors.summary + "-----------------")
+
+
   const selects = {
-    issuType     : ["タスク", "検証", "議事録"],
-    author   : ["minamoto", "taira", "soga", "fujiwara"],
+    issueType     : ["タスク", "検証", "議事録"],
+    createUser   : ["minamoto", "taira", "soga", "fujiwara"],
     status   : ["未対応", "対応済"],
     priority : ["高", "中", "低"]
   }
 
-  const [ addTask, setAddTask ] = useState()
 
   const title = id === undefined ? "課題追加" : "課題編集"
   const submit_label = id === undefined ? "追加" : "更新"
@@ -84,32 +109,26 @@ const Form = (props) => {
   }, [])
 
 
-  const [body, setBody ] = useState({
-    projectId: 1073938367,
-    summary: "",
-    content: "",
-    issueTypeId: "",
-    issueType: "",
-    priorityId: "",
-    priority: "",
-    startDate: "",
-    dueDate: ""
-  })
+  console.log("--projectId--" + body.projectId)
+  console.log("--summary--" + body.summary)
+  console.log("--createUser--" + body.createUser)
+  console.log("--content--" + body.content)
+  console.log("--issueTypeId--" + body.issueTypeId)
+  console.log("--issueType--" + body.issueType)
+  console.log("--priorityId--" + body.priorityId)
+  console.log("--priority--" + body.priority)
+  console.log("--startDate--" + body.startDate)
+  console.log("--dueDate--" + body.dueDate)
 
-
-  useEffect(() => {
-    const params = Object.keys(body).map(key => {
-      return (key + "=" + encodeURI(JSON.stringify(body[key])))
-    }).join("&")
-    fetch(`https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&${params}`, {
-      method       : "POST",
+  fetch(`https://2012.backlog.jp/api/v2/priorities?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT`, {
+      method       : "GET",
       headers      : {
-        "Content-Type" : "application/x-www-form-urlencoded"
+        "Content-Type" : "application/json;charset=utf-8"
       }
     })
-    .then(res => res.json())
-    .then(json => console.log(json))
-  },[body])
+  .then(res => res.json())
+  .then(json => console.log("fetchプライマリID" + json[0].id))
+  
 
 
   const generateOpt = (key) => {
@@ -120,18 +139,20 @@ const Form = (props) => {
   }
 
   const noError = () =>{
-    const new_error = error
-    const keys = Object.keys(state)
+    const new_error = errors
+    const keys = Object.keys(body)
     keys.forEach(key => {
-      if (state[key] === 0 || state[key] === ""){
+      if (body[key] === 0 || body[key] === ""){
         new_error[key] = false;
       } else { new_error[key] = true; }
+      console.log(key)
     })
-    setError({...new_error})
+    setErrors({...new_error})
 
-    console.log(error)
+    console.log(errors)
 
-    const check_result = Object.values(error)
+    const check_result = Object.values(errors)
+    console.log("checkresult------" + check_result)
     const result = check_result.every(b => b === true)
     // const testtest = [1,1,1,1,1]
     // const test = testtest.every(a => a === 1);
@@ -141,9 +162,16 @@ const Form = (props) => {
     return result;
     
   }
-
+  // ????????????????
+  // 質問
+  //bodyの内容がstringifyをしないとコンソールに表示できない理由は何でしょうか？
+  //またその先のaddTaskが実行できない理由と関係があるのでしょうか？
+  // 質問
+  // ????????????????
   const createOrUpdateTask = (tasks) => {
     if(!noError()){return}
+    console.log("addTask実行(form)")
+    console.log("body---------" + JSON.stringify(body))
     const onclick = props.onClickAddTask || props.onClickUpdateTask
     onclick(tasks)
   }
@@ -159,12 +187,14 @@ const Form = (props) => {
           {generateOpt("issueType")}
           </select>
           {errors.issueType === false && <span className="red txt-indent">タスクを選択して下さい</span>}
-          {console.log(error.issueType)}
+          {console.log(errors.issueType)}
           {console.log(state.issueType)}
       </div>
       <div>
         <input type="text" className="form form--title" value={body.summary} onChange={(e) => setBody({...body, ...{summary: e.target.value}})} placeholder="タイトル" />
             {errors.summary === false && <span className="red txt-indent">タイトルを入力して下さい</span>}
+            {console.log(errors.summary)}
+            {console.log(body.summary)}
       </div>
       <div className="taskDetail"> 
         <div className="detailTop">
@@ -279,8 +309,7 @@ const Form = (props) => {
           <button onClick={()=>{
             //resultがtrueの場合だけcreateOrUpdateTask(state)を実行させようとしましたが、うまく処理が書けず、どのように書いたら良いでしょうか？
             // 現在はcreateOrUpdateTask()がエラーとなっています。
-            createOrUpdateTask(state)
-            setAddTask(true)}} className="submitbtn">{submit_label}</button>
+            createOrUpdateTask(body)}} className="submitbtn">{submit_label}</button>
         </div>
     </div>
   )

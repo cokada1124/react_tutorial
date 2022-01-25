@@ -51,6 +51,7 @@ function App() {
   // console.log(keys.createdUser.idd)
   // console.log(Obuject.keys(keys))
   const addTask = (task) => {
+    console.log("addTask実行(app)")
     console.log("add task: ", task)
     const this_id = mid + 1
     localStorage["maxId"] = this_id
@@ -64,6 +65,18 @@ function App() {
     
     console.log(tasks)
     location.href = `/${task.id}`
+
+    // const params = Object.keys(body).map(key => {
+    //   return (key + "=" + encodeURI(JSON.stringify(body[key])))
+    // }).join("&")
+    // fetch(`https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&${params}`, {
+    //   method       : "POST",
+    //   headers      : {
+    //     "Content-Type" : "application/x-www-form-urlencoded"
+    //   }
+    // })
+    // .then(res => res.json())
+    // .then(json => console.log(json))
   }
 
   const updateTask = (task) => {
