@@ -6,49 +6,68 @@ const Index = (props) => {
 
   const tasksPerPage = 5
   const [ tasks, setState ] = useState([])
-  const [ sortState, setSortState ] = useState(true)
+  /** !!!!!!!!!!!!!!!!!!!!!
+   * sortはtasksSort()で直接fetchするようにしたので、再レンダーはsetStateで十分
+   */
+  // const [ sortState, setSortState ] = useState(true)
   
   const currentSortKey = useRef("")
-  const currentSortVector = useRef(true)
+  /** !!!!!!!!!!!!!!!!!!!
+   * currentOrderと意味が被ってたので削除
+   */
+  // const currentSortVector = useRef(true)
   const tasksCount = useRef(0)
 
   const [search] = useSearchParams()
   const search_p = search.get("p") || 1
   const currentPage = useRef(search_p)
 
-  const currentOrder = useRef("asc")
+  const currentOrder = useRef("")
 
-  const [ offSet, setOffset] = useState(currentPage)
-  const currentOffset = useRef(0)
+  /** !!!!!!!!!!!!!!!!!!!!
+   * 初期値が正しくセットされてなかったので。
+   * あとcurrentOffset使う意味がなかったので削除。
+   */
+  // const [ offSet, setOffset] = useState(currentPage)
+  // const currentOffset = useRef(0)
+  const [ offSet, setOffset] = useState((currentPage.current - 1) * tasksPerPage)
 
 
-  if(search_p === 1) {
-    localStorage["currentPage"] = search_p
-  }
+  // if(search_p === 1) {
+  //   currentPage.current = search_p
+  // }
 
-  const pagenateFetchURL = () => {
-    return `https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367&count=${tasksPerPage}&offset=${currentOffset.current}`
-  }
+  /** !!!!!!!!!!!!!!!!!!
+   * URLは統一しておかないと、ソートした状態でページ切り替えたらソートが解除されませんか？
+   */
+  // const pagenateFetchURL = () => {
+  //   return `https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367&count=${tasksPerPage}&offset=${offSet}`
+  // }
 
-  const makeSortFetchURL = () =>{
-    return `https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367&sort=${currentSortKey.current}&order=${currentOrder.current}&count=${tasksPerPage}`
+  // const makeSortFetchURL = () =>{
+  //   return `https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367&sort=${currentSortKey.current}&order=${currentOrder.current}&count=${tasksPerPage}&offset=${offSet}`
+  // }
+
+  const makeFetchURL = () =>{
+    const sort = currentSortKey.current ? `&sort=${currentSortKey.current}` : ""
+    const order = currentOrder.current ? `&order=${currentOrder.current}` : ""
+    return `https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367${sort}${order}&count=${tasksPerPage}&offset=${offSet}`
   }
 
   useEffect(() => {
-
     const get_tasks = () => {
-      return fetch(pagenateFetchURL(), {
+      return fetch(makeFetchURL(), {
         method: "GET"
-      }).then(res => res.json()).then(js => {console.log(js);return js})
+      }).then(res => res.json())
     }
     const get_count = () => {
       return fetch("https://2012.backlog.jp/api/v2/issues/count?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
         method: "GET"
-      }).then(res => res.json()).then(js => {console.log(js);return js})
+      }).then(res => res.json())
     }
     Promise.all([get_tasks(), get_count()])
     .then(res => {
-      console.log(res)
+      // console.log(res)
       tasksCount.current = res[1]
       setState(res[0])
     })
@@ -57,140 +76,104 @@ const Index = (props) => {
   }, [offSet])
 
 
-  useEffect(() => {
-
-    fetch(makeSortFetchURL(), {
-        method: "GET"
-      })
-      .then(res => res.json())
-      .then(js => {setState(js)})
-  }, [sortState])
-  // console.log(ppp.current)
-  /** ? 質問
-   * 課題取得後にcountとoffsetを使ってページング するとなっていましたが、
-   * countとoffsetとはメソッドのことでしょうか？
-   * またはlengthを使ってcountする考え方ということでしょうか？
-   * イメージが付けられておらず、伺えれば幸いです。
+  /** !!!!!!!!!!!!!!!!!!!!
+   * こっちもuseEffectしてたら↑のuseEffectの後にこっちも実行されませんか？
+   * せっかくURLに?p=3とかつけて初期表示を３ページ目にしていても
+   * 二度目のuseEffectで０〜５件目表示で上書きされますよね。
+   * ソートは表頭を押した時だけで良いので、tasksSortに含めてしまいましょう。
    */
-  /** !
-   * 既に回答済みですが、countとoffsetはbacklog apiの課題一覧取得時のクエリパラメタです。
-   * offsetが「●件目から取得」という取得開始位置で、countが件数です。
-   */
-
-    /* 
-  * useEffectは、第一引数にcallbackを入れて、第二引数に依存する値の配列を入れる
-  * 依存する値が変更される度にcallbackが実行される
-  */
-
-    console.log(tasks)
-
-
+  //  useEffect(() => {
+  //   fetch(makeSortFetchURL(), {
+  //       method: "GET"
+  //     })
+  //     .then(res => res.json())
+  //     .then(js => {setState(js)})
+  // }, [sortState])
+  
   const nav = useNavigate()
   const getPosition = (page) => [(page * tasksPerPage) - tasksPerPage, page * tasksPerPage]
   const position = getPosition(currentPage.current)
-  console.log(tasks)
+  // console.log(tasks)
   const [ currentTasks , setCurrentTasks ] = useState(tasks.slice(position[0], position[1]))
 
 
   const ths = Object.keys(props.keys).map((key, i) => {
     const sortVector = (() => {
+      /** !!!!!!!!!!!!!
+       * currentSortKey.current === (key || `${key}.name`)
+       * という書き方は意図通り動いてますか？
+       * (key || `${key}.name`)
+       * は、
+       * 　keyがtruthyならkeyと比較
+       * 　keyがfalsyなら`${key}.name`と比較
+       * という動きになります。
+       * props.keysは絶対にtrucyなので`${key}.name`との比較が発動することはないように見えます。
+       * 
+       */
       if(currentSortKey.current === (key || `${key}.name`)) {
-        return currentSortVector.current ? "▼" : "▲"
+        return currentOrder.current === "asc" ? "▲" : "▼"
       }
       return ""
     })()
+    /** !!!!!!!!!!!!!!!!!!!!!!
+     * なぜか<Link>があったんですが、不要ですよね？？
+     * 単に文字色を変えるためなら
+     * .main_container__table_tasks > th
+     * にcolorをつければ良いと思います。
+     */
     return (
       <th key={ `th_${i}` } onClick={ () => tasksSort(key) }>
-        <Link to={`/`}>
           { props.keys[key] + sortVector }
-        </Link>
       </th>
     )
   })
 
-  
-  // const tths = tasks.map((task, i) => {
-  //  const ttths = Object.keys(task).filter(key => (
-  //       [
-  //         "id",
-  //         "issueType",
-  //         "issueKey",
-  //         "summary",
-  //         "createdUser",
-  //         "status",
-  //         "priority",
-  //         "created",
-  //         "startDate",
-  //         "dueDate",
-  //       ].includes(key)
-  //     )).map((kkey,j) => {
-  //       const sortVector = (() => {
-  //         if(currentSortKey.current === kkey) {
-  //           return currentSortVector.current ? "▼" : "▲"
-  //         }
-  //         return ""
-  //       })()
-
-  //       if(kkey === "createdUser"){
-  //         return <th key={`${kkey}_${i}_${j}`} onClick={()=>tasksSort(kkey)}>
-  //           <Link to={`/`}>{props.keys[kkey] + sortVector}</Link>
-  //         </th>
-  //       }
-  //       if(["issueType", "priority", "status"].includes(kkey)){
-  //         return Object.keys(task[kkey]).map((tdd, i) => (
-  //           <th key={`${kkey}-${tdd}_${i}_${j}`} onClick={()=>tasksSort(kkey)}>
-  //           <Link to={`/`}>{`${kkey}_${tdd}` + sortVector}</Link>
-  //           </th>
-  //         ))
-  //       }
-  //       return <th key={`${kkey}_${i}_${j}`} onClick={()=>tasksSort(kkey)}><Link to={`/`}>{`${kkey}` + sortVector}</Link></th>
-  //     })
-
-  //     return (
-  //       <tr key={`tr_${i}`}>
-  //         {ttths}
-  //       </tr>
-  //     )
-  // })
 
 
-
-  const tasksSort = (key) => {
-    if(key === ("createUser" || "issueType" || "priority" || "status")){
-      currentSortKey.current = `${key}.name`
-    }else {
+  const tasksSort = async (key) => {
+    /** !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     * `${key}.name`の条件は必要なのでしょうか？
+     * https://developer.nulab.com/ja/docs/backlog/api/2/get-issue-list/#%E3%82%AF%E3%82%A8%E3%83%AA%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E3%83%BC
+     * を見るとsortに指定できる文字列で「〜.name」というものはありませんでした。
+     * 
+     * あとconst thsのところでも書いたのですが、
+     * 　=== (A || B || C || ...)
+     * というのは意図通り動いていますか？
+     * この書き方では、まずAがtrucyか判定しtrucyならAを比較、falsyならBを判定し、、、
+     * という風に左にある選択肢がtrucyならそこで比較されてしまうものです。
+     * 
+     * "createUser"はtrucyなので、毎回必ずkey === "createUser"が採用されます。
+     */
+    // if(key === ("createUser" || "issueType" || "priority" || "status")){
+    //   currentSortKey.current = `${key}.name`
+    // }else {
     currentSortKey.current = key
-    }
-    currentSortVector.current = sortState
-
-    if (currentOrder.current === "asc" ){
-      currentOrder.current = "desc"
-    }else if(currentOrder.current === "desc"){
-      currentOrder.current = "asc"
-    }
-
-    setSortState(!sortState)
-
-    // console.log(makeSortFetchURL(key))
-    // if(sortstate){
-    //   const desctasks = tasks.sort((a, b) => (a[key] < b[key]) ? 1 : -1)
-      
-    //   setSortState(!sortstate)
-    //   setState([...desctasks])
-    // }else{
-    //   const asctasks = tasks.sort((a, b) => (a[key] > b[key]) ? 1 : -1)
-    //   setSortState(!sortstate)
-    //   setState([...asctasks])
     // }
-    // const currentT = tasks.slice(position[0], position[1])
-    // changeCurrentTasks(currentT)
-    // localStorage["currentPage"] = 1
-    // location.href = `/?p=1`
+
+    /** !!!!!!!!!
+     * currentSortVectorとcurrentOrderが全く同じ意味のようなので、
+     * こちらを削ります。
+     */
+    // currentSortVector.current = sortState
+
+    /** !!!!!!!!!!!!
+     * ２値反転なら三項演算子の方がシンプルに書けます。
+     */
+    // if (currentOrder.current === "asc" ){
+    //   currentOrder.current = "desc"
+    // }else if(currentOrder.current === "desc"){
+    //   currentOrder.current = "asc"
+    // }
+    currentOrder.current = currentOrder.current === "asc" ? "desc" : "asc"
+
+    const res = await fetch(makeFetchURL(), {method: "GET"})
+    const js = await res.json()
+    setState(js)
   }
 
 
 
-  const pageOflastTask = +localStorage["currentPage"] * tasksPerPage 
+  const pageOflastTask = +currentPage.current * tasksPerPage 
   const pageOffarstTask = pageOflastTask - tasksPerPage 
   const pageOfmiddle = currentTasks.length + pageOffarstTask
   const maxPage = Math.ceil(tasksCount.current.count / tasksPerPage)
@@ -202,54 +185,63 @@ const Index = (props) => {
     pageNumber.push(i)
   }
 
-  if(maxPage > 5 && +localStorage["currentPage"] <= 3){
+  if(maxPage > 5 && +currentPage.current <= 3){
     pageNumber = [1,2,3,4,5,null,maxPage]
   }
-  if(+localStorage["currentPage"] >= 3 && maxPage >= +localStorage["currentPage"] +2){
-    pageNumber = [+localStorage["currentPage"] -2,+localStorage["currentPage"] -1,+localStorage["currentPage"],+localStorage["currentPage"] +1,+localStorage["currentPage"] +2,null,maxPage]
+  if(+currentPage.current >= 3 && maxPage >= +currentPage.current +2){
+    pageNumber = [+currentPage.current -2,+currentPage.current -1,+currentPage.current,+currentPage.current +1,+currentPage.current +2,null,maxPage]
   }
-  if(+localStorage["currentPage"] > 5 && +localStorage["currentPage"] === maxPage -2){
-    pageNumber = [+localStorage["currentPage"] -2, +localStorage["currentPage"] -1,+localStorage["currentPage"],+localStorage["currentPage"] +1,+localStorage["currentPage"] +2]
+  if(+currentPage.current > 5 && +currentPage.current === maxPage -2){
+    pageNumber = [+currentPage.current -2, +currentPage.current -1,+currentPage.current,+currentPage.current +1,+currentPage.current +2]
   }
-  if(+localStorage["currentPage"] > 5 && +localStorage["currentPage"] >= maxPage -1){
+  if(+currentPage.current > 5 && +currentPage.current >= maxPage -1){
     pageNumber = [maxPage -4,maxPage -3,maxPage -2,maxPage -1,maxPage]
   }
 
 
   const ttrs = tasks.map((task, i) => {
-    const tds = Object.keys(task).filter(key => (
-      [
-        "issueType",
-        "issueKey",
-        "summary",
-        "createdUser",
-        "status",
-        "priority",
-        "created",
-        "startDate",
-        "dueDate"
-      ].includes(key)
-    )).map((td, j) => {
-      if(td === "issueType") {
-        return <td key={`${td}_${i}_${j}`}>{task[td]["name"]}</td>
-      }else if(td === "createdUser") {
-        return <td key={`${td}_${i}_${j}`}>{task[td]["name"]}</td>
-      }else if(td === "status") {
-        return <td key={`${td}_${i}_${j}`}>{task[td]["name"]}</td>
-      }else if(td === "priority") {
-        return <td key={`${td}_${i}_${j}`}>{task[td]["name"]}</td>
-      }
-      // if(["createdUser","issueType", "priority", "status"].includes(td)){
+    /** !!!!!!!!!!!!!!!!!!!
+     * props.keysで表示する列を絞り込むようにしたんですよね。
+     * なのでここでもそれを使えば良いように思いました。
+     */
+    // const tds = Object.keys(task).filter(key => (
+    //   [
+    //     "issueType",
+    //     "issueKey",
+    //     "summary",
+    //     "createdUser",
+    //     "status",
+    //     "priority",
+    //     "created",
+    //     "startDate",
+    //     "dueDate"
+    //   ].includes(key)
+    // )).map((td, j) => {
+    const tds = Object.keys(props.keys).map((td, j) => {
+      /** !!!!!!!!!!!!!!!!!!!
+       * 返却値が同じなのにelse ifが重複しているのは冗長なので、
+       * ["name"]したいカラム名を配列で定義しincludesで三項演算子にかけました。
+       */
+      const name_keys = ["issueType", "createdUser", "status", "priority"]
+      const val = name_keys.includes(td) ? task[td]["name"] : task[td]
+      return <td key={`${td}_${i}_${j}`}>{val}</td>
+      // if(td === "issueType") {
+      //   return <td key={`${td}_${i}_${j}`}>{task[td]["name"]}</td>
+      // }else if(td === "createdUser") {
+      //   return <td key={`${td}_${i}_${j}`}>{task[td]["name"]}</td>
+      // }else if(td === "status") {
+      //   return <td key={`${td}_${i}_${j}`}>{task[td]["name"]}</td>
+      // }else if(td === "priority") {
       //   return <td key={`${td}_${i}_${j}`}>{task[td]["name"]}</td>
       // }
-      return <td key={`${td}_${i}_${j}`}>{task[td]}</td>
+      // return <td key={`${td}_${i}_${j}`}>{task[td]}</td>
     })
     const toEdit = (id) => {
           // location.href = "/" + id
           nav("/" + id)
     
     }
-    console.log(tds)
+    // console.log(tds)
 
     return (
       <tr key={`tr_${i}`} onClick={()=>toEdit(task.id)}>
@@ -260,31 +252,32 @@ const Index = (props) => {
 
   const numTd = pageNumber.map((v,i) => (
     <td key={`pn_td_${i}`} className="tdnum">
-      <span className={`main_container__table_pagenum--num ${+localStorage["currentPage"] === v ? 'currentNum' : '' }`}>
+      <span className={`main_container__table_pagenum--num ${+currentPage.current === v ? 'currentNum' : '' }`}>
         <Link to={`/?p=${v}`} onClick={()=>hundlePagenate(v)}>{v === null ? "..." : v }</Link>
       </span>
     </td>
   ))
 
   const backTd = 
-    <td className="tdbacktext" onClick={1 < +localStorage["currentPage"] ? ()=>hundlePagenate(+localStorage["currentPage"] -1) : ()=>{}}><Link to={`/?p=${1 < +localStorage["currentPage"] ? +localStorage["currentPage"] -1 : +localStorage["currentPage"]}`}><span  className="main_container__table_pagenum--text">戻る</span></Link></td>
+    <td className="tdbacktext" onClick={1 < +currentPage.current ? ()=>hundlePagenate(+currentPage.current -1) : ()=>{}}><Link to={`/?p=${1 < +currentPage.current ? +currentPage.current -1 : +currentPage.current}`}><span  className="main_container__table_pagenum--text">戻る</span></Link></td>
 
   const nextTd =
-    <td onClick={+maxPage > +localStorage["currentPage"] ? ()=>hundlePagenate(+localStorage["currentPage"] +1) : ()=>{}}><Link to={`/?p=${+maxPage > +localStorage["currentPage"] ? +localStorage["currentPage"] +1 : +localStorage["currentPage"]}`}><span className="main_container__table_pagenum--text">次へ</span></Link></td>
+    <td onClick={+maxPage > +currentPage.current ? ()=>hundlePagenate(+currentPage.current +1) : ()=>{}}><Link to={`/?p=${+maxPage > +currentPage.current ? +currentPage.current +1 : +currentPage.current}`}><span className="main_container__table_pagenum--text">次へ</span></Link></td>
 
   const hundlePagenate = (v) => {
-    const cp = v
-    localStorage["currentPage"] = cp
+    /** !!!!!!!!!!!!!!!!!!
+     * localStorageにcurrentPage入れる必要ないですよね・・・・・・・
+     * しかもhundlePagenateでしかセットされてないので、URLの「?p=X」を変更しても
+     * localStorageに反映されずページ番号が間違った表示になってしまってました。
+     * 
+     * currentPage.currentを全体で参照するのと何が違うんでしょうか？
+     * 
+     * あとconst cp = vの意味がわかりませんでした。
+     */
+    // const cp = v
+    // localStorage["currentPage"] = cp
     currentPage.current = v
-    currentOffset.current = tasksPerPage * currentPage.current
-    setOffset(currentOffset.current)
-  }
-
-    // const location = useLocation();
-
-  const changeCurrentTasks = (tasks) => {
-    setCurrentTasks([...tasks])
-    localStorage["currentTasks"] = JSON.stringify(tasks)
+    setOffset((currentPage.current - 1) * tasksPerPage)
   }
 
   const pagenate = (
