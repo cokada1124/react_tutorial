@@ -39,10 +39,11 @@ const Form = (props) => {
     issueTypeId : true,
     issueType    : true,
     priorityId  : true,
-    priority    : true,
     startDate   : true,
     dueDate     : true
   })
+
+  console.log("errors-------------" + errors)
 
   // ????????????????
   // 質問
@@ -56,14 +57,8 @@ const Form = (props) => {
   const [body, setBody ] = useState({
     projectId: 1073938367,
     summary: "",
-    createUser: "",
-    // content: "",
-    issueTypeId: "1",
-    issueType: "",
-    priorityId: "2",
-    priority: "",
-    startDate: "",
-    dueDate: ""
+    issueTypeId: 1074691455,
+    priorityId:2
   })
 
   console.log(errors.projectId + "-----------------")
@@ -74,10 +69,13 @@ const Form = (props) => {
     issueType     : ["タスク", "検証", "議事録"],
     createUser   : ["minamoto", "taira", "soga", "fujiwara"],
     status   : ["未対応", "対応済"],
+    // priority : [{name:"高",value:"2"},{name: "中", value:"3"},{name: "低",value:"4"}]
     priority : ["高", "中", "低"]
   }
 
 
+  // console.log(selects.priority_[0].value)
+  
   const title = id === undefined ? "課題追加" : "課題編集"
   const submit_label = id === undefined ? "追加" : "更新"
 
@@ -116,27 +114,46 @@ const Form = (props) => {
   console.log("--issueTypeId--" + body.issueTypeId)
   console.log("--issueType--" + body.issueType)
   console.log("--priorityId--" + body.priorityId)
-  console.log("--priority--" + body.priority)
+  // console.log("--priority--" + body.priority)
   console.log("--startDate--" + body.startDate)
   console.log("--dueDate--" + body.dueDate)
 
-  fetch(`https://2012.backlog.jp/api/v2/priorities?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT`, {
-      method       : "GET",
-      headers      : {
-        "Content-Type" : "application/json;charset=utf-8"
-      }
-    })
-  .then(res => res.json())
-  .then(json => console.log("fetchプライマリID" + json[0].id))
+  console.log(body)
+
+  // fetch(`https://2012.backlog.jp/api/v2/priorities?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT`, {
+  //     method       : "GET",
+  //     headers      : {
+  //       "Content-Type" : "application/json;charset=utf-8"
+  //     }
+  //   })
+  // .then(res => res.json())
+  // .then(json => console.log("fetchプライマリID" + json[0].id))
   
 
 
   const generateOpt = (key) => {
     // console.log("gen opt: ", selects[key])
+    console.log(selects[key][0].value)
     return selects[key].map((opt, i) => (
-      <option key={`${key}_${i}`} value={opt}>{opt}</option>
+      <option key={`${key}_${i}`} value={resPriority(opt)}>{opt}</option>
+      // <option key={`${key}_${i}`} value={key === "priority" ? selects[key][0].value: opt}>{key === "priority" ? selects[key][0].name : opt}</option>
+      
     ))
+  
   }
+
+  const resPriority = (name) => {
+    if(name ==="高") {
+      return +2
+    }else if (name ==="中"){
+      return +3
+    }else if (name ==="低"){
+      return +4
+    }
+
+  }
+
+
 
   const noError = () =>{
     const new_error = errors
@@ -152,7 +169,7 @@ const Form = (props) => {
     console.log(errors)
 
     const check_result = Object.values(errors)
-    console.log("checkresult------" + check_result)
+    console.log(check_result)
     const result = check_result.every(b => b === true)
     // const testtest = [1,1,1,1,1]
     // const test = testtest.every(a => a === 1);
@@ -171,7 +188,7 @@ const Form = (props) => {
   const createOrUpdateTask = (tasks) => {
     if(!noError()){return}
     console.log("addTask実行(form)")
-    console.log("body---------" + JSON.stringify(body))
+    console.log("body---------" ,body)
     const onclick = props.onClickAddTask || props.onClickUpdateTask
     onclick(tasks)
   }
@@ -183,7 +200,7 @@ const Form = (props) => {
       {/* <form onSubmit={}> */}
       <div>
         {/* <label>タスク</label> */}
-        <select onChange={(e)=>setBody({...body, ...{issueType: e.target.value}})} value={body.issueType} className="form form--task">
+        <select value={body.issueTypeId} className="form form--task">
           {generateOpt("issueType")}
           </select>
           {errors.issueType === false && <span className="red txt-indent">タスクを選択して下さい</span>}
@@ -198,35 +215,36 @@ const Form = (props) => {
       </div>
       <div className="taskDetail"> 
         <div className="detailTop">
-          <textarea type="text" value={body.content} onChange={(e) => setBody({...body, ...{content: e.target.value}})}  placeholder="本文" className="form form--content"/>
+          <textarea type="text" value={body.content}  placeholder="本文" className="form form--content"/>
           {errors.content === false && <span className="red txt-indent">本文を入力して下さい</span>}
         </div>
         <div>
           <div className="splitLeft">
             <div className="splitLeft--farst">
             <label>担当者</label>
-              <select onChange={(e)=>setBody({...body, ...{createUser: e.target.value}})} value={body.createUser} className="form">
+              <select value={body.createUser} className="form">
             {generateOpt("createUser")}
               </select>
               {errors.createUser === false && <span className="red txt-indent">担当者を選択して下さい</span>}
             </div>
             <div className="splitLeft--second">
             <label>開始日</label>
-              <input type="date" value={body.startDate} onChange={(e) => setBody({...body, ...{startDate: e.target.value}})} className="form" />
+              <input type="date" value={body.startDate}  className="form" />
               {errors.startDate === false && <span className="red txt-indent">開始を選択して下さい</span>}
             </div>
           </div>
           <div className="splitRight">
             <div className="splitRight--farst">
             <label>優先度</label>
-              <select onChange={(e)=>setBody({...body, ...{priority: e.target.value}})} value={body.priority} className="form">
+              {/* <select onChange={(e)=>setBody({...body, ...{priority: e.target[0].value}})} value={body.priority} className="form"> */}
+              <select value={body.priorityId} className="form">
             {generateOpt("priority")}
               </select>
               {errors.priority === false && <span className="red txt-indent">優先度を選択して下さい</span>}
             </div>
             <div className="splitRight--second">
             <label>期限日</label>
-              <input type="date" value={body.dueDate} onChange={(e) => setBody({...body, ...{dueDate: e.target.value}})} className="form" />
+              <input type="date" value={body.dueDate}  className="form" />
               {errors.dueDate === false && <span className="red txt-indent">期限日を選択して下さい</span>}
             </div>
           </div>

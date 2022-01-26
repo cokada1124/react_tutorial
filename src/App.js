@@ -34,6 +34,8 @@ function App() {
 
   const [tasks,setTasks] = useState(local_state)
 
+  const [body, setBody ] = useState()
+
   const keys = {
     // id          : "#",
     issueType        : "種別",
@@ -51,32 +53,41 @@ function App() {
   // console.log(keys.createdUser.idd)
   // console.log(Obuject.keys(keys))
   const addTask = (task) => {
-    console.log("addTask実行(app)")
-    console.log("add task: ", task)
-    const this_id = mid + 1
-    localStorage["maxId"] = this_id
+    // console.log("addTask実行(app)")
+    // console.log("add task: ", task)
+    // const this_id = mid + 1
+    // localStorage["maxId"] = this_id
     
     //// localStorageから読み直し意味がありません。
-    task.id = this_id
-    const added_tasks = [...tasks, ...[task]]
+    // task.id = this_id
+    // const added_tasks = [...tasks, ...[task]]
 
-    localStorage["tasks"] = JSON.stringify(added_tasks)
-    setTasks(added_tasks)
+    // localStorage["tasks"] = JSON.stringify(added_tasks)
+    // setTasks(added_tasks)
     
-    console.log(tasks)
-    location.href = `/${task.id}`
+    // location.href = `/${task.id}`
 
-    // const params = Object.keys(body).map(key => {
-    //   return (key + "=" + encodeURI(JSON.stringify(body[key])))
-    // }).join("&")
-    // fetch(`https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&${params}`, {
-    //   method       : "POST",
-    //   headers      : {
-    //     "Content-Type" : "application/x-www-form-urlencoded"
-    //   }
-    // })
-    // .then(res => res.json())
-    // .then(json => console.log(json))
+    const params = Object.keys(task).map(key => {
+      return (key + "=" + encodeURI(JSON.stringify(task[key])))
+    }).join("&")
+    fetch(`https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&${params}`, {
+      method       : "POST",
+      headers      : {
+        "Content-Type" : "application/x-www-form-urlencoded"
+      }
+    })
+    .then(res => res.json())
+    .then((json) => {
+      setBody(json)
+      location.href = `/${json.id}`
+    })
+
+    console.log(body)
+
+    // console.log("addTask実行(app)")
+    // console.log(task)
+
+    // location.href = `/${task.id}`
   }
 
   const updateTask = (task) => {
