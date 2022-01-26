@@ -54,6 +54,23 @@ const Form = (props) => {
   //useState内で条件分岐するとうまくいかないのですが、どのように書くとよいでしょうか？
   // 質問
   // ????????????????
+
+  /** !!!!!!!!!!!!!!!!!
+   *  issueTypeId: 1074691455,
+   * を指定ください！
+   * 
+   * useState内で条件分岐の意味がよくわかりませんでした・・・
+   * 例えば
+   * 
+   * <select>
+   *  <option value="1">低</option>
+   *  <option value="2">低</option>
+   * </select>
+   * 
+   * で「高」が選択されたらvalueに2が入るので、それをPOSTすれば良いのでは。
+   * なぜuseState()の初期値にpriorityIdや他のプロパティをセットしているのかがわかりません。
+   * 
+   */
   const [body, setBody ] = useState({
     projectId: 1073938367,
     summary: "",
@@ -185,6 +202,18 @@ const Form = (props) => {
   //またその先のaddTaskが実行できない理由と関係があるのでしょうか？
   // 質問
   // ????????????????
+
+  /** !!!!!!!!!!!!!!!!!
+   * 理由は、、、
+   * console.log()の引数が文字列あるいはtoString()で文字列になる値と
+   * 決まっているからです。
+   * ObjectをtoString()すると[object object]になるので、
+   * 仕様通りの出力です。
+   * 
+   * addTaskが実行されないですか？こちらでは実行されましたが・・・
+   * addTaskの67行目でlocation.hrefが移動しているから、
+   * 54行目・55行目のconsole.log()が消えているだけでは。
+   */
   const createOrUpdateTask = (tasks) => {
     if(!noError()){return}
     console.log("addTask実行(form)")
