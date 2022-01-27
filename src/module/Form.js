@@ -54,28 +54,11 @@ const Form = (props) => {
   //useState内で条件分岐するとうまくいかないのですが、どのように書くとよいでしょうか？
   // 質問
   // ????????????????
-
-  /** !!!!!!!!!!!!!!!!!
-   *  issueTypeId: 1074691455,
-   * を指定ください！
-   * 
-   * useState内で条件分岐の意味がよくわかりませんでした・・・
-   * 例えば
-   * 
-   * <select>
-   *  <option value="1">低</option>
-   *  <option value="2">低</option>
-   * </select>
-   * 
-   * で「高」が選択されたらvalueに2が入るので、それをPOSTすれば良いのでは。
-   * なぜuseState()の初期値にpriorityIdや他のプロパティをセットしているのかがわかりません。
-   * 
-   */
   const [body, setBody ] = useState({
     projectId: 1073938367,
     summary: "",
     issueTypeId: 1074691455,
-    priorityId:2
+    // priorityId: ""
   })
 
   console.log(errors.projectId + "-----------------")
@@ -87,7 +70,7 @@ const Form = (props) => {
     createUser   : ["minamoto", "taira", "soga", "fujiwara"],
     status   : ["未対応", "対応済"],
     // priority : [{name:"高",value:"2"},{name: "中", value:"3"},{name: "低",value:"4"}]
-    priority : ["高", "中", "低"]
+    priority : [null, null ,"高", "中", "低"]
   }
 
 
@@ -148,15 +131,22 @@ const Form = (props) => {
   
 
 
-  const generateOpt = (key) => {
-    // console.log("gen opt: ", selects[key])
-    console.log(selects[key][0].value)
-    return selects[key].map((opt, i) => (
-      <option key={`${key}_${i}`} value={resPriority(opt)}>{opt}</option>
-      // <option key={`${key}_${i}`} value={key === "priority" ? selects[key][0].value: opt}>{key === "priority" ? selects[key][0].name : opt}</option>
+  // const generateOpt = (key) => {
+  //   // console.log("gen opt: ", selects[key])
+  //   console.log(selects[key][0].value)
+  //   return selects[key].map((opt, i) => (
+  //     <option key={`${key}_${i}`} value={resPriority(opt)}>{opt}</option>
+  //     // <option key={`${key}_${i}`} value={key === "priority" ? selects[key][0].value: opt}>{key === "priority" ? selects[key][0].name : opt}</option>
       
-    ))
+  //   ))
   
+  // }
+
+  const generateOpt = (key) => {
+    return selects[key].map((opt, i) => {
+      if(opt === null) { return null }
+      return (<option key={`${key}_${i}`} value={i}>{opt}</option>) 
+    })
   }
 
   const resPriority = (name) => {
@@ -202,18 +192,6 @@ const Form = (props) => {
   //またその先のaddTaskが実行できない理由と関係があるのでしょうか？
   // 質問
   // ????????????????
-
-  /** !!!!!!!!!!!!!!!!!
-   * 理由は、、、
-   * console.log()の引数が文字列あるいはtoString()で文字列になる値と
-   * 決まっているからです。
-   * ObjectをtoString()すると[object object]になるので、
-   * 仕様通りの出力です。
-   * 
-   * addTaskが実行されないですか？こちらでは実行されましたが・・・
-   * addTaskの67行目でlocation.hrefが移動しているから、
-   * 54行目・55行目のconsole.log()が消えているだけでは。
-   */
   const createOrUpdateTask = (tasks) => {
     if(!noError()){return}
     console.log("addTask実行(form)")
@@ -265,8 +243,8 @@ const Form = (props) => {
           <div className="splitRight">
             <div className="splitRight--farst">
             <label>優先度</label>
-              {/* <select onChange={(e)=>setBody({...body, ...{priority: e.target[0].value}})} value={body.priority} className="form"> */}
-              <select value={body.priorityId} className="form">
+              <select onChange={(e)=>setBody({...body, ...{priorityId: e.target.value}})} value={body.priorityId} className="form">
+              {/* <select value={body.priorityId} className="form"> */}
             {generateOpt("priority")}
               </select>
               {errors.priority === false && <span className="red txt-indent">優先度を選択して下さい</span>}
