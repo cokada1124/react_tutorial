@@ -33,8 +33,17 @@ function App() {
   console.log(mid)
 
   const [tasks,setTasks] = useState(local_state)
+  const [bodys, setBody ] = useState()
 
-  const [body, setBody ] = useState()
+  useEffect(() => {
+    fetch("https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
+    method: "GET"
+    })
+    .then(res => res.json())
+    .then(json => setBody(json))
+  }, [])
+
+  console.log(bodys)
 
   const keys = {
     // id          : "#",
@@ -50,10 +59,7 @@ function App() {
 
   }
   
-  // console.log(keys.createdUser.idd)
-  // console.log(Obuject.keys(keys))
   const addTask = (task) => {
-    // console.log("addTask実行(app)")
     // console.log("add task: ", task)
     // const this_id = mid + 1
     // localStorage["maxId"] = this_id
@@ -68,7 +74,8 @@ function App() {
     // location.href = `/${task.id}`
 
     const params = Object.keys(task).map(key => {
-      return (key + "=" + encodeURI(JSON.stringify(task[key])))
+      // return (key + "=" + encodeURI(JSON.stringify(task[key])))
+      return (key + "=" + encodeURI(task[key]))
     }).join("&")
     fetch(`https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&${params}`, {
       method       : "POST",
@@ -81,13 +88,6 @@ function App() {
       setBody(json)
       location.href = `/${json.id}`
     })
-
-    console.log(body)
-
-    // console.log("addTask実行(app)")
-    // console.log(task)
-
-    // location.href = `/${task.id}`
   }
 
   const updateTask = (task) => {
@@ -115,10 +115,10 @@ function App() {
       <BrowserRouter>
         <Side />
         <Routes>
-          <Route path="/" element={  <Index title="テスト" tasks={tasks} keys={keys} /> } />
+          <Route path="/" element={  <Index title="テスト" tasks={tasks} keys={keys} bodys={bodys} /> } />
           {/* <Route path="/:id" element={  <Index title="テスト" tasks={tasks} keys={keys} /> } /> */}
           <Route path="/new" element={<Form onClickAddTask={addTask} num={tasks.length} /> } />
-          <Route path="/:id" element={<Form onClickUpdateTask={updateTask} tasks={tasks} /> } />
+          <Route path="/:id" element={<Form onClickUpdateTask={updateTask} tasks={tasks} bodys={bodys} /> } />
         </Routes>
       </BrowserRouter>
     </div>
