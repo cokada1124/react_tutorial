@@ -103,7 +103,13 @@ const Form = (props) => {
   }, [])
 
   console.log(body)
-  
+
+  // const aaa = props.tasks.find(task => +task.id === +1120493890 )
+  // 
+  // console.log(props.bodys[0])
+  console.log(props.bodys)
+  console.log(props.tasks[0])
+  // console.log(aaa)
 
 
   const generateOpt = (key) => {
