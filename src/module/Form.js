@@ -87,15 +87,26 @@ const Form = (props) => {
   // console.log(result)
 
   useEffect(() => {
-    const this_task = id === undefined ? null : props.tasks.find(task => +task.id === +id)
-    if(this_task !== null) {
-      setState({...this_task})
+    const this_body = id === undefined ? null : props.bodys.find(task => +task.id === +id)
+    if(this_body !== null) {
+      this_body.dueDate = this_body.dueDate.slice(0,10)
+      this_body.startDate = this_body.startDate.slice(0,10)
+      setBody({...this_body})
+      // console.log(formatDate(this_body.dueDate))
     }
   }, [])
 
-  console.log(body)
 
-  // const aaa = props.tasks.find(task => +task.id === +1120493890 )
+  // console.log(formatDate(body.dueDate))
+  function formatDate(dt) {
+    var y = dt.getFullYear();
+    var m = ('00' + (dt.getMonth()+1)).slice(-2);
+    var d = ('00' + dt.getDate()).slice(-2);
+    return (y + '-' + m + '-' + d);
+  }
+
+
+   const aaa = props.bodys.find(task => +task.id === +id )
   // 
 
   // ????????????????
@@ -108,8 +119,8 @@ const Form = (props) => {
 
   // console.log(props.bodys[0])
   console.log(props.bodys)
-  console.log(props.tasks[0])
-  // console.log(aaa)
+  console.log(props.tasks)
+  console.log(body)
 
 
   const generateOpt = (key) => {
@@ -127,10 +138,13 @@ const Form = (props) => {
         new_error[key] = false;
       } else { new_error[key] = true; }
     })
+    new_error.description = true
     setErrors({...new_error})
     const check_result = Object.values(errors)
     const result = check_result.every(b => b === true)
 
+    console.log(errors)
+    console.log(result)
     return result;
     
   }

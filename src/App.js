@@ -41,9 +41,15 @@ function App() {
     })
     .then(res => res.json())
     .then(json => setBody(json))
+
+    fetch("https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
+    method: "GET"
+    })
+    .then(res => res.json())
+    .then(json => setTasks(json))
   }, [])
 
-  console.log(bodys)
+  console.log(tasks)
 
   const keys = {
     // id          : "#",
@@ -60,6 +66,7 @@ function App() {
   }
   
   const addTask = (task) => {
+    console.log("送信後(addTaks)")
     // console.log("add task: ", task)
     // const this_id = mid + 1
     // localStorage["maxId"] = this_id
@@ -90,18 +97,38 @@ function App() {
     })
   }
 
+  console.log()
   const updateTask = (task) => {
     /*
       万が一存在しないidが指定された場合に例外が起きないように処理する。
     */
+   console.log(task)
     const target_task_idx = tasks.findIndex(t => +t.id === +task.id)
     if(target_task_idx === -1) return false
     tasks[target_task_idx] = task
 
     //// local_stateをセットしてましたが、それだと更新が反映されません・・・
-    localStorage["tasks"] = JSON.stringify(tasks)
+    // localStorage["tasks"] = JSON.stringify(tasks)
+
     setTasks(tasks)
+
+    const params = Object.keys(task).map(key => {
+      // return (key + "=" + encodeURI(JSON.stringify(task[key])))
+      return (key + "=" + encodeURI(task[key]))
+    }).join("&")
+    fetch(`https://2012.backlog.jp/api/v2/issues/${task.id}?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&${params}`, {
+      method       : "PATCH",
+      headers      : {
+        "Content-Type" : "Content-Type:application/x-www-form-urlencoded"
+      }
+    })
+    .then(res => res.json())
+    .then((json) => {
+      console.log(json)
+      // location.href = `/${json.id}`
+    })
   }
+
 
   const hundleSort = (tasks) => {
     setTasks({...tasks})
