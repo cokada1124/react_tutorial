@@ -41,15 +41,6 @@ const Form = (props) => {
     dueDate     : true
   })
 
-  // ????????????????
-  // 質問
-  //issueTypeIdにどのような番号を入れて良いか、調べてみましたがわかりませんでした。
-  //issueType: {id:}と同じ意味でしょうか？それともあらかじめ一意の連番を作成し
-  //入れるものでしょうか？
-  //またpriorityIdは番号を入れるとして、「高」の場合は2を入れたい場合、
-  //useState内で条件分岐するとうまくいかないのですが、どのように書くとよいでしょうか？
-  // 質問
-  // ????????????????
   const [body, setBody ] = useState({
     projectId: 1073938367,
     summary: "",
@@ -106,6 +97,15 @@ const Form = (props) => {
 
   // const aaa = props.tasks.find(task => +task.id === +1120493890 )
   // 
+
+  // ????????????????
+  // 質問（）
+  //110、111行目はオブジェクトの内容がコンソールんい表示されるのですが、
+  //109行目のように配列の0番目を表示させようとするとエラーとなってしまいます。
+  //原因がわからずに困っています。
+  // 質問
+  // ????????????????
+
   // console.log(props.bodys[0])
   console.log(props.bodys)
   console.log(props.tasks[0])
