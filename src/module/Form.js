@@ -96,30 +96,6 @@ const Form = (props) => {
     }
   }, [])
 
-
-  // console.log(formatDate(body.dueDate))
-  function formatDate(dt) {
-    var y = dt.getFullYear();
-    var m = ('00' + (dt.getMonth()+1)).slice(-2);
-    var d = ('00' + dt.getDate()).slice(-2);
-    return (y + '-' + m + '-' + d);
-  }
-
-
-   const aaa = props.bodys.find(task => +task.id === +id )
-  // 
-
-  // ????????????????
-  // 質問（）
-  //110、111行目はオブジェクトの内容がコンソールんい表示されるのですが、
-  //109行目のように配列の0番目を表示させようとするとエラーとなってしまいます。
-  //原因がわからずに困っています。
-  // 質問
-  // ????????????????
-
-  // console.log(props.bodys[0])
-  console.log(props.bodys)
-  console.log(props.tasks)
   console.log(body)
 
 
@@ -154,7 +130,7 @@ const Form = (props) => {
     const onclick = props.onClickAddTask || props.onClickUpdateTask
     onclick(tasks)
   }
-  console.log(props)
+
   return (
     <div className="main_container fl-right m-top-5">
       <h2>{title}</h2>

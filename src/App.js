@@ -66,7 +66,6 @@ function App() {
   }
   
   const addTask = (task) => {
-    console.log("送信後(addTaks)")
     // console.log("add task: ", task)
     // const this_id = mid + 1
     // localStorage["maxId"] = this_id
@@ -102,7 +101,6 @@ function App() {
     /*
       万が一存在しないidが指定された場合に例外が起きないように処理する。
     */
-   console.log(task)
     const target_task_idx = tasks.findIndex(t => +t.id === +task.id)
     if(target_task_idx === -1) return false
     tasks[target_task_idx] = task
@@ -111,12 +109,16 @@ function App() {
     // localStorage["tasks"] = JSON.stringify(tasks)
 
     setTasks(tasks)
-
-    const params = Object.keys(task).map(key => {
-      // return (key + "=" + encodeURI(JSON.stringify(task[key])))
-      return (key + "=" + encodeURI(task[key]))
-    }).join("&")
-    fetch(`https://2012.backlog.jp/api/v2/issues/${task.id}?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&${params}`, {
+ 
+    const ppp = Object.keys(task).map((v , i) => {
+      if (v === "issueType"){
+        return ("&issueTypeId=" + encodeURI(task[v].id))
+      }
+      if(["priorityId" ,"summary", "startDate", "dueDate"].includes(v)){
+        return ("&" + v + "=" + encodeURI(task[v]))
+      }
+    }).join("")
+    fetch(`https://2012.backlog.jp/api/v2/issues/${task.id}?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT${ppp}`, {
       method       : "PATCH",
       headers      : {
         "Content-Type" : "Content-Type:application/x-www-form-urlencoded"
@@ -126,8 +128,10 @@ function App() {
     .then((json) => {
       console.log(json)
       // location.href = `/${json.id}`
+    
     })
   }
+
 
 
   const hundleSort = (tasks) => {
