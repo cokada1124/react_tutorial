@@ -1,5 +1,5 @@
 import React from "react"
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useRef} from 'react'
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 
@@ -19,6 +19,9 @@ function App() {
     }catch(e) {return [] }
   })()
 
+  // const [loading ,setLoding ] = useState(true)
+
+  // console.log(loading)
   /*
       localStorageから取り出したい値が単純な数字か文字列の場合、
       JSON.parseする必要はありません・・・
@@ -47,6 +50,7 @@ function App() {
     })
     .then(res => res.json())
     .then(json => setTasks(json))
+    // setLoding(false)
   }, [])
 
   console.log(tasks)
@@ -137,6 +141,14 @@ function App() {
   const hundleSort = (tasks) => {
     setTasks({...tasks})
   }
+
+
+  // if (loading) {
+  //   return (
+  //     <div className="loadingimg">
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="App">

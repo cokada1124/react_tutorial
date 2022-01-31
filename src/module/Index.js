@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect}  from "react"
 import { useParams, Link, useLocation, useSearchParams, useNavigate, useMatch } from "react-router-dom"
 
 const Index = (props) => {
+
   const { id } = useParams()
 
   const tasksPerPage = 5
@@ -22,8 +23,11 @@ const Index = (props) => {
   const search_p = search.get("p") || 1
   const currentPage = useRef(search_p)
 
+  const [loading, setLoading] = useState(true)
+
   const currentOrder = useRef("")
 
+  
   /** !!!!!!!!!!!!!!!!!!!!
    * 初期値が正しくセットされてなかったので。
    * あとcurrentOffset使う意味がなかったので削除。
@@ -48,6 +52,7 @@ const Index = (props) => {
   //   return `https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367&sort=${currentSortKey.current}&order=${currentOrder.current}&count=${tasksPerPage}&offset=${offSet}`
   // }
 
+
   const makeFetchURL = () =>{
     const sort = currentSortKey.current ? `&sort=${currentSortKey.current}` : ""
     const order = currentOrder.current ? `&order=${currentOrder.current}` : ""
@@ -70,12 +75,15 @@ const Index = (props) => {
       // console.log(res)
       tasksCount.current = res[1]
       setState(res[0])
+      setLoading(false)
+      console.log("useEffect(index)")
     })
     
 
   }, [offSet])
 
 
+  
   /** !!!!!!!!!!!!!!!!!!!!
    * こっちもuseEffectしてたら↑のuseEffectの後にこっちも実行されませんか？
    * せっかくURLに?p=3とかつけて初期表示を３ページ目にしていても
@@ -294,6 +302,12 @@ const Index = (props) => {
     </table>
   )
 
+  if (loading) {
+      return (
+        <div className="loadingimg">
+        </div>
+      );
+    }
   return(
     <div className="main_container">
       {pagenate}
