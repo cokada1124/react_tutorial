@@ -127,7 +127,7 @@ function App() {
       if (["priorityId" ,"summary", "startDate", "dueDate"].includes(v)){
         return ("&" + v + "=" + encodeURI(task[v]))
       }
-    })
+    }).join("")
 
     
     fetch(`https://2012.backlog.jp/api/v2/issues/${task.id}?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT${editParams}`, {
