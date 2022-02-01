@@ -82,21 +82,6 @@ const Index = (props) => {
 
   }, [offSet])
 
-
-  
-  /** !!!!!!!!!!!!!!!!!!!!
-   * こっちもuseEffectしてたら↑のuseEffectの後にこっちも実行されませんか？
-   * せっかくURLに?p=3とかつけて初期表示を３ページ目にしていても
-   * 二度目のuseEffectで０〜５件目表示で上書きされますよね。
-   * ソートは表頭を押した時だけで良いので、tasksSortに含めてしまいましょう。
-   */
-  //  useEffect(() => {
-  //   fetch(makeSortFetchURL(), {
-  //       method: "GET"
-  //     })
-  //     .then(res => res.json())
-  //     .then(js => {setState(js)})
-  // }, [sortState])
   
   const nav = useNavigate()
   const getPosition = (page) => [(page * tasksPerPage) - tasksPerPage, page * tasksPerPage]
@@ -107,17 +92,6 @@ const Index = (props) => {
 
   const ths = Object.keys(props.keys).map((key, i) => {
     const sortVector = (() => {
-      /** !!!!!!!!!!!!!
-       * currentSortKey.current === (key || `${key}.name`)
-       * という書き方は意図通り動いてますか？
-       * (key || `${key}.name`)
-       * は、
-       * 　keyがtruthyならkeyと比較
-       * 　keyがfalsyなら`${key}.name`と比較
-       * という動きになります。
-       * props.keysは絶対にtrucyなので`${key}.name`との比較が発動することはないように見えます。
-       * 
-       */
       if(currentSortKey.current === (key)) {
         return currentOrder.current === "asc" ? "▲" : "▼"
       }
@@ -139,22 +113,6 @@ const Index = (props) => {
 
 
   const tasksSort = async (key) => {
-    /** !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-     * `${key}.name`の条件は必要なのでしょうか？
-     * https://developer.nulab.com/ja/docs/backlog/api/2/get-issue-list/#%E3%82%AF%E3%82%A8%E3%83%AA%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E3%83%BC
-     * を見るとsortに指定できる文字列で「〜.name」というものはありませんでした。
-     * 
-     * あとconst thsのところでも書いたのですが、
-     * 　=== (A || B || C || ...)
-     * というのは意図通り動いていますか？
-     * この書き方では、まずAがtrucyか判定しtrucyならAを比較、falsyならBを判定し、、、
-     * という風に左にある選択肢がtrucyならそこで比較されてしまうものです。
-     * 
-     * "createUser"はtrucyなので、毎回必ずkey === "createUser"が採用されます。
-     */
-    // if(key === ("createUser" || "issueType" || "priority" || "status")){
-    //   currentSortKey.current = `${key}.name`
-    // }else {
     currentSortKey.current = key
     // }
 
@@ -183,7 +141,7 @@ const Index = (props) => {
 
   const pageOflastTask = +currentPage.current * tasksPerPage 
   const pageOffarstTask = pageOflastTask - tasksPerPage 
-  const pageOfmiddle = currentTasks.length + pageOffarstTask
+  const pageOfmiddle = tasks.length + pageOffarstTask
   const maxPage = Math.ceil(tasksCount.current.count / tasksPerPage)
 
 
@@ -231,7 +189,8 @@ const Index = (props) => {
        * ["name"]したいカラム名を配列で定義しincludesで三項演算子にかけました。
        */
       const name_keys = ["issueType", "createdUser", "status", "priority"]
-      const val = name_keys.includes(td) ? task[td]["name"] : task[td]
+      const date_keys = ["dueDate", "startDate", "created"]
+      const val = name_keys.includes(td) ? task[td]["name"] : date_keys.includes(td) && task[td] !== null ? task[td].slice(0,10) : task[td]
       return <td key={`${td}_${i}_${j}`}>{val}</td>
       // if(td === "issueType") {
       //   return <td key={`${td}_${i}_${j}`}>{task[td]["name"]}</td>
@@ -292,7 +251,7 @@ const Index = (props) => {
     <table className="main_container__table_pagenum">
       <tbody>
         <tr>
-          <td className="tdcurrentpagenum">{pageOffarstTask +1}〜{currentTasks.length === tasksPerPage ? pageOflastTask :pageOfmiddle}件</td>
+          <td className="tdcurrentpagenum">{pageOffarstTask +1}〜{tasks.length === tasksPerPage ? pageOflastTask :pageOfmiddle}件</td>
           {numTd}
           {backTd}
           {nextTd}
@@ -303,11 +262,11 @@ const Index = (props) => {
   )
 
   if (loading) {
-      return (
-        <div className="loadingimg">
-        </div>
-      );
-    }
+    return (
+      <div className="loadingimg">
+      </div>
+    );
+  }
   return(
     <div className="main_container">
       {pagenate}

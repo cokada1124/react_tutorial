@@ -8,6 +8,7 @@ import "./App.scss"
 import Side from "./module/Side"
 import Index from "./module/Index"
 import Form from "./module/Form"
+import Result from "./module/Result"
 
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 
@@ -37,6 +38,8 @@ function App() {
 
   const [tasks,setTasks] = useState(local_state)
   const [bodys, setBody ] = useState()
+  // const result = useRef("")
+  const [result, setResult ] = useState()
 
   useEffect(() => {
     fetch("https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
@@ -50,7 +53,8 @@ function App() {
     })
     .then(res => res.json())
     .then(json => setTasks(json))
-    // setLoding(false)
+    
+    
   }, [])
 
   console.log(tasks)
@@ -68,6 +72,8 @@ function App() {
     dueDate          : "期限日",
 
   }
+
+  // const nav = useNavigate()
   
   const addTask = (task) => {
     // console.log("add task: ", task)
@@ -93,14 +99,16 @@ function App() {
         "Content-Type" : "application/x-www-form-urlencoded"
       }
     })
-    .then(res => res.json())
-    .then((json) => {
-      setBody(json)
-      location.href = `/${json.id}`
+    .then(res => {
+      if (!res.ok) {
+        setResult("タスク登録失敗")
+      } else {
+        setBody(res.json())
+        setResult("タスク登録完了")
+      }
     })
   }
 
-  console.log()
   const updateTask = (task) => {
     /*
       万が一存在しないidが指定された場合に例外が起きないように処理する。
@@ -109,30 +117,31 @@ function App() {
     if(target_task_idx === -1) return false
     tasks[target_task_idx] = task
 
-    //// local_stateをセットしてましたが、それだと更新が反映されません・・・
-    // localStorage["tasks"] = JSON.stringify(tasks)
-
     setTasks(tasks)
  
-    const ppp = Object.keys(task).map((v , i) => {
+
+    const editParams = Object.keys(task).map((v , i) => {
       if (v === "issueType"){
         return ("&issueTypeId=" + encodeURI(task[v].id))
       }
-      if(["priorityId" ,"summary", "startDate", "dueDate"].includes(v)){
+      if (["priorityId" ,"summary", "startDate", "dueDate"].includes(v)){
         return ("&" + v + "=" + encodeURI(task[v]))
       }
-    }).join("")
-    fetch(`https://2012.backlog.jp/api/v2/issues/${task.id}?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT${ppp}`, {
+    })
+
+    
+    fetch(`https://2012.backlog.jp/api/v2/issues/${task.id}?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT${editParams}`, {
       method       : "PATCH",
       headers      : {
         "Content-Type" : "Content-Type:application/x-www-form-urlencoded"
       }
     })
-    .then(res => res.json())
-    .then((json) => {
-      console.log(json)
-      // location.href = `/${json.id}`
-    
+    .then(res => {
+      if (!res.ok){
+        setResult("タスク編集失敗")
+      }else {
+      setResult("タスク編集完了")
+      }
     })
   }
 
@@ -142,13 +151,6 @@ function App() {
     setTasks({...tasks})
   }
 
-
-  // if (loading) {
-  //   return (
-  //     <div className="loadingimg">
-  //     </div>
-  //   );
-  // }
 
   return (
     <div className="App">
@@ -161,6 +163,7 @@ function App() {
           <Route path="/" element={  <Index title="テスト" tasks={tasks} keys={keys} bodys={bodys} /> } />
           {/* <Route path="/:id" element={  <Index title="テスト" tasks={tasks} keys={keys} /> } /> */}
           <Route path="/new" element={<Form onClickAddTask={addTask} num={tasks.length} /> } />
+          <Route path="/result" element={<Result result={result}/>} />
           <Route path="/:id" element={<Form onClickUpdateTask={updateTask} tasks={tasks} bodys={bodys} /> } />
         </Routes>
       </BrowserRouter>
