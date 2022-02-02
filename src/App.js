@@ -40,9 +40,17 @@ function App() {
   const [bodys, setBody ] = useState()
   // const result = useRef("")
   const [result, setResult ] = useState()
+  const [backTop, setBackTop] = useState(false)
 
+  // ????????????????
+  // 質問 下記で課題一覧を取得する際に上限が100件となっているのですが、
+  // 100件以上になった場合はどのように取得したらよいでしょうか？
+  // ここで取得しておかないと編集時にデータがとってこれなくなる作りに
+  // なっているため、どのようにしたらよいかと思っています。    
+  //      
+  // ????????????????
   useEffect(() => {
-    fetch("https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
+    fetch("https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367&count=100", {
     method: "GET"
     })
     .then(res => res.json())
@@ -74,6 +82,9 @@ function App() {
   }
 
   // const nav = useNavigate()
+  const setbackTop = () => {
+    setBackTop(true)
+  }
   
   const addTask = (task) => {
     // console.log("add task: ", task)
@@ -113,11 +124,11 @@ function App() {
     /*
       万が一存在しないidが指定された場合に例外が起きないように処理する。
     */
-    const target_task_idx = tasks.findIndex(t => +t.id === +task.id)
-    if(target_task_idx === -1) return false
-    tasks[target_task_idx] = task
+    // const target_task_idx = tasks.findIndex(t => +t.id === +task.id)
+    // if(target_task_idx === -1) return false
+    // tasks[target_task_idx] = task
 
-    setTasks(tasks)
+    // setTasks(tasks)
  
 
     const editParams = Object.keys(task).map((v , i) => {

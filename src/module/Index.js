@@ -39,6 +39,7 @@ const Index = (props) => {
 
   // if(search_p === 1) {
   //   currentPage.current = search_p
+  //   setOffset((currentPage.current - 1) * tasksPerPage)
   // }
 
   /** !!!!!!!!!!!!!!!!!!
@@ -157,11 +158,16 @@ const Index = (props) => {
   if(+currentPage.current >= 3 && maxPage >= +currentPage.current +2){
     pageNumber = [+currentPage.current -2,+currentPage.current -1,+currentPage.current,+currentPage.current +1,+currentPage.current +2,null,maxPage]
   }
+
+  if(+currentPage.current >= 4 && maxPage >= +currentPage.current +2){
+    pageNumber = [1,null,+currentPage.current -2, +currentPage.current -1, +currentPage.current,+currentPage.current +1, +currentPage.current +2, null, maxPage]
+  }
+
   if(+currentPage.current > 5 && +currentPage.current === maxPage -2){
-    pageNumber = [+currentPage.current -2, +currentPage.current -1,+currentPage.current,+currentPage.current +1,+currentPage.current +2]
+    pageNumber = [1,null,+currentPage.current -2, +currentPage.current -1,+currentPage.current,+currentPage.current +1,+currentPage.current +2]
   }
   if(+currentPage.current > 5 && +currentPage.current >= maxPage -1){
-    pageNumber = [maxPage -4,maxPage -3,maxPage -2,maxPage -1,maxPage]
+    pageNumber = [1,null,maxPage -4,maxPage -3,maxPage -2,maxPage -1,maxPage]
   }
 
 

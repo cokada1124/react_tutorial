@@ -91,8 +91,12 @@ const Form = (props) => {
   useEffect(() => {
     const this_body = id === undefined ? null : props.bodys.find(task => +task.id === +id)
     if(this_body !== null) {
+      if(this_body.dueDate !== null){
       this_body.dueDate = this_body.dueDate.slice(0,10)
+      }
+      if(this_body.startDate !== null){
       this_body.startDate = this_body.startDate.slice(0,10)
+      }
       setBody({...this_body})
       // console.log(formatDate(this_body.dueDate))
     }
