@@ -1,28 +1,122 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
+import { useParams } from "react-router-dom"
+import { useForm } from 'react-hook-form'＝
 
-class Form extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      title: "課題追加"
+const Form = (props) => {
+  const { id } = useParams()
+  const [ state, setState ] = useState({
+    id          : 0,
+    task        : 0,
+    key         : "",
+    title       : "",
+    author      : "",
+    status      : "",
+    priority    : "",
+    registed_at : "",
+    start_date  : "",
+    end_date    : ""
+  })
+
+  const selects = {
+    task     : ["タスク", "検証", "議事録"],
+    author   : ["minamoto", "taira", "soga", "fujiwara"],
+    status   : ["未対応", "対応済"],
+    priority : ["高", "中", "低"]
+  }
+
+  const title = id === undefined ? "課題追加" : "課題編集"
+  const submit_label = id === undefined ? "追加" : "更新"
+
+  useEffect(() => {
+    const this_task = id === undefined ? null : props.tasks.find(task => +task.id === +id)
+    if(this_task !== null) {
+      setState({...this_task})
     }
+  }, [])
+
+  console.log(state)
+
+  const generateOpt = (key) => {
+    // console.log("gen opt: ", selects[key])
+    return selects[key].map((opt, i) => (
+      <option key={`${key}_${i}`} value={opt}>{opt}</option>
+    ))
   }
 
-  render() {
-    return (
-      <div>
-        <h2>{this.state.title}</h2>
-        <form>
-          <label for="title">タイトル</label>
-          <input type="text" id="title" name="title" />
+  const createOrUpdateTask = props.onClickAddTask || props.onClickUpdateTask
+  console.log(props)
+  return (
+    <div className="main_container fl-right m-top-5">
+      num: {props.num}
+      <h2>{title}</h2>
+      {/* <form onSubmit={}> */}
+      <ul className="FormList">
+        <li><label>id</label>{id}</li>
+
+        <li>
+          <label>task</label>
+          <select onChange={(e)=>setState({...state, ...{task: e.target.value}})} value={state.task}>
+          {generateOpt("task")}
+          </select>
+        </li>
         
-          <div><button>
-            追加
-          </button></div>
-        </form>
+        <li>
+          <label>key</label>
+          <input type="text" value={state.key} onChange={(e) => setState({...state, ...{key: e.target.value}})} />
+        </li>
+        
+        <li>
+          <label>title</label>
+          <input type="text" value={state.title} onChange={(e) => setState({...state, ...{title: e.target.value}})} />
+        </li>
+        
+        <li>
+          <label>author</label>
+          <select onChange={(e)=>setState({...state, ...{author: e.target.value}})} value={state.author}>
+          {generateOpt("author")}
+          </select>
+        </li>
+        
+        <li>
+          <label>status</label>
+          <select onChange={(e)=>setState({...state, ...{status: e.target.value}})} value={state.status}>
+          {generateOpt("status")}
+          </select>
+        </li>
+        
+        <li>
+          <label>priority</label>
+          <select onChange={(e)=>setState({...state, ...{priority: e.target.value}})} value={state.priority}>
+          {generateOpt("priority")}
+          </select>
+        </li>
+        
+        <li>
+          <label>registed_at</label>
+          <input type="date" value={state.registed_at} onChange={(e) => setState({...state, ...{registed_at: e.target.value}})} />
+        </li>
+        
+        <li>
+          <label>start_date</label>
+          <input type="date" value={state.start_date} onChange={(e) => setState({...state, ...{start_date: e.target.value}})} />
+        </li>
+        
+        <li>
+          <label>end_date</label>
+          <input type="date" value={state.end_date} onChange={(e) => setState({...state, ...{end_date: e.target.value}})} />
+        </li>
+      </ul>
+      
+      <div>
+        {/*
+          stateにidが含まれるので、引数はstateだけで良いような気がします。
+          /newの場合はidがundefinedになりますし、送らなくて良いものは控えた方が
+          意図が明確になるかなと。
+        */}
+        <button onClick={()=>createOrUpdateTask(state)}>{submit_label}</button>
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 export default Form
