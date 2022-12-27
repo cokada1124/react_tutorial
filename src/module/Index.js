@@ -3,14 +3,15 @@ import React from "react"
 export class Index extends React.Component{
   constructor(props){
     super(props);
-    // this.state ={
-    //   data: JSON.parse(localStorage["test"]),
-    //   vals: Object.values(JSON.parse(localStorage["test"])),
-    //   vals_: [Object.values(JSON.parse(localStorage["test"])[0])],
-    //   keys: [Object.keys(JSON.parse(localStorage["test"])[0])],
+    this.state ={
+      data_: JSON.parse(localStorage["test"]),
+      vals: Object.values(JSON.parse(localStorage["test"])),
+      vals_: [Object.values(JSON.parse(localStorage["test"])[0])],
+      keys: [Object.keys(JSON.parse(localStorage["test"])[0])],
 
-    //   le: JSON.parse(localStorage["test"]).length
-    // }
+      le: this.props.tasks.length,
+      data: this.props.tasks.concat()
+    }
 
     // localstorageデータ
     // state=[{kind: 'タスク', key:"HBR-HOGE-1", task_name: "summary", manager:"fujiwara", state:"未対応", primary:"高", registration_date:"2021/9/1", start_date:"2021/9/1", deadline_date:"2021/9/1"}]
@@ -18,10 +19,8 @@ export class Index extends React.Component{
 
   }
   render(){
-    return (
-      <>{this.props.tasks}</>
-    )
-    const {title} = this.props;
+    // return null
+    // const {tasks} = this.props.tasks;
     const test = [];
     const local = (() => {
       try{
@@ -29,10 +28,70 @@ export class Index extends React.Component{
       }catch(e) {return null }
     })()
 
+    const ths = Object.keys(this.props.keys).map((key, i) => (
+      <th key={`th_${i}`}>{this.props.keys[key]}</th>
+    ))
+
+    console.log(ths)
+    // console.log(this.state.vals_)
+
+    // const ths = Object.keys(this.state.vals_).map((key, i) => (
+    //   <th key={`th_${i}`}>{column_names[key]}</th>
+    // ))
+
+
+  
+    const trs = this.props.tasks.map((task, i) => {
+      const tds = Object.keys(task).map((td, j) => (
+        <td key={`td_${j}`}>{task[td]}</td>
+      ))
+      const toEdit = (id) => {
+        location.href = "/" + id
+      }
+  
+      return (
+        <tr key={`tr_${i}`} onClick ={()=>toEdit(task.id)}>
+          {tds}
+        </tr>
+      )
+    })
+
+    // console.log(ths);
+    // ths.forEach(th => {
+    //   console.log(th.props.children)
+    // })
+  
+    // return(
+    //   <div>
+    //     <table>
+    //       <thead>
+    //         <tr>
+    //           {ths}
+    //         </tr>
+    //       </thead>
+    //       <tbody>
+    //         {trs}
+    //       </tbody>
+    //     </table>
+    //   </div>
+    // )
+
     return(
-      <div>
-      <table className="fl-right">
-        <tbody>
+      
+      <div className="main_container">
+        {/* {console.log(this.props.tasks[0])}
+        {console.log(ths)} */}
+      <table className="fl-right m-top-15">
+      <thead>
+            <tr>
+              {ths}
+            </tr>
+          </thead>
+          <tbody>
+            {trs}
+          </tbody>
+          </table>
+        {/* <tbody>
         <tr>
           <th>種別</th>
           <th>キー</th>
@@ -42,12 +101,15 @@ export class Index extends React.Component{
           <th>優先度</th>
           <th>登録者</th>
           <th>開始日</th>
-          <th>期限日</th>
-          {console.log(this.state.vals[0])}
+          <th>期限日</th> */}
+          {/* {console.log(this.state.vals[0])}
           {console.log(this.state.vals_)}
-          {console.log(this.state.keys[0])}
+          {console.log(this.state.keys[0])} */}
+          {/* {JSON.stringify(this.state.data)} */}
+          
 
-        </tr>
+        {/* </tr> */}
+          
           {/* {this.state.a.map((key, i) => {
             return(
               {this:key.map((keys, j) =>
@@ -60,8 +122,8 @@ export class Index extends React.Component{
          )} */}
 
          {/* データを一つづつ表示 dateの要素が2つになると動かない状態です */}
-          <tr>
-          {this.state.data.map((key, i) =>
+          {/* <tr>
+          {this.props.tasks.map((key, i) =>
           <td key={i}>{key.kind}</td>
           )}
 
@@ -91,7 +153,7 @@ export class Index extends React.Component{
           {this.state.data.map((key, i) =>
           <td key={i}>{key.deadline_date}</td>
           )}
-        </tr>
+        </tr> */}
         {
           
         }
@@ -120,27 +182,65 @@ export class Index extends React.Component{
       {     // 下記詰まっている内容になります。
             // this.state.valsをthis.state.vals[i]として要素分回したいのですが、エラーとなる。
             // {val}が<td></td>の中に全て入ってしまう。
-            Array(this.state.le).fill("0").map((test,i) => {
-                return (
-                      <tr key ={i}>
-                      {
+            // let tasks = this.props.tasks;
+            
+
+            // Array(this.state.le).fill("0").map((test,i) => {
+            //     return (
+            //           <tr key ={i}>
+            //           {
                         
-                          this.state.vals_.map((val, j)=>{
-                            return(
-                                  <td key={j}>
+            //               this.props.tasks.map((val, j)=>{
+            //                 return(
+            //                       <td key={j}>
                                     
-                                  {val}
+            //                       {val}
                                     
-                                  </td>
-                            );
-                          })
-                      }
-                      </tr>
-                );
-            })
+            //                       </td>
+            //                 );
+            //               })
+            //           }
+            //           </tr>
+            //     );
+            // })
       }
-        </tbody>
-      </table>
+{
+// function Index(props) {
+//   const { column_names, tasks } = props
+
+//   const ths = Object.keys(column_names).map((key, i) => (
+//     <th key={`th_${i}`}>{column_names[key]}</th>
+//   ))
+
+//   const trs = tasks.map((task, i) => {
+//     const tds = Object.keys(task).map((td, j) => (
+//       <td key={`td_${j}`}>{task[td]}</td>
+//     ))
+
+//     return (
+//       <tr key={`tr_${i}`}>
+//         {tds}
+//       </tr>
+//     )
+//   })
+
+//   return(
+//     <div>
+//       <table>
+//         <thead>
+//           <tr>
+//             {ths}
+//           </tr>
+//         </thead>
+//         <tbody>
+//           {trs}
+//         </tbody>
+//       </table>
+//     </div>
+//   )
+}
+        {/* </tbody>
+      </table> */}
 
       
 
@@ -157,6 +257,8 @@ export class Index extends React.Component{
                     );
                 })
             } */}
+            {/* {JSON.stringify(this.props.tasks)} */}
+            {/* console.log({this.props.tasks}); */}
       </div>
       
       
