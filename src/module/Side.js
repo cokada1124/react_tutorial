@@ -1,40 +1,38 @@
-import React from "react"
+import React, {useState} from "react"
 
-import { Link } from "react-router-dom"
+import { useParams, Link, useMatch } from "react-router-dom"
 
-class Side extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      title_1 : "課題一覧",
-      title_2 : "課題追加",
-      toggle  : false
-    }
-  }
+const Side = () => {
+  const [ title_1, setTitle1 ] = useState("課題一覧")
+  const [ title_2, setTtile2 ] = useState("課題追加")
+  // const [ toggle , setToggle ] = useState(false)  
 
-  render() {
-    return (
-      <ul className="li-st-none f-24">
-        <li>
-      <Link to={`/`}>{this.state.title_1}</Link>
-      {/* <a href="/new">{this.state.title_1}</a> */}
-      {/* <a href="/" className={this.state.toggle ? "on" : ""} onClisk={() => this.setState(toggle: !)}</a> */}
+  const tasksList = useMatch("/") ? "gray" : ""
+  const addTasks = useMatch("/new") ? "gray" : ""
+  
+  return (
+    <ul className="side-bar__ul">
+      <li>
+        {/** !
+         * なぜ<a></a>にしてたんですっけ？？
+         * アンカーだとページ全体がリフレッシュしてしまい、せっかくreactで組んだSPAが台無しです。
+         * Linkを使うことでreact-routerの動作によりコンポーネントの描画が行われ、
+         * 高速な動作が保証されるのです。
+         * 通常はLinkを使いましょう。
+         */}
+          {/* ????????????????
+          質問 下記一つ目のリンクをクリックした場合にページングを1に戻し
+          データをfetchしなおしたいのですが、URLが変わった
+          時にoffsetを更新しようとすると、再レンダーが多すぎるというエラーと
+          なってしまいます。いい書き方はありますでしょうか？
+          ???????????????? */}
+        <Link to="/" className={tasksList}>{title_1}</Link>
       </li>
       <li>
-      <a href="/new">{this.state.title_2}</a>
+        <Link to="/new" className={addTasks}>{title_2}</Link>
       </li>
-      </ul>
-    )
+    </ul>
+  )
   }
-}
 
 export default Side
-
-
-// import React from "react"
-
-// const Menu = () => {
-//     return <p>This is Person Component.</p>
-// }
-
-// export default Menu
