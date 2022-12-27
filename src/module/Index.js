@@ -1,177 +1,118 @@
-import React from "react"
+import React, { useState, useRef }  from "react"
+import { Link } from "react-router-dom"
 
-export class Index extends React.Component{
-  constructor(props){
-    super(props);
-    // this.state ={
-    //   data: JSON.parse(localStorage["test"]),
-    //   vals: Object.values(JSON.parse(localStorage["test"])),
-    //   vals_: [Object.values(JSON.parse(localStorage["test"])[0])],
-    //   keys: [Object.keys(JSON.parse(localStorage["test"])[0])],
+const Index = (props) => {
+  const tasksPerPage = 5
 
-    //   le: JSON.parse(localStorage["test"]).length
-    // }
+  const [ tasks, setState ] = useState(props.tasks)
+  const [ sortstate, setSortState ] = useState(true)
+  const search_p = (() => {try{return +location.search.match(/p\=(\d+)/)[1]}catch(e){return 1}})()
+  const currentPage = useRef(search_p)
+  const getPosition = (page) => [(page * tasksPerPage) - tasksPerPage, page * tasksPerPage]
+  const position = getPosition(currentPage.current)
+  const [ currentTasks , setCurrentTasks ] = useState(tasks.slice(position[0], position[1]))
 
-    // localstorageデータ
-    // state=[{kind: 'タスク', key:"HBR-HOGE-1", task_name: "summary", manager:"fujiwara", state:"未対応", primary:"高", registration_date:"2021/9/1", start_date:"2021/9/1", deadline_date:"2021/9/1"}]
-    // localStorage["test"]=JSON.stringify(state)
+  const ths = Object.keys(props.keys).map((key, i) => (
+    <th key={`th_${i}`} onClick={()=>tasksSort(key)}>{props.keys[key]}</th>
+  ))
 
+  const tasksSort = (key) => {
+    if(sortstate){
+    const desctasks = tasks.sort((a, b) => (a[key] < b[key]) ? 1 : -1)
+    setSortState(!sortstate)
+    setState([...desctasks])
+    console.log(!sortstate)
+    }else{
+      const asctasks = tasks.sort((a, b) => (a[key] > b[key]) ? 1 : -1)
+      setSortState(!sortstate)
+      setState([...asctasks])
+    }
   }
-  render(){
+
+
+
+  const pageOflastTask = currentPage * tasksPerPage
+  const pageOffarstTask = pageOflastTask - tasksPerPage 
+
+  console.log(pageOflastTask)
+  console.log(pageOffarstTask)
+
+  const pageNumber = [];
+
+  for(let i = 1; i <= Math.ceil(tasks.length / tasksPerPage); i++){
+    pageNumber.push(i)
+    console.log(i)
+  }
+  
+  const trs = currentTasks.map((task, i) => {
+    const tds = Object.keys(task).map((td, j) => (
+      <td key={`td_${j}`}>{task[td]}</td>
+    ))
+    const toEdit = (id) => {
+      location.href = "/" + id
+    }
+
     return (
-      <>{this.props.tasks}</>
+      <tr key={`tr_${i}`} onClick ={()=>toEdit(task.id)}>
+        {tds}
+      </tr>
     )
-    const {title} = this.props;
-    const test = [];
-    const local = (() => {
-      try{
-        return JSON.parse(localStorage["test"])
-      }catch(e) {return null }
-    })()
+  })
 
-    return(
-      <div>
-      <table className="fl-right">
-        <tbody>
-        <tr>
-          <th>種別</th>
-          <th>キー</th>
-          <th>件名</th>
-          <th>担当者</th>
-          <th>状態</th>
-          <th>優先度</th>
-          <th>登録者</th>
-          <th>開始日</th>
-          <th>期限日</th>
-          {console.log(this.state.vals[0])}
-          {console.log(this.state.vals_)}
-          {console.log(this.state.keys[0])}
+  const numtd = pageNumber.map((v,i) => (
+    <td key={`pn_td_${i}`} onClick={()=>hundlePagenate(v)}><span className="main_container__table_pagenum--num"><Link to={`/?p=${v}`}>{v}</Link></span></td>
+  ))
 
-        </tr>
-          {/* {this.state.a.map((key, i) => {
-            return(
-              {this:key.map((keys, j) =>
-                <td key={j}>{keys}</td>
-                )}
-          <td key={i}>
-         {key.namne}</td>
-            )
-          }
-         )} */}
 
-         {/* データを一つづつ表示 dateの要素が2つになると動かない状態です */}
-          <tr>
-          {this.state.data.map((key, i) =>
-          <td key={i}>{key.kind}</td>
-          )}
+  const hundlePagenate = (v) => {
+    currentPage.current = v
+    const cp = v
+    localStorage["currentPage"] = cp
 
-          {this.state.data.map((key, i) =>
-          <td key={i}>{key.key}</td>
-          )}
+    const position = getPosition(v)
+    const currentT = tasks.slice(position[0], position[1])
 
-          {this.state.data.map((key, i) =>
-          <td key={i}>{key.task_name}</td>
-          )}
-
-          {this.state.data.map((key, i) =>
-          <td key={i}>{key.manager}</td>
-          )}
-          {this.state.data.map((key, i) =>
-          <td key={i}>{key.state}</td>
-          )}
-          {this.state.data.map((key, i) =>
-          <td key={i}>{key.primary}</td>
-          )}
-          {this.state.data.map((key, i) =>
-            <td key={i}>{key.registration_date}</td>
-          )}
-          {this.state.data.map((key, i) =>
-          <td key={i}>{key.start_date}</td>
-          )}
-          {this.state.data.map((key, i) =>
-          <td key={i}>{key.deadline_date}</td>
-          )}
-        </tr>
-        {
-          
-        }
-        {/* {
-            Array(this.state.le).fill("0").map((test,i) => {
-                return (
-                      <tr key ={i}>
-                      {
-                          this.state.data.map((test2, j)=>{
-                            return(
-
-                              this.state.keys.map((test3, k)=>{
-                                return(
-                                  <td key={k}>
-                                  {test2.test3}</td>
-                                  );
-                              })
-                            );
-                          })
-                      }
-                      </tr>
-                );
-            })
-      } */}
-      
-      {     // 下記詰まっている内容になります。
-            // this.state.valsをthis.state.vals[i]として要素分回したいのですが、エラーとなる。
-            // {val}が<td></td>の中に全て入ってしまう。
-            Array(this.state.le).fill("0").map((test,i) => {
-                return (
-                      <tr key ={i}>
-                      {
-                        
-                          this.state.vals_.map((val, j)=>{
-                            return(
-                                  <td key={j}>
-                                    
-                                  {val}
-                                    
-                                  </td>
-                            );
-                          })
-                      }
-                      </tr>
-                );
-            })
-      }
-        </tbody>
-      </table>
-
-      
-
-            {/* {
-                Array(3).fill('test').map((val, i) => {
-                    return (
-                        Array(3).fill(0).map((val2, j) => {
-                            return (
-                                <div>
-                                    {i}, {j}
-                                </div>
-                            );
-                        })
-                    );
-                })
-            } */}
-      </div>
-      
-      
-    )
+    changeCurrentTasks(currentT)
   }
+
+  const changeCurrentTasks = (tasks) => {
+    setCurrentTasks([...tasks])
+    localStorage["currentTasks"] = JSON.stringify(tasks)
+    console.log(JSON.parse(localStorage["currentTasks"]))
+  }
+
+  return(
+    <div className="main_container">
+    <table className="main_container__table_pagenum">
+      <tbody>
+        <tr>
+          <td>{position[0] + 1}〜{position[1]}件</td>
+          {numtd}
+          <td className="main_container__table_pagenum--text" onClick={()=>hundlePagenate(+localStorage["currentPage"]+1)}>次へ</td>
+        </tr>
+      </tbody>
+    </table>
+    <table className="main_container__table_tasks">
+    <thead>
+          <tr>
+            {ths}
+          </tr>
+        </thead>
+        <tbody>
+          {trs}
+        </tbody>
+        </table>
+    <table className="main_container__table_pagenum">
+      <tbody>
+        <tr>
+          <td>{position[0] + 1}〜{position[1]}件</td>
+          {numtd}
+          <td className="main_container__table_pagenum--text" onClick={()=>hundlePagenate(+localStorage["currentPage"]+1)}>次へ</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  )
 }
-// {kind: 'タスク', key:"HBR-HOGE-1", task_name: "summary", manager:"fujiwara", state:"未対応", primary:"高", registration_date:"2021/9/1", start_date:"2021/9/1", deadline_date:"2021/9/1"}
-// JSON.parse(localStorage["this_test"])
 
-// for (var i = 0, length = localStorage.length; i < length; ++i) {
-//   console.log(localStorage.key(i));
-// }
-
-// {arr.map((fruit, i) => <li key={i}>{fruit}</li>)}
-
-// [{"namne":"hoge","kind":"task"}]
-
-// Object.keys(state[0])[0]
+export default Index

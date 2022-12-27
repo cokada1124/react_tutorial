@@ -14,11 +14,9 @@ class Side extends React.Component {
 
   render() {
     return (
-      <ul className="li-st-none f-24">
+      <ul className="side-bar__ul">
         <li>
-      <Link to={`/`}>{this.state.title_1}</Link>
-      {/* <a href="/new">{this.state.title_1}</a> */}
-      {/* <a href="/" className={this.state.toggle ? "on" : ""} onClisk={() => this.setState(toggle: !)}</a> */}
+      <a href="/">{this.state.title_1}</a>
       </li>
       <li>
       <a href="/new">{this.state.title_2}</a>
@@ -29,12 +27,3 @@ class Side extends React.Component {
 }
 
 export default Side
-
-
-// import React from "react"
-
-// const Menu = () => {
-//     return <p>This is Person Component.</p>
-// }
-
-// export default Menu

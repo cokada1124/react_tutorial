@@ -36,9 +36,127 @@
 //     transform: rotate(360deg);
 //   }
 // }
+html {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration:none; 
+  color: #000;
+}
+
+body {
+  background-color: #f0f0f0 ;
+}
+
+ul, li {
+  margin: 0px;
+}
+
+.main_container {
+  &__table_tasks {
+  width: 85%;
+  margin-top:15px;
+  background-color: #fff;
+  border-collapse:collapse;
+    tr {
+    border-bottom:#dcdcdc 1px solid;
+    padding:10px 0px;
+    }
+    th {
+    border-bottom:#dcdcdc 2px solid;
+    padding:10px 0px;      
+    }
+
+    td {
+    padding:10px 0px;
+    }
+    tr:hover td {
+      background-color: #f0f0f0;
+    }
+  }
+  &__table_pagenum {
+    width: 85%;
+    float:left;
+    padding: 15px;
+
+    &--num {
+      
+      font-weight: bold;
+      border-radius: 50%;
+	    width: 25px;
+	    height: 25px;
+	    line-height: 25px;
+      background: #c8c8c8;
+      display: inline-block;
+      text-align:center;
+    }
+    &--text {
+      
+      font-weight: bold;
+      border-radius: 25px;
+	    width: 50px;
+	    height: 25px;
+	    line-height: 25px;
+      background: #c8c8c8;
+      display: inline-block;
+      text-align:center;
+    }
+  
+  }
+}
+
+
+.main_container__table_pagenum__num{
+  width: 85%;
+  float:left;
+  padding: 15px;
+}
+
+.side-bar__ul{
+  width:15%;
+  height: 1000px;
+  list-style: none;
+  padding-top:15px;
+  font-size: 24px;
+  float:left;
+  background-color: #dadada;
+}
+
+.main_container{
+  width:80%;
+  background-color: #f0f0f0;
+  float:right;
+}
+
+.FormList {
+  list-style-type: none;
+  label {
+    display: inline-block;
+    font-weight: bold;
+    width: 7rem;
+    margin-right: 1rem;
+  }
+  li {
+    margin-bottom: 20px;
+  }
+}
+
+select.-error,
+input.-error {
+  background-color: #fcc;
+}
+
+
+
 
 .fl-right{
   float:right;
+}
+
+.fl-left{
+  float:left;
 }
 
 .f-bole{
@@ -49,12 +167,29 @@
   font-size: 24px;
 }
 
-a {
-  text-decoration:none; 
-  color: #000;
-  
-}
-
 .li-st-none{
   list-style: none;
+}
+
+.m-top-15{
+  margin-top:15px;
+}
+.m-top-10{
+  margin-top:10px;
+}
+
+.m-top-5{
+  margin-top:5px;
+}
+
+.m-0{
+  margin:0px;
+}
+
+.txt-indent{
+  padding-left:1em;
+}
+
+.red{
+  color: red;
 }
