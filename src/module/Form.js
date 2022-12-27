@@ -1,32 +1,32 @@
 import React, { useState, useEffect } from "react"
-import { useParams, useMatch, useNavigate, } from "react-router-dom"
+import { useParams, useNavigate, } from "react-router-dom"
 // import { useForm } from 'react-hook-form'
 
 const Form = (props) => {
   const { id } = useParams()
   
-  const [ state, setState ] = useState({
-    id          : 1,
-    task        : 0,
-    key         : "",
-    title       : "",
-    author      : "",
-    status      : "",
-    priority    : "",
-    registed_at : "",
-    start_date  : "",
-    end_date    : ""
-  })
+  // const [ state, setState ] = useState({
+  //   id          : 1,
+  //   task        : 0,
+  //   key         : "",
+  //   title       : "",
+  //   author      : "",
+  //   status      : "",
+  //   priority    : "",
+  //   registed_at : "",
+  //   start_date  : "",
+  //   end_date    : ""
+  // })
 
-  const [ bodyState, setBodyState ] = useState({
-    id          : "",
-    projectId   : "",
-    summary     : "",
-    issueTypeId : "",
-    priorityId  : "",
-    startDate   : "",
-    dueDate     : ""
-  })
+  // const [ bodyState, setBodyState ] = useState({
+  //   id          : "",
+  //   projectId   : "",
+  //   summary     : "",
+  //   issueTypeId : "",
+  //   priorityId  : "",
+  //   startDate   : "",
+  //   dueDate     : ""
+  // })
  
   console.log(props.bodys)
 

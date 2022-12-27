@@ -1,5 +1,5 @@
 import React from "react"
-import {useState, useEffect, useRef} from 'react'
+import {useState, useEffect} from 'react'
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 
@@ -16,7 +16,7 @@ function App() {
   //  const { id } = useParams()
   const local_state = (() => {
     try{
-      return JSON.parse(localStorage["tasks"])
+      return "" + localStorage["tasks"]
     }catch(e) {return [] }
   })()
 
@@ -40,7 +40,6 @@ function App() {
   const [bodys, setBody ] = useState()
   // const result = useRef("")
   const [result, setResult ] = useState()
-  const [backTop, setBackTop] = useState(false)
 
   // ????????????????
   // 質問 下記で課題一覧を取得する際に上限が100件となっているのですが、
@@ -54,18 +53,23 @@ function App() {
     method: "GET"
     })
     .then(res => res.json())
-    .then(json => setBody(json))
+    .then(json => {
+      // console.log(json)
+      setBody(json)})
 
     fetch("https://2012.backlog.jp/api/v2/issues?apiKey=OT11LGAZyh1sUNrzwYqFXIPSFz5RaNcSFM1Ma1nemzocZU8hOiTzmm8pWMVwiffT&projectId[]=1073938367", {
     method: "GET"
     })
     .then(res => res.json())
-    .then(json => setTasks(json))
+    .then(json => {
+      setTasks(json)
+    })
     
     
   }, [])
 
   console.log(tasks)
+  console.log(bodys)
 
   const keys = {
     // id          : "#",
@@ -82,9 +86,6 @@ function App() {
   }
 
   // const nav = useNavigate()
-  const setbackTop = () => {
-    setBackTop(true)
-  }
   
   const addTask = (task) => {
     // console.log("add task: ", task)
@@ -137,6 +138,8 @@ function App() {
       }
       if (["priorityId" ,"summary", "startDate", "dueDate"].includes(v)){
         return ("&" + v + "=" + encodeURI(task[v]))
+      }else{
+        return ""
       }
     }).join("")
 
@@ -157,10 +160,6 @@ function App() {
   }
 
 
-
-  const hundleSort = (tasks) => {
-    setTasks({...tasks})
-  }
 
 
   return (

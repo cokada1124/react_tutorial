@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect}  from "react"
-import { useParams, Link, useLocation, useSearchParams, useNavigate, useMatch } from "react-router-dom"
+import {Link, useSearchParams, useNavigate} from "react-router-dom"
 
 const Index = (props) => {
-
-  const { id } = useParams()
 
   const tasksPerPage = 5
   const [ tasks, setState ] = useState([])
@@ -85,10 +83,10 @@ const Index = (props) => {
 
   
   const nav = useNavigate()
-  const getPosition = (page) => [(page * tasksPerPage) - tasksPerPage, page * tasksPerPage]
-  const position = getPosition(currentPage.current)
+  // const getPosition = (page) => [(page * tasksPerPage) - tasksPerPage, page * tasksPerPage]
+  // const position = getPosition(currentPage.current)
   // console.log(tasks)
-  const [ currentTasks , setCurrentTasks ] = useState(tasks.slice(position[0], position[1]))
+  // const [ currentTasks , setCurrentTasks ] = useState(tasks.slice(position[0], position[1]))
 
 
   const ths = Object.keys(props.keys).map((key, i) => {
